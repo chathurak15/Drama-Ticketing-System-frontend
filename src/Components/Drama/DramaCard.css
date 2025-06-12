@@ -1,0 +1,36 @@
+/* src/components/DramaCard.css */
+.drama-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  text-align: center;
+  padding: 10px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+
+.drama-card img {
+  width: 420px;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.drama-card h3 {
+  font-size: 18px;
+  margin: 10px 0 5px;
+}
+
+.drama-card p {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.view-button {
+  display: inline-block;
+  background-color: maroon;
+  color: #fff;
+  padding: 8px 12px;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+}

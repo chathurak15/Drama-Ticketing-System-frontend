@@ -1,0 +1,199 @@
+/*Card Slider css part*/
+.c1/*Button left*/{
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    background: #fff;
+    border: 1px solid black;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+
+.c2/*Scroll*/{
+    display: flex;
+    gap: 20px;
+    overflow: hidden;
+    scroll-behavior: smooth;
+    max-width: 1120px;
+    margin: 0 auto;
+}
+
+.c3/*Card Details*/{
+    min-width: 260px;
+    max-width: 260px;
+    background: #fff;
+    border-radius: 8px;
+    background-color: #7a2c1b;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    text-align: center;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.c4/*Button right*/{
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    background: #fff;
+    border: 1px solid black;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+}
+
+
+
+
+/*How to book css*/
+
+.c5{
+    display:flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    padding: 60px 20px;
+    background-color: #ffffff;
+    max-width: 1200px;
+    margin: auto;
+}
+
+
+
+
+/*Search Shows css part*/
+
+.search-section {
+  background-color: #661b1b; /* Same maroon tone as in first image */
+  padding: 15px;
+  color: black;
+  text-align:left;
+  justify-content: left;
+}
+
+.search-title {
+  margin-bottom: 15px;
+  font-size: 32px;
+  color: #fff;
+  font-weight: bold;
+}
+
+.search-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.search-input {
+  width: 220px;
+  padding: 12px 20px;
+  border: none;
+  font-size: 14px;
+  background-color: #fff;
+  width: 300px;
+  height: 50px;
+  border-radius: 8px;
+}
+
+.search-box-group {
+  display: flex;
+  background-color: #fff;
+  width: 500px;
+  height: 50px;
+  border-radius: 8px;
+}
+
+.search-text {
+  width: 500px;
+  padding: 12px 16px;
+  border: none;
+  font-size: 14px;
+}
+
+.search-button {
+  background-color: black;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  height: 50px;
+  border-radius: 8px;
+}
+
+
+
+/*Upcoming shows css part*/
+
+.u1/*Bar details*/{
+    position: relative;
+    padding: 40px 0;
+    background-color: #f8f8f8;
+}
+
+.u2/*Left button*/{
+    position: absolute;
+    left: -40px;
+    top: 40%;
+    transform: translateY(-50%);
+    z-index: 2;
+    background: #fff;
+    border: 1px solid black;
+    border-radius: 50%;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.u3/*Card view details*/{
+    display: flex;
+    overflow: hidden;
+    scroll-behavior: smooth;
+    gap: 20px;
+    padding: 0 20px;
+}
+
+.u4/*Card details*/{
+    min-width: 260px;
+    max-width: 260px;
+    background: #fff;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.u5/*Button details*/{
+    padding: 8px 16px;
+    background-color: #8B0000;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.u6/*Button right*/{
+    position: absolute;
+    right: -40px;
+    top: 40%;
+    transform: translateY(-50%);
+    z-index: 2;
+    background: #fff;
+    border: 1px solid black;
+    border-radius: 50%;
+    padding: 10px;
+    cursor: pointer;
+}

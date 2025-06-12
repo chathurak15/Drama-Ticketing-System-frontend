@@ -1,0 +1,86 @@
+.footer {
+  background-color: #661F19;
+  color: #ffffff;
+  padding: 2rem 1rem;
+  font-family: Arial, sans-serif;
+}
+
+.footer-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.logo-title {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.logo {
+  width: 80px;
+  height: 48px;
+  margin-right: 12px;
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.subtitle {
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+.social-icons a img {
+  width: 30px;
+  height: 40px;
+  margin-right: 10px;
+  transition: opacity 0.3s ease;
+}
+
+.social-icons a:hover img {
+  opacity: 0.7;
+}
+
+.payment-img {
+  margin-top: 20px;
+  width: 30px;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+}
+
+.footer-section ul li {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+.footer-section ul li a {
+  text-decoration: none;
+  color: #ccc;
+  transition: color 0.3s ease;
+}
+
+.footer-section ul li a:hover {
+  color: #ffffff;
+}
+
+.footer-title {
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.footer-bottom {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #aaa;
+  margin-top: 2rem;
+}
