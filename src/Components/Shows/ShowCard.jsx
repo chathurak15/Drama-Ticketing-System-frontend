@@ -12,7 +12,7 @@ const ShowCard = ({ show }) => {
       <h3>{show.title}</h3>
       <p>{show.date} - {show.time}</p>
       <p>{show.city} - {show.location}</p>
-      <button onClick={() => navigate(`/booking/${show.id}`)}>Booking</button>
+      <button onClick={() => navigate(`/show/${show.id}`)}>Booking</button>
     </div>
   );
 };
