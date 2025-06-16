@@ -66,26 +66,6 @@ const NewDramas = () => {
     return (
     <div style={{ position: 'relative', width: '100%', padding: '40px 0'}}>
 
-<<<<<<< Updated upstream
-      <h2 style={{ textAlign: 'center', marginBottom: '20px', fontSize: '40px', fontWeight: 'bolder'}}>--New Dramas--</h2>
-      <button onClick={() => scroll('left')} className="c1"> ◀ </button>
-
-        <div ref={scrollRef} className="c2">
-            {dramas.map((drama, index) => (
-                <div key={index} className="c3">
-                    <img
-                        src={drama.image}
-                        alt={drama.title}
-                        style={{ width: '100%', height: '180px', objectFit: 'cover' }}
-                    />
-                    <div style={{ padding: '10px' }}>
-                        <h3 style={{ margin: '10px 0 5px', fontSize: '16px', color: 'white'}}>{drama.title}</h3>
-                    </div>
-                </div>
-            ))}
-        </div>
-        <button onClick={() => scroll('right')} className="c4"> ▶ </button>
-=======
       <h2 className='home-title'>New Dramas</h2>
       <button onClick={() => scroll('left')} className="c1"> ◀ </button>
 
@@ -106,7 +86,6 @@ const NewDramas = () => {
         ))}
       </div>
       <button onClick={() => scroll('right')} className="c4"> ▶ </button>
->>>>>>> Stashed changes
     </div>
   );
 };

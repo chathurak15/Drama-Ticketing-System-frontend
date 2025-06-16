@@ -5,16 +5,12 @@
   border-radius: 10px;
   text-align: center;
   padding: 10px;
-<<<<<<< Updated upstream
-  box-shadow: 0 0 8px rgba(0,0,0,0.1);
-=======
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
 }
 
 .drama-card:hover {
   transform: scale(1.05);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
->>>>>>> Stashed changes
 }
 
 .drama-card img {
