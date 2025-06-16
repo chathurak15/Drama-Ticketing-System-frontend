@@ -25,6 +25,14 @@ font{
   font-family: 'Poppins' , sans-serif;
 }
 
+.booking-btn{
+  background-color: #661F19
+}
+
+.showDetails-card{
+  background-color: rgba(117, 117, 117, 0.15);
+}
+
 @media (max-width: 768px) {
   .search-bar {
     flex-direction: column;

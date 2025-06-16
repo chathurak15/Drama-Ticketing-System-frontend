@@ -10,6 +10,8 @@ import Login from './Components/Pages/Login.jsx';
 import Shows from './Components/Pages/Shows.jsx';
 import Home from './Components/Pages/Home.jsx';
 import DramaDetails from './Components/Drama/DramaDetails.jsx';
+import ShowsDetails from './Components/Pages/ShowDetails.jsx';
+
 
 import {
   createBrowserRouter,
@@ -48,6 +50,11 @@ const router = createBrowserRouter([
   {
     path: "/drama/:id",
     element: <DramaDetails />,
+  },
+  {
+    path: "/show/:id",
+    element: <ShowsDetails />,
+
   }
 ]);
 
