@@ -24,6 +24,10 @@ const ShowDetails = () => {
           setError('Show not found');
         } else {
           setShow(showData);
+
+          if(showData?.title) {
+            document.title = `${showData.title}`;
+          }
           
           if (showData?.image) {
             import(`../../assets/${showData.image}`)
@@ -84,9 +88,9 @@ const ShowDetails = () => {
       <Header />
       {/* Main Content */}
       <main className="min-h-screen">
-        <div className="container mx-auto px-4 py-8">
+        <div className="container  px-4 py-8">
           {/* Show Details Card */}
-          <div className="rounded-2xl shadow-lg overflow-hidden my-12">
+          <div className="lg:w-4/4 rounded-2xl shadow-lg overflow-hidden my-12">
             <div className="flex flex-col lg:flex-row">
               {/* Poster Image */}
               <div className="lg:w-1/4 p-0 h-90 flex items-center justify-center">
