@@ -13,7 +13,7 @@ import './Home.css'
 function Home() {
   return (
     <>
-    <div id="wrapper">
+      <div id="wrapper">
         <Header />
         <Body>
           <div className="bg-cover bg-center h-[500px] relative" style={{ backgroundImage: `url(${headerImage})` }}>
@@ -52,7 +52,7 @@ function Home() {
             <Footer />
           </div>
         </Body>
-    </div>
+      </div>
     </>
   )
 }
