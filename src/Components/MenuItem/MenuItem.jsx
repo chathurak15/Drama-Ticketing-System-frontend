@@ -11,7 +11,7 @@ function MenuItem(props) {
         isButton ? (
           <button id="login" className="loginbtn">{linktext}</button>
         ) : (
-          <span className="hover:text-black">{linktext}</span>
+          <span className="link-text">{linktext}</span>
         )
       }
       </Link>

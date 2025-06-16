@@ -1,9 +1,9 @@
-.drama-page {
+/* .drama-page {
   width: 1300px;
   margin: 0 auto;
   padding: 20px;
   font-family: 'Poppins', sans-serif;
-}
+} */
 
 .top-section {
   width: 1250px;
@@ -237,7 +237,7 @@
 .book-btn {
   margin-top: 10px;
   width: 100%;
-  background-color: #d9230f;
+  background-color: var(--primary-color);
   color: #fff;
   padding: 6px 12px;
   border: none;
@@ -247,7 +247,7 @@
 }
 
 .book-btn:hover {
-  background-color: #b61d0a;
+  background-color: var(--primary-color);
 }
 
 .audience-reviews-section {

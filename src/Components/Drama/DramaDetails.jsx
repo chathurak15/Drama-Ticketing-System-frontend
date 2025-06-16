@@ -86,7 +86,7 @@ const DramaDetails = () => {
       <Header />
       <br />
       <br />
-      <div className="drama-page">
+      <div className="drama-page container mx-auto px-4 py-8">
         <div className="top-section">
           <img
             src={drama.image}
@@ -120,7 +120,7 @@ const DramaDetails = () => {
             <iframe
               width="100%"
               height="250"
-              src="https://youtu.be/8VT7UZ527g8?si=uix_uK7ICfQ81AUl"
+              src={drama.videoUrl || "https://www.youtube.com/embed/placeholder"}
               title="Mama Nemeyi Wena Kenek - Best Clips"
               frameBorder="0"
               allowFullScreen

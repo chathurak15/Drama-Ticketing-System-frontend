@@ -5,22 +5,18 @@ import logo from "../../assets/logo nataka white.png"
 const Footer = () => {
     return (
         <footer className="footer">
-            <div className="footer-container">
+            <div className="footer-container container mx-auto px-4 ">
                 {/* Logo and Social */}
                 <div className="footer-section logo-social">
                     <div className="logo-title">
                         <img src={logo} alt="Nataka.LK" className="logo" />
-                        <div>
-                            <h2 className="title">නාටක.lk</h2>
-                            <p className="subtitle">Nataka.LK</p>
-                        </div>
                     </div>
                     <div className="social-icons">
                         <a href="#"><img src="/images/instagram.avif" alt="Instagram" /></a>
                         <a href="#"><img src="/images/youtube.svg" alt="YouTube" /></a>
                         <a href="#"><img src="/images/linkedin.svg" alt="LinkedIn" /></a>
                     </div>
-                    <img src="/images/payement.jpg" alt="Payments" className="payment-img" />
+                    
                 </div>
 
                 {/* Use Cases */}

@@ -1,17 +1,17 @@
-/* Dramas.css */
+/* Dramas.css
 .dramas-container {
   max-width: 1300px;
   margin: auto;
   padding: 24px;
   background: #fff;
   min-height: 100vh;
-}
+} */
 
 h1 {
   font-size: 28px;
   margin-bottom: 20px;
   font-weight: bold;
-  color: #601010;
+  color: var(--primary-color);
 }
 
 .filter-bar {
@@ -48,7 +48,7 @@ h1 {
 
 .search-button {
   padding: 8px 16px;
-  background-color: #601010;
+  background-color: var(--primary-color);
   color: white;
   border: none;
   border-radius: 6px;
@@ -59,12 +59,13 @@ h1 {
 }
 
 .search-button:hover {
-  background-color: #8a1f1f;
+  background-color: var(--btn-color);
 }
 
 .dramas-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-rows: auto;
+  grid-template-columns: repeat(auto-fill, minmax(22%, 1fr));
   gap: 20px;
   margin-bottom: 20px;
 }

@@ -53,10 +53,11 @@ const Dramas = () => {
   return (
     <>
       <Header />
-      <div className="dramas-container">
-        <h1>Stage Dramas</h1>
+      <div className="bg-gray-100 align-items-center justify-content-center h-28 mb-5">
+      <div className="container mx-auto px-4 py-8">
 
-        <div className="filter-bar">
+        <div className="filter-bar flex justify-between items-center ">
+          <h1>Stage Dramas</h1>
           <div>
             <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} className="filter-left-bar">
               <option value="">Filter by default</option>
@@ -76,7 +77,10 @@ const Dramas = () => {
             <button className="search-button" onClick={handleSearch}>Search</button>
           </div>
         </div>
+        </div>
+      </div>
 
+      <div className="container mx-auto px-4">
         <div className="dramas-grid">
           {currentDramas.map(drama => (
             <DramaCard key={drama.id} drama={drama} />

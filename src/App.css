@@ -1,10 +1,12 @@
+:root {
+  --primary-color: #661F19;
+  --btn-color: #FED800;
+  --secondary-color: #373333;
+  --primary-font: 'Poppins', sans-serif;
+}
+
 .container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  width: 100%;
-  max-width: 1200px;
-  padding: 0 5%;
+  width: 93%;
 }
 
 body {

@@ -1,27 +1,19 @@
 .footer {
-  background-color: #661F19;
+  background-color: var(--secondary-color);
   color: #ffffff;
   padding: 2rem 1rem;
-  font-family: Arial, sans-serif;
+  font-family: var(--primary-font);
 }
 
 .footer-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 2rem;
-  max-width: 1200px;
   margin: 0 auto;
 }
 
-.logo-title {
-  display: flex;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
 .logo {
-  width: 80px;
-  height: 48px;
+  width: 100%;
   margin-right: 12px;
 }
 
@@ -35,6 +27,11 @@
   color: #ccc;
 }
 
+.social-icons {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
 .social-icons a img {
   width: 30px;
   height: 40px;
