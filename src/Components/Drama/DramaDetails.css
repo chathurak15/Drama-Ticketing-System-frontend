@@ -1,0 +1,330 @@
+.drama-page {
+  width: 1300px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.top-section {
+  width: 1250px;
+  display: flex;
+  height: 250px;
+  align-items: flex-start;
+  gap: 20px;
+  border-radius: 20px;
+  margin-bottom: 30px;
+  background-color: #cdc7c7;
+}
+
+.top-section:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.drama-poster {
+  border-radius: 8px;
+  width: 400px;
+  height: 250px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.drama-details {
+  flex: 1;
+}
+
+.drama-title {
+  font-size: 28px;
+  font-weight: bold;
+  text-align: center;
+  margin: 0 0 10px 0;
+  margin-top: 70px;
+}
+
+.drama-info {
+  display: flex;
+  gap: 50px;
+  font-size: 28px;
+  justify-content: center;
+  color: #0b0303;
+}
+
+.rating {
+  color: #0b0303;
+}
+
+.description-section {
+  display: flex;
+  gap: 30px;
+  width: 1250px;
+  height: 300px;
+  align-items: flex-start;
+}
+
+.description-text {
+  flex: 1;
+  height: 300px;
+  text-align: center;
+}
+
+.description-text h2 {
+  font-size: 28px;
+  margin-bottom: 10px;
+  font-weight: bolder;
+  font-family: 'Poppins', sans-serif;
+}
+
+.description-text p {
+  font-size: 22px;
+  margin-top: 28px;
+  line-height: 1.6;
+  color: #333;
+  font-weight: bold;
+  font-family: 'Poppins', sans-serif;
+}
+
+.video-section iframe {
+  flex: 1;
+  border-radius: 20px;
+  width: 600px;
+  height: 300px;
+}
+
+.cast-section {
+  margin-top: 50px;
+  width: 1250px;
+}
+
+.cast-section h2 {
+  font-size: 32px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.cast-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 30px;
+  justify-items: center;
+}
+
+.cast-card {
+  text-align: center;
+  background-color: #c2bfbf;
+  width: 350px;
+  border-radius: 10px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  height: 140px;
+  display: flex;
+  padding: 10px;
+}
+
+.cast-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.cast-photo {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+  margin-top: 20px;
+  margin-left: 20px;
+}
+
+.cast-name {
+  font-size: 16px;
+  font-weight: bold;
+  color: black;
+  margin-top: 42px;
+  margin-left: 20px;
+}
+
+.upcoming-section {
+  margin-top: 50px;
+  height: 500px;
+}
+
+.upcoming-section h2 {
+  font-size: 28px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.slide-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.arrow-btn {
+  font-size: 24px;
+  padding: 10px 15px;
+  background-color: #eee;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.arrow-btn:hover {
+  background-color: #ccc;
+}
+
+.card-slider {
+  display: flex;
+  gap: 20px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.show-card {
+  width: 265px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  text-align: center;
+  flex-shrink: 0;
+  transition: transform 0.3s;
+}
+
+.image-container {
+  position: relative;
+  width: 250px;
+  height: 275px;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.image-container img {
+  width: 250px;
+  height: 275px;
+}
+
+.city-overlay {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background-color: #FED800;
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.show-card h3 {
+  font-size: 16px;
+  margin-top: 12px;
+  font-weight: 600;
+}
+
+.show-card p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.location {
+  color: #555;
+}
+
+.book-btn {
+  margin-top: 10px;
+  width: 100%;
+  background-color: #d9230f;
+  color: #fff;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.book-btn:hover {
+  background-color: #b61d0a;
+}
+
+.audience-reviews-section {
+  text-align: center;
+  width: 1300px;
+}
+
+.audience-reviews-section h2 {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+
+.review-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  width: 1300px;
+}
+
+.arrow-btn {
+  font-size: 24px;
+  background-color: #ffffff;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin: 0 10px;
+  transition: background-color 0.3s ease;
+}
+
+.arrow-btn:hover {
+  background-color: #f0f0f0;
+}
+
+.reviews-container {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 10px;
+  max-width: 80%;
+  scroll-behavior: smooth;
+}
+
+/* Hide scrollbar for all browsers */
+.reviews-container::-webkit-scrollbar {
+  display: none;
+}
+
+
+.review-card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 250px;
+  flex: 0 0 auto;
+  text-align: left;
+}
+
+.stars {
+  color: #ffa500;
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.review-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #333;
+}
+
+.review-text {
+  font-size: 15px;
+  color: #444;
+}

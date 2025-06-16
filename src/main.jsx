@@ -9,6 +9,7 @@ import Dramas from './Components/Pages/Dramas.jsx';
 import Login from './Components/Pages/Login.jsx';
 import Shows from './Components/Pages/Shows.jsx';
 import Home from './Components/Pages/Home.jsx';
+import DramaDetails from './Components/Drama/DramaDetails.jsx';
 
 import {
   createBrowserRouter,
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
     path: "/shows",
     element: <Shows />,
   },
+  {
+    path: "/drama/:id",
+    element: <DramaDetails />,
+  }
 ]);
 
 createRoot(document.getElementById('root')).render(

@@ -8,10 +8,11 @@ import Actors from './Components/Pages/Actors'
 import AboutUs from './Components/Pages/AboutUs'
 import Contact from './Components/Pages/Contact'
 import Login from './Components/Pages/Login'
-import { Router, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import BookingPage from './Components/Pages/BookingPage';
+import DramaDetails from './Components/Drama/DramaDetails';
 
 function App() {
 
@@ -22,7 +23,7 @@ function App() {
         <Routes>
           <Route path = "/" element = {<Home />} />
           <Route path = "/dramas" element = {<Dramas />} />
-          <Route path = "/dramas/:id" element = {<div>Drama deails will go here later.</div>}/>
+          <Route path = "/dramas/:id" element = {<DramaDetails/>}/>
           <Route path = "/shows" element = {<Shows />} />
           <Route path = "/booking/:id" element = {<BookingPage/>}/>
           <Route path = "/actors" element = {<Actors />} />
