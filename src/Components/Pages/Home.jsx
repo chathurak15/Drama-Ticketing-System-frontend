@@ -1,36 +1,45 @@
-import React from 'react'
-import Header from '../Header/Header'
-import Body from '../Body/Body'
-import headerImage from "../../assets/Stage.png"
-import UpcomingShowsSlider from '../Home/UpcomingShowsSlider'
-import NewDramas from '../Home/NewDramas'
-import HowToBook from '../Home/HowToBook'
-import Footer from '../Footer/Footer'
-import CardSlider from '../Home/CardSlider'
-import SearchShows from '../Home/SearchShows'
-import './Home.css'
+import React from "react";
+import Header from "../Header/Header";
+import Body from "../Body/Body";
+import headerImage from "../../assets/hero.png";
+import UpcomingShowsSlider from "../Home/UpcomingShowsSlider";
+import NewDramas from "../Home/NewDramas";
+import HowToBook from "../Home/HowToBook";
+import Footer from "../Footer/Footer";
+import CardSlider from "../Home/CardSlider";
+import SearchShows from "../Home/SearchShows";
+import { useNavigate } from "react-router-dom";
+import "./Home.css";
 
 function Home() {
+  const navigate = useNavigate();
+
+  const handleBookClick = () => {
+    navigate("/shows");
+  };
   return (
     <>
     <div id="wrapper">
         <Header />
         <Body>
-          <div className="bg-cover bg-center h-[500px] relative" style={{ backgroundImage: `url(${headerImage})` }}>
+          <div
+            className="bg-cover bg-center relative"
+            style={{ backgroundImage: `url(${headerImage})` }}
+          >
             {/* Overlay content */}
-            <div className="overlay-content">
-              <h1>Book Your <br /> seats Now!</h1>
+            <div className="overlay-content container mx-auto px-4 py-8">
+              <h1>
+                Book Your <br /> Seats Now
+              </h1>
               <p>Easy stage drama ticket booking.</p>
-              <button>
-                Book Tickets
-              </button>
+              <button onClick={handleBookClick}>Book Tickets</button>
             </div>
           </div>
           <div>
             <SearchShows />
           </div>
           <br />
-          <div className="home-container">
+          <div className="container mx-auto px-4">
             <div>
               <CardSlider />
             </div>
@@ -54,7 +63,7 @@ function Home() {
         </Body>
     </div>
     </>
-  )
+  );
 }
 
-export default Home
+export default Home;
