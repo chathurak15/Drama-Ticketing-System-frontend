@@ -4,6 +4,7 @@ import { Calendar, Clock, MapPin, User } from "lucide-react";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import { getShowById } from "./SampleShows.js";
+import SeatSelectionPopup from "./SeatPopup.jsx";
 
 const ShowDetails = () => {
   const { id } = useParams();
@@ -11,6 +12,7 @@ const ShowDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [imageSrc, setImageSrc] = useState("");
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   useEffect(() => {
     const fetchShowDetails = async () => {
@@ -168,7 +170,10 @@ const ShowDetails = () => {
                       {show.dramaName}
                     </a>
                   </div>
-                  <button className="booking-btn text-white px-8 py-3 rounded-lg font-semibold hover:bg-amber-800 transition-colors">
+                  <button
+                    onClick={() => setIsPopupOpen(true)}
+                    className="booking-btn text-white px-8 py-3 rounded-lg font-semibold hover:bg-amber-800 transition-colors"
+                  >
                     Book Your Seat
                   </button>
                 </div>
@@ -242,6 +247,12 @@ const ShowDetails = () => {
           </div>
         </div>
       </main>
+
+      <SeatSelectionPopup
+        isOpen={isPopupOpen}
+        onClose={() => setIsPopupOpen(false)}
+        showData={show}
+      />
 
       <Footer />
     </>
