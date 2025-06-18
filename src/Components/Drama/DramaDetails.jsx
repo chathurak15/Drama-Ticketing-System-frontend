@@ -1,28 +1,62 @@
 import { useParams } from 'react-router-dom';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import './DramaDetails.css';
 import '../Shows/ShowsData'
 import showsData from '../Shows/ShowsData';
-
-const dramaList = Array.from({ length: 30 }, (_, i) => ({
-  id: i + 1,
-  title: 'Garu Katanayakathumani',
-  rating: 4.8,
-  category: i % 3 === 0 ? 'Newest' : 'Top Rated',
-  image: `/images/drama${(i % 6) + 1}.jpg`
-}));
-
+import {getDramaById, getRatings} from '../../services/dramaService';
 
 const DramaDetails = () => {
-
   const { id } = useParams();
-  const drama = dramaList.find(d => d.id === parseInt(id));
-
-  if (!drama) return <p>Drama not found</p>;
-
+  const [drama, setDrama] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [startIndex, setStartIndex] = useState(0);
+
+  // Fetch drama details and reviews on component mount 
+  useEffect(() => {
+    const fetchDramaData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        console.log('Fetching drama with ID:', id);
+        
+        // Fetch drama details
+        const dramaResponse = await getDramaById(id);
+        console.log('Drama response:', dramaResponse);
+        setDrama(dramaResponse.data);
+
+        // Fetch reviews/ratings
+        try {
+          const reviewsResponse = await getRatings(0, 12, id);
+          console.log('Reviews response:', reviewsResponse);
+          setReviews(reviewsResponse.data.content || []);
+        } catch (reviewError) {
+          console.warn('Failed to fetch reviews:', reviewError);
+          // Continue without reviews if drama details loaded successfully
+          setReviews([]);
+        }
+        
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching drama data:', err);
+        console.error('Error details:', {
+          message: err.message,
+          response: err.response?.data,
+          status: err.response?.status,
+          url: err.config?.url
+        });
+        
+      }
+    };
+
+    if (id) {
+      fetchDramaData();
+    }
+  }, [id]);
 
   const visibleShows = showsData.slice(startIndex, startIndex + 4);
 
@@ -38,38 +72,6 @@ const DramaDetails = () => {
     }
   };
 
-  const reviews = [
-    {
-      name: "Supun Perera",
-      date: "2025/06/08",
-      rating: 5,
-      text: "loved every moment of this drama! The performances were outstanding and the story was deeply moving.",
-    },
-    {
-      name: "Pasangi",
-      date: "2025/06/05",
-      rating: 4,
-      text: "Sriyantha Mendis delivered a stellar performance. The emotional depth of the story was incredible.",
-    },
-    {
-      name: "Adithya",
-      date: "2025/06/04",
-      rating: 4.5,
-      text: "Yashoda Wimaladharma's portrayal of the mother was heart-wrenching. A must-see for drama lovers.",
-    },
-    {
-      name: "Jessy",
-      date: "2025/06/01",
-      rating: 5,
-      text: "I laughed, I cried, and I was moved. This drama is a masterpiece of storytelling.",
-    },
-    {
-      name: "Tharindu",
-      date: "2025/05/30",
-      rating: 1,
-      text: "I don't like.",
-    }
-  ];
   const scrollRef = useRef();
 
   const scroll = (direction) => {
@@ -80,23 +82,57 @@ const DramaDetails = () => {
     }
   };
 
+  // Helper function to render stars based on rating
+  const renderStars = (rating) => {
+    const fullStars = Math.floor(rating);
+    const halfStar = rating % 1 !== 0;
+    return '★'.repeat(fullStars) + (halfStar ? '☆' : '');
+  };
+
+  const convertToEmbedUrl = (url) => {
+  try {
+    const youtubeRegex = /(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/;
+    const match = url.match(youtubeRegex);
+
+    if (match && match[1]) {
+      return `https://www.youtube.com/embed/${match[1]}`;
+    }
+  } catch (err) {
+    console.error("Invalid YouTube URL:", url);
+  }
+
+  return null;
+};
+
+  // Helper function to format duration
+  const formatDuration = (minutes) => {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
+  };
+
+  
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+  if (!drama) return <div>Drama not found</div>;
+
 
   return (
     <>
       <Header />
-      <br />
-      <br />
-      <div className="drama-page container mx-auto px-4 py-8">
+      <div className="drama-page container mx-auto px-4 py-8 ">
         <div className="top-section">
           <img
-            src={drama.image}
+            src={`/public/images/upload/drama/${drama.image}`}
             className="drama-poster"
+            alt={drama.title}
           />
           <div className="drama-details">
             <h1 className="drama-title">{drama.title} - Stage Drama</h1>
             <div className="drama-info">
               <span className="rating">⭐ {drama.rating}</span>
-              <span className="duration">⏱ {drama.duration}</span>
+              <span className="duration">⏱ {formatDuration(drama.duration)}</span>
             </div>
           </div>
         </div>
@@ -107,21 +143,15 @@ const DramaDetails = () => {
         <div className="description-section">
           <div className="description-text">
             <h2>Description</h2>
-            <p>
-              "Mama Nemeyi Wena Kenek" is a powerful stage drama that explores the
-              struggles of a mother battling societal expectations and personal
-              sacrifice. Set against a backdrop of cultural tension and emotional
-              conflict, it delivers a poignant message about love, resilience, and
-              the strength of maternal bonds.
-            </p>
+            <p>{drama.description}</p>
           </div>
 
           <div className="video-section">
             <iframe
               width="100%"
               height="250"
-              src={drama.videoUrl || "https://www.youtube.com/embed/placeholder"}
-              title="Mama Nemeyi Wena Kenek - Best Clips"
+              src={convertToEmbedUrl(drama.videoUrl) || 'https://www.youtube.com/embed/defaultVideoId'}
+              title={`${drama.title} - Best Clips`}
               frameBorder="0"
               allowFullScreen
             ></iframe>
@@ -134,20 +164,15 @@ const DramaDetails = () => {
         <div className="cast-section">
           <h2>Cast</h2>
           <div className="cast-grid">
-            {[
-              { name: "Nadeesha Hemamali", image: "/images/cast1.jpeg" },
-              { name: "Sajitha Anthony", image: "/images/cast2.jpeg" },
-              { name: "Kumara Thirimadura", image: "/images/cast3.jpeg" },
-              { name: "Sriyantha Mendis", image: "/images/cast4.jpeg" },
-              { name: "Yashoda Wimaladharma", image: "/images/cast5.jpeg" },
-              { name: "Mahendra Perera", image: "/images/cast6.jpeg" },
-            ].map((cast, index) => (
-
-              <div className="cast-card" key={index}>
-                <img src={cast.image} className="cast-photo" />
-                <p className="cast-name">{cast.name}</p>
+            {drama.actors && drama.actors.map((actor, index) => (
+              <div className="cast-card" key={actor.id || index}>
+                <img 
+                  src={`/public/images/upload/actor/${actor.photo}`}
+                  className="cast-photo" 
+                  alt={actor.name}
+                />
+                <p className="cast-name">{actor.name}</p>
               </div>
-
             ))}
           </div>
         </div>
@@ -161,25 +186,30 @@ const DramaDetails = () => {
             <button className="arrow-btn" onClick={() => scroll('left')}>&lt;</button>
             <div className="reviews-container" ref={scrollRef}>
               {reviews.map((review, index) => (
-                <div className="review-card" key={index}>
+                <div className="review-card" key={review.id || index}>
                   <div className="stars">
-                    {'★'.repeat(Math.floor(review.rating)) + (review.rating % 1 !== 0 ? '' : '')}
+                    {renderStars(review.rating)}
                   </div>
                   <div className="review-meta">
-                    <strong>{review.name}</strong>
-                    <span>{review.date}</span>
+                    <strong>{review.user ? `${review.user.fname} ${review.user.lname}` : 'Anonymous'}</strong>
+                    <span>{new Date(review.created).toLocaleDateString()}</span>
                   </div>
-                  <p className="review-text">{review.text}</p>
+                  <p className="review-text">{review.comment}</p>
                 </div>
               ))}
+              {reviews.length === 0 && (
+                <div className="no-reviews">
+                  <p>No reviews yet. Be the first to review!</p>
+                </div>
+              )}
             </div>
-            <br />
-            <br />
-            <br />
-            <br />
             <button className="arrow-btn" onClick={() => scroll('right')}>&gt;</button>
           </div>
         </div>
+        <br />
+        <br />
+        <br />
+        <br />
         <div className="upcoming-section">
           <h2>Upcoming Shows</h2>
           <div className="slide-container">

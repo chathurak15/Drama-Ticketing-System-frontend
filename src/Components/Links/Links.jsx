@@ -1,6 +1,6 @@
 import React from 'react'
 import MenuItem from '../MenuItem/MenuItem'
-import language from "/images/language1.jpg"
+import language from "/images/internet.png"
 
 function Links() {
   return (

@@ -12,7 +12,7 @@ const DramaCard = ({ drama }) => {
   return (
     <div className="drama-card">
       <a href={`/drama/${drama.id}`} className="drama-link">
-      <img src={drama.image} alt={drama.title} />
+      <img src={`/public/images/upload/drama/${drama.image}`} alt={drama.title} />
       <h3>{drama.title}</h3>
       <p>{drama.rating}★</p>
       </a>

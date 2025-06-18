@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import SignIn from './SignIn';
+import SignIn from './login';
 import Register from './Register';
 import Profile from './Profile';
 
@@ -33,9 +33,9 @@ function AuthPage() {
   return (
     <>
       {showLogin ? (
-        <Register switchToSignIn={() => setShowLogin(false)} handleLogin={handleLogin} loginError={loginError} />
+        <SignIn switchToSignIn={() => setShowLogin(false)} handleLogin={handleLogin} loginError={loginError} />
       ) : (
-        <SignIn switchToRegister={() => setShowLogin(true)} handleRegister={handleRegister} />
+        <Register switchToRegister={() => setShowLogin(true)} handleRegister={handleRegister} />
       )}
     </>
   );

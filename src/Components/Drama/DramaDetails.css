@@ -6,7 +6,8 @@
 } */
 
 .top-section {
-  width: 1250px;
+  width: 95%;
+  margin-top: 30px;
   display: flex;
   height: 250px;
   align-items: flex-start;
@@ -14,11 +15,7 @@
   border-radius: 20px;
   margin-bottom: 30px;
   background-color: #cdc7c7;
-}
-
-.top-section:hover {
-  transform: scale(1.05);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  justify-self: center;
 }
 
 .drama-poster {
@@ -33,19 +30,22 @@
 }
 
 .drama-title {
-  font-size: 28px;
-  font-weight: bold;
+  font-family: var(--primary-font);
+  font-size: 33px;
+  font-weight: 700;
   text-align: center;
   margin: 0 0 10px 0;
   margin-top: 70px;
 }
 
 .drama-info {
+  font-family: var(--primary-font);
   display: flex;
   gap: 50px;
   font-size: 28px;
   justify-content: center;
   color: #0b0303;
+  font-weight: 600;
 }
 
 .rating {
@@ -53,16 +53,17 @@
 }
 
 .description-section {
+  justify-self: center;
+  width: 90%;
   display: flex;
   gap: 30px;
-  width: 1250px;
+  padding: 10px;
   height: 300px;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .description-text {
   flex: 1;
-  height: 300px;
   text-align: center;
 }
 
@@ -74,24 +75,24 @@
 }
 
 .description-text p {
-  font-size: 22px;
+  font-size: 19px;
   margin-top: 28px;
-  line-height: 1.6;
+  line-height: 1.8;
   color: #333;
-  font-weight: bold;
-  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-family: var(--primary-font);
 }
 
 .video-section iframe {
   flex: 1;
   border-radius: 20px;
   width: 600px;
-  height: 300px;
+  height: 310px;
 }
 
 .cast-section {
-  margin-top: 50px;
-  width: 1250px;
+  margin-top: 20px;
+  padding: 30px;
 }
 
 .cast-section h2 {
@@ -104,19 +105,19 @@
 .cast-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-  gap: 30px;
-  justify-items: center;
+  grid-template-rows: auto;
+  gap: 50px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
 }
 
 .cast-card {
   text-align: center;
   background-color: #c2bfbf;
-  width: 350px;
   border-radius: 10px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
-  height: 140px;
   display: flex;
   padding: 10px;
 }
@@ -252,7 +253,6 @@
 
 .audience-reviews-section {
   text-align: center;
-  width: 1300px;
 }
 
 .audience-reviews-section h2 {
@@ -267,7 +267,6 @@
   align-items: center;
   justify-content: center;
   margin-top: 20px;
-  width: 1300px;
 }
 
 .arrow-btn {
@@ -290,7 +289,6 @@
   overflow-x: auto;
   gap: 16px;
   padding: 10px;
-  max-width: 80%;
   scroll-behavior: smooth;
 }
 
@@ -301,11 +299,12 @@
 
 
 .review-card {
+  max-height: 200px ;
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  width: 250px;
+  width: 24%;
   flex: 0 0 auto;
   text-align: left;
 }
@@ -320,11 +319,11 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
-  font-size: 14px;
+  font-size: 15px;
   color: #333;
 }
 
 .review-text {
-  font-size: 15px;
+  font-size: 16px;
   color: #444;
 }
