@@ -8,6 +8,19 @@
 
 .shows-grid {
   display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.filter-bar .filter-input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+
+.shows-grid {
+  display: grid;
   grid-template-columns: repeat(auto-fill, minmax(23%, 1fr));
   gap: 30px;
 }

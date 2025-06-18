@@ -6,7 +6,7 @@ const showsData = [
     time: "7:00 PM",
     city: "Kandy",
     location: "Royal Hall",
-    image: "/images/drama7.jpg",
+    image: "/images/drama2.jpg",
   },
   {
     id: 2,

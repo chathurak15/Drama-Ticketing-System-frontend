@@ -22,12 +22,11 @@ const DramaDetails = () => {
         setLoading(true);
         setError(null);
         
-        console.log('Fetching drama with ID:', id);
-        
         // Fetch drama details
         const dramaResponse = await getDramaById(id);
-        console.log('Drama response:', dramaResponse);
         setDrama(dramaResponse.data);
+
+         document.title = `${dramaResponse.data.title}`;
 
         // Fetch reviews/ratings
         try {

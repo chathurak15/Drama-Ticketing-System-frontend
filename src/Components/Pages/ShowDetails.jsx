@@ -3,40 +3,49 @@ import { useParams } from "react-router-dom";
 import { Calendar, Clock, MapPin, User } from "lucide-react";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
-import { getShowById } from "./SampleShows.js";
+import { getShowById } from "../../services/ShowService.js";
 import SeatSelectionPopup from "./SeatPopup.jsx";
 
 const ShowDetails = () => {
   const { id } = useParams();
   const [show, setShow] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [imageSrc, setImageSrc] = useState("");
+  const [error, setError] = useState(null);;
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  // Helper function to format date
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
+  // Helper function to convert duration to readable format
+  const formatDuration = (minutes) => {
+    if (!minutes) return "Duration TBA";
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
+  };
 
   useEffect(() => {
     const fetchShowDetails = async () => {
       try {
         setLoading(true);
-        // Simulate API call delay
         await new Promise((resolve) => setTimeout(resolve, 300));
 
-        const showData = getShowById(id);
-        if (!showData) {
-          setError("Show not found");
-        } else {
-          setShow(showData);
+        // Fetch drama details
+        const showResponse = await getShowById(id);
+        console.log("show response:", showResponse);
+        setShow(showResponse.data);
 
-          if (showData?.title) {
-            document.title = `${showData.title}`;
-          }
-
-          if (showData?.image) {
-            import(`../../assets/${showData.image}`)
-              .then((module) => setImageSrc(module.default))
-              .catch(() => setImageSrc("/images/default-show.jpg")); // fallback
-          }
-        }
+        document.title = `${showResponse.data.title}`;
+        
+        
       } catch (err) {
         setError("Failed to load show details");
       } finally {
@@ -46,6 +55,7 @@ const ShowDetails = () => {
 
     if (id) {
       fetchShowDetails();
+      
     }
   }, [id]);
 
@@ -96,21 +106,21 @@ const ShowDetails = () => {
       <Header />
       {/* Main Content */}
       <main className="min-h-screen">
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-18 py-0 mb-15">
           {/* Show Details Card */}
           <div className="lg:w-4/4 rounded-2xl shadow-lg overflow-hidden my-12">
             <div className="flex flex-col lg:flex-row">
               {/* Poster Image */}
-              <div className="lg:w-1/4 p-0 h-90 flex items-center justify-center">
+              <div className="lg:w-1/4 p-0 h-100 flex items-center justify-center">
                 <img
-                  src={imageSrc}
+                  src={show.image ? `/public/images/upload/show/${show.image}` : "/images/default-show.jpg"}
                   alt={show.title}
                   className="w-full h-full object-cover"
                 />
               </div>
 
               {/* Show Information */}
-              <div className="lg:w-3/4 p-10 flex flex-col justify-center">
+              <div className="lg:w-3/4 p-10 ps-10 flex flex-col justify-center">
                 <h1 className="text-3xl font-bold text-gray-900 mb-6">
                   {show.title}
                 </h1>
@@ -122,10 +132,10 @@ const ShowDetails = () => {
                       <Calendar className="w-6 h-6 text-amber-600" />
                     </div>
                     <div>
-                      <p className="font-semibold text-gray-900">{show.date}</p>
-                      <p className="text-sm text-gray-500">
-                        {show.dateDetails}
+                      <p className="font-semibold text-gray-900">
+                        {formatDate(show.showDate)}
                       </p>
+                      <p className="text-sm text-gray-500">Show Date</p>
                     </div>
                   </div>
 
@@ -135,9 +145,11 @@ const ShowDetails = () => {
                       <Clock className="w-6 h-6 text-blue-600" />
                     </div>
                     <div>
-                      <p className="font-semibold text-gray-900">{show.time}</p>
+                      <p className="font-semibold text-gray-900">
+                        {show.showTime}
+                      </p>
                       <p className="text-sm text-gray-500">
-                        Duration: {show.duration}
+                        Duration: {formatDuration(show.drama?.duration)}
                       </p>
                     </div>
                   </div>
@@ -149,25 +161,27 @@ const ShowDetails = () => {
                     </div>
                     <div>
                       <p className="font-semibold text-gray-900">
-                        {show.venue.name}
+                        {show.location}
                       </p>
                       <p className="text-sm text-gray-500">
-                        {show.venue.location}
+                        {show.city?.cityName}
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <p className="text-gray-600 mb-6">{show.description}</p>
+                <p className="text-gray-600 mb-6">
+                  {show.description || show.drama?.description}
+                </p>
 
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-left gap-10">
                   <div className="flex items-center space-x-2">
-                    <span className="text-gray-600">Drama Name:</span>
+                    <span className="text-gray-600">Drama:</span>
                     <a
-                      href={`/drama/${show.dramaId}`}
+                      href={`/drama/${show.drama?.id}`}
                       className="text-amber-900 font-semibold hover:underline"
                     >
-                      {show.dramaName}
+                      {show.drama?.title}
                     </a>
                   </div>
                   <button
@@ -182,35 +196,36 @@ const ShowDetails = () => {
           </div>
 
           {/* Show Information Section */}
-          <h2 className="text-2xl font-bold text-gray-900 mb-0 mt-6">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6 mt-20">
             Show Information
           </h2>
-          <div className="grid lg:grid-cols-3 gap-8 mb-15 flex items-center">
-            {/* Ticket Pricing */}
+          <div className="grid lg:grid-cols-3 gap-8 mb-15">
+            {/* Ticket Booking */}
             <div className="lg:col-span-2">
               <div className="bg-white rounded-lg shadow-md p-6">
-                <h3 className="text-xl font-semibold mb-4">Ticket Price</h3>
+                <h3 className="text-xl font-semibold mb-4">Ticket Booking</h3>
                 <div className="space-y-3 mb-6">
-                  {show.ticketPrices.map((ticket, index) => (
-                    <div
-                      key={index}
-                      className="flex justify-between items-center"
+                  <p className="text-gray-600">
+                    Select your preferred seats and book your tickets for this
+                    amazing show.
+                  </p>
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Status:</span>
+                    <span
+                      className={`font-bold capitalize ${
+                        show.status === "approved"
+                          ? "text-green-600"
+                          : "text-yellow-600"
+                      }`}
                     >
-                      <span className="font-medium">{ticket.category}</span>
-                      <span
-                        className={`font-bold ${
-                          ticket.available ? "" : "text-red-600"
-                        }`}
-                      >
-                        :{" "}
-                        {ticket.available
-                          ? `${ticket.price} LKR`
-                          : "Not Available"}
-                      </span>
-                    </div>
-                  ))}
+                      {show.status}
+                    </span>
+                  </div>
                 </div>
-                <button className="w-full booking-btn text-white py-3 rounded-lg font-semibold hover:bg-amber-800 transition-colors">
+                <button
+                  onClick={() => setIsPopupOpen(true)}
+                  className="w-full booking-btn text-white py-3 rounded-lg font-semibold hover:bg-amber-800 transition-colors"
+                >
                   Book Your Seat
                 </button>
               </div>
@@ -221,30 +236,74 @@ const ShowDetails = () => {
               <div className="showDetails-card rounded-lg shadow-md p-6">
                 <div className="flex items-center space-x-4 mb-4">
                   <div className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center">
-                    <User className="w-8 h-8 text-gray-600" />
+                    {show.user?.image ? (
+                      <img
+                        src= {`/public/images/upload/user/${show.user.image}`}
+                        alt="Organizer"
+                        className="w-16 h-16 rounded-full object-cover"
+                      />
+                    ) : (
+                      <User className="w-8 h-8 text-gray-600" />
+                    )}
                   </div>
                   <div>
                     <p className="font-semibold">
-                      Organize By:{" "}
+                      Organized By:{" "}
                       <span className="text-amber-900">
-                        {show.organizer.name}
+                        {show.user?.fname}
+                        {show.user?.lname && ` ${show.user.lname}`}
                       </span>
+                    </p>
+                    <p className="text-sm text-gray-500 capitalize">
+                      {show.user?.role?.replace(/([A-Z])/g, " $1").trim()}
                     </p>
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <p className="text-mb">
-                    <span className="font-bold">Email:</span>{" "}
-                    {show.organizer.email}
+                  <p className="text-sm">
+                    <span className="font-bold">Email:</span> {show.user?.email}
                   </p>
-                  <p className="text-mb">
+                  <p className="text-sm">
                     <span className="font-bold">Contact Number:</span>{" "}
-                    {show.organizer.contact}
+                    {show.user?.phoneNumber}
                   </p>
                 </div>
               </div>
             </div>
           </div>
+
+          {/* Drama Details Section */}
+          {show.drama && (
+            <div className="mt-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                About the Drama
+              </h2>
+              <div className="bg-white rounded-lg shadow-md p-6">
+                <h3 className="text-xl font-semibold mb-4">
+                  {show.drama.title}
+                </h3>
+                <p className="text-gray-600 mb-4">{show.drama.description}</p>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="flex items-center space-x-2">
+                    <Clock className="w-5 h-5 text-blue-600" />
+                    <span className="text-sm text-gray-600">
+                      Duration: {formatDuration(show.drama.duration)}
+                    </span>
+                  </div>
+                  {show.drama.videoUrl && (
+                    <a
+                      href={show.drama.videoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-amber-600 hover:text-amber-700 font-medium text-sm"
+                    >
+                      Watch Trailer →
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </main>
 

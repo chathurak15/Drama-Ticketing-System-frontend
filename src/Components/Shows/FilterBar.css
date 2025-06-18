@@ -1,12 +1,14 @@
-.filter-bar {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+.shows-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
 }
 
-.filter-bar input, .filter-bar button {
-  padding: 5px;
-  font-size: 14px;
+.filter-bar .filter-input {
+  width: 23%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
 }
 
 .filter-location-bar {
@@ -47,11 +49,11 @@
 
 .filter-bar button {
   padding: 8px 16px;
-  background-color: #601010;
+  background-color: var(--primary-color);
   color: white;
   border: none;
   border-radius: 6px;
-  width: 175px;
+  width: 300px;
   font-size: 14px;
   font-weight: bold;
   cursor: pointer;
@@ -59,7 +61,7 @@
 }
 
 .filter-bar button:hover {
-  background-color: #8a1f1f;
+  background-color: var(--btn-color);
   color: black;
   font-weight: bold;
 }

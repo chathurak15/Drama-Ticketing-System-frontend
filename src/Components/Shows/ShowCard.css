@@ -10,15 +10,29 @@
   position: relative;
 }
 
+.show-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-10px);
+  transition: transform 0.2s ease-in-out;
+}
+
+.show-card a {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
 .show-location {
   position: absolute;
   top: 5px;
   left: 5px;
   background: var(--btn-color);
-  padding: 2px 5px;
+  padding: 2px 10px;
   font-weight: bold;
   border-radius: 5px;
-  font-size: 12px;
+  font-size: 15px;
+  z-index: 2;
+  color: #000;
 }
 
 .show-image {
@@ -29,20 +43,129 @@
   border-radius: 10px 10px 0 0;
 }
 
+.show-card h3 {
+  padding: 0 15px;
+  font-size: 1.125rem;
+  font-weight: bold;
+  margin: 10px 0;
+  color: #1f2937;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.4;
+}
+
+.show-card p {
+  padding: 0 15px;
+  margin: 5px 0;
+  color: #6b7280;
+}
+
 .show-card button {
   background-color: var(--primary-color);
-  width: 100%;
+  width: calc(100% - 20px);
   color: white;
   border: none;
-  padding: 8px 12px;
+  padding: 12px 16px;
   border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
-  margin-top: 10px;
+  margin: 10px 10px 15px 10px;
   transition: background-color 0.3s ease;
+  font-size: 14px;
 }
 
 .show-card button:hover {
   background-color: var(--btn-color);
   color: #000;
+}
+
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 480px) {
+  .show-card {
+    margin-top: 8px;
+  }
+  
+  .show-location {
+    font-size: 12px;
+    padding: 3px 8px;
+    top: 8px;
+    left: 8px;
+  }
+  
+  .show-image {
+    height: 220px;
+  }
+  
+  .show-card h3 {
+    font-size: 1rem;
+    padding: 0 12px;
+    margin: 8px 0;
+  }
+  
+  .show-card p {
+    font-size: 0.875rem;
+    padding: 0 12px;
+    margin: 4px 0;
+  }
+  
+  .show-card button {
+    width: calc(100% - 16px);
+    margin: 8px 8px 12px 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+}
+
+/* Tablet styles */
+@media (min-width: 481px) and (max-width: 768px) {
+  .show-location {
+    font-size: 13px;
+    padding: 3px 9px;
+  }
+  
+  .show-image {
+    height: 280px;
+  }
+  
+  .show-card h3 {
+    font-size: 1.05rem;
+  }
+  
+  .show-card p {
+    font-size: 0.9rem;
+  }
+}
+
+/* Desktop styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .show-image {
+    height: 320px;
+  }
+}
+
+/* Large desktop styles */
+@media (min-width: 1025px) {
+  .show-image {
+    height: 350px;
+  }
+  
+  .show-card h3 {
+    font-size: 1.2rem;
+  }
 }
