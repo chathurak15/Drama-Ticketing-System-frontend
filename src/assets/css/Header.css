@@ -1,11 +1,13 @@
 .nav-logo img {
-    height: 60px;
+    height: 55px;
     width: auto;
+    padding: 0;
+    margin: -4px 0;
 }
 
 .nav-bar{
     font-family: var(--primary-font);
-    font-size: 18px;
+    font-size: 17px;
     background-color: var(--primary-color);
     font-weight: 600;
     gap: 5em;

@@ -9,7 +9,7 @@ import Footer from "../Footer/Footer";
 import CardSlider from "../Home/CardSlider";
 import SearchShows from "../Home/SearchShows";
 import { useNavigate } from "react-router-dom";
-import "./Home.css";
+import "../../assets/css/Home.css";
 
 function Home() {
   const navigate = useNavigate();

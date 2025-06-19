@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import FilterBar from "../Shows/FilterBar";
 import ShowCard from "../Shows/ShowCard";
-import "./Shows.css";
+import "../../assets/css/Shows.css";
 import Header from "../Header/Header.jsx";
 import Footer from "../Footer/Footer.jsx";
 import { getShows } from "../../services/ShowService.js";
-import Pagination from '../Drama/Pagination';
+import Pagination from "../Drama/Pagination";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -54,7 +54,7 @@ const Shows = () => {
     setCurrentPage(0); // reset to first page on filter change
   };
 
-   const paginate = (pageNumber) => {
+  const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
@@ -85,11 +85,11 @@ const Shows = () => {
             </div>
 
             <Pagination
-          totalDramas={totalPages * ITEMS_PER_PAGE}
-          dramasPerPage={ITEMS_PER_PAGE}
-          currentPage={currentPage + 1}
-          paginate={(page) => paginate(page - 1)} // convert to 0-based
-        />
+              totalDramas={totalPages * ITEMS_PER_PAGE}
+              dramasPerPage={ITEMS_PER_PAGE}
+              currentPage={currentPage + 1}
+              paginate={(page) => paginate(page - 1)} // convert to 0-based
+            />
           </>
         )}
       </div>

@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import React, { useState, useRef, useEffect } from 'react';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
-import './DramaDetails.css';
+import '../../assets/css/DramaDetails.css';
 import '../Shows/ShowsData'
 import showsData from '../Shows/ShowsData';
 import {getDramaById, getRatings} from '../../services/dramaService';

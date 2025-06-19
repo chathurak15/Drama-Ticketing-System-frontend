@@ -2,7 +2,7 @@ import React, { useState,useEffect  } from 'react';
 import { getDramas } from '../../services/dramaService';
 import DramaCard from '../Drama/DramaCard';
 import Pagination from '../Drama/Pagination';
-import './Dramas.css';
+import '../../assets/css/Dramas.css';
 import { Link } from 'react-router-dom';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';

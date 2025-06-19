@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import SignIn from './login';
-import Register from './Register';
+import SignIn from '../Pages/Login';
+import Register from '../Pages/Register';
 import Profile from './Profile';
 
 function AuthPage() {

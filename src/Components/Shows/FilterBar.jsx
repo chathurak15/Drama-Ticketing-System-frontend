@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./FilterBar.css";
+import "../../assets/css/FilterBar.css";
 import { getCity } from "../../services/ShowService";
 
 const FilterBar = ({ filters, onFilterChange }) => {
