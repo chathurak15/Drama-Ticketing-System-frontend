@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "./ShowCard.css";
+import "../../assets/css/ShowCard.css";
 
 const ShowCard = ({ show }) => {
   const navigate = useNavigate();

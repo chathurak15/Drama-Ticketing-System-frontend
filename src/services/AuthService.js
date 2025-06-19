@@ -1,10 +1,11 @@
 import axios from "../api/axiosInstance";
 
 export const login = (email, password) => {
-  return axios.post("auth/login", {
-    email,
-    password
-  });
+  return axios.post("auth/login", 
+    {email,password},
+    {
+      withCredentials: true, 
+    });
 };
 
 // Additional auth functions you might need

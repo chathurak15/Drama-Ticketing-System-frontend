@@ -1,5 +1,5 @@
 import React from 'react';
-import './Footer.css'; // Import the CSS file
+import '../../assets/css/Footer.css'; // Import the CSS file
 import logo from "../../assets/logo nataka white.png"
 
 const Footer = () => {

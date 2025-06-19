@@ -1,6 +1,6 @@
 // src/components/Pagination.jsx
 import React from 'react';
-import './Pagination.css';
+import '../../assets/css/Pagination.css';
 
 const Pagination = ({ totalDramas, dramasPerPage, currentPage, paginate }) => {
   const pageNumbers = [];

@@ -28,7 +28,7 @@ font{
 }
 
 .booking-btn{
-  background-color: #661F19
+  background-color: var(--primary-color)
 }
 
 .showDetails-card{

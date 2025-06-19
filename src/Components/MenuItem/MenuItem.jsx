@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from "react-router-dom";
-import '../MenuItem/MenuItem.css'
+import '../../assets/css/MenuItem.css'
 
 function MenuItem(props) {
 

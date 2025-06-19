@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Links from "../Links/Links";
 import logo from "../../assets/logo nataka white.png";
-import "./Header.css";
+import "../../assets/css/Header.css";
 import { useLocation } from "react-router-dom";
 
 function Header() {

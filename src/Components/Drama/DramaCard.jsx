@@ -1,5 +1,5 @@
 import React from 'react';
-import './DramaCard.css';
+import '../../assets/css/DramaCard.css';
 import { useNavigate } from 'react-router-dom';
 
 const DramaCard = ({ drama }) => {
