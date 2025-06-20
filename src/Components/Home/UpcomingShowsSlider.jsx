@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom"; // For navigation
 const upcomingShows = [
   {
     id: 1,
-    image: "/images/drama7.jpg",
+    image: "/images/upload/show/drama7.jpg",
     title: "Mama Nemeyi Wena Kenek – Colombo Premiere",
     date: "October 26, 2025",
     time: "7:00 PM",
@@ -20,7 +20,7 @@ const upcomingShows = [
   },
    {
     id: 3,
-    image: "/images/drama7.jpg",
+   image: "/images/upload/show/drama7.jpg",
     title: "Mama Nemeyi Wena Kenek – Colombo Premiere",
     date: "October 26, 2025",
     time: "7:00 PM",

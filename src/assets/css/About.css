@@ -1,0 +1,111 @@
+.about-section {
+  background-color: #fff9f8;
+  padding: 60px 20px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.about-container {
+  max-width: 80%;
+  margin: 0 auto;
+  background: #ffffff;
+  padding: 60px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  color: var(--primary-color);
+}
+
+.intro-with-image {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 100px;
+  margin-bottom: 40px;
+}
+
+.about-text {
+  flex: 2;
+}
+
+.about-logo img {
+  width: 270px;
+  height: auto;
+  object-fit: contain;
+}
+
+.about-heading {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+  border-left: 6px solid var(--primary-color);
+  padding-left: 16px;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+/* About Paragraph Box */
+.about-box {
+  background-color: #fff4f2;
+  padding: 50px;
+  border-left: 6px solid var(--primary-color);
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  margin-top: 10px;
+}
+
+.about-box p {
+  font-size: 1.1rem;
+  color: black;
+  line-height: 1.8;
+  margin-bottom: 1rem;
+}
+
+/* Platform Support Section */
+.platform-support {
+  margin-top: 40px;
+}
+
+.support-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.support-image img {
+  width: 400px;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+}
+
+.support-text {
+  flex: 1;
+}
+
+.platform-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.centered-list {
+  font-style: italic;
+}
+
+.centered-list ul {
+  padding-left: 1.2rem;
+  text-align: left;
+}
+
+.about-container ul li {
+  margin-bottom: 0.6rem;
+}
+
+/* Future Vision Section */
+.future-vision {
+  font-size: 1.1rem;
+  margin-top: 40px;
+  color: #333;
+  line-height: 1.7;
+  font-style: italic;
+}

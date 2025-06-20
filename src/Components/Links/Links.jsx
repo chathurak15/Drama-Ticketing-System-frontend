@@ -8,9 +8,9 @@ function Links() {
       <MenuItem linktext="Home" linkurl="/" />
       <MenuItem linktext="Dramas" linkurl="/dramas" />
       <MenuItem linktext="Shows" linkurl="/shows" />
-      <MenuItem linktext="Actors" linkurl="/actors" />
-      <MenuItem linktext="About Us" linkurl="/about" />
-      <MenuItem linktext="Contact" linkurl="/contact" />
+      {/* <MenuItem linktext="Actors" linkurl="/actors" /> */}
+      <MenuItem linktext="Terms" linkurl="/terms" />
+      <MenuItem linktext="Contact US" linkurl="/contact" />
       <MenuItem linktext = "Login/Register" linkurl="/login" isButton={true}/>
       <button id="languagebtn" className="cursor-pointer"><img src = {language} className="h-9 w-auto"/></button>
     </div>

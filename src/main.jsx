@@ -3,8 +3,12 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
+
+// Import Layout component
+import Layout from './Components/Chatbot/Layout.jsx'
+
 import AboutUs from './Components/Pages/AboutUs.jsx'
-import Actors from './Components/Pages/Actors.jsx';
+import Term from './Components/Pages/Term.jsx';
 import Contact from './Components/Pages/Contact.jsx';
 import Dramas from './Components/Pages/Dramas.jsx';
 import Login from './Components/Pages/Login.jsx';
@@ -14,13 +18,11 @@ import Home from './Components/Pages/Home.jsx';
 import DramaDetails from './Components/Drama/DramaDetails.jsx';
 import ShowsDetails from './Components/Pages/ShowDetails.jsx';
 
-
 import AdminDashboard from './Components/Dashboards/AdminDashboard.jsx';
 import TheaterManagerDashboard from './Components/Dashboards/TheaterManagerDashboard.jsx';
 import OrganizerDashboard from './Components/Dashboards/OrganizerDashboard.jsx';
 import UserDashboard from './Components/Dashboards/UserDashboard.jsx';
 
-// Import the ProtectedRoute component
 import ProtectedRoute from './Components/ProtectRoute/ProtectedRoute.jsx'
 
 import {
@@ -61,24 +63,81 @@ const RedirectToDashboard = () => {
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home/>,
+    element: <Layout />, 
+    children: [
+      {
+        index: true, // This makes it the default route for "/"
+        element: <Home />,
+      },
+      {
+        path: "about",
+        element: <AboutUs />,
+      },
+      {
+        path: "terms",
+        element: <Term />,
+      },
+      {
+        path: "contact",
+        element: <Contact />,
+      },
+      {
+        path: "dramas",
+        element: <Dramas />,
+      },
+      {
+        path: "shows",
+        element: <Shows />,
+      },
+      {
+        path: "drama/:id",
+        element: <DramaDetails />,
+      },
+      {
+        path: "show/:id",
+        element: <ShowsDetails />,
+      },
+      
+      // Protected Dashboard Routes
+      {
+        path: "admin-dashboard",
+        element: (
+          <ProtectedRoute allowedRoles={['admin']}>
+            <AdminDashboard />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "theater-manager-dashboard",
+        element: (
+          <ProtectedRoute allowedRoles={['theater manager', 'theater_manager', 'theatermanager']}>
+            <TheaterManagerDashboard />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "organizer-dashboard",
+        element: (
+          <ProtectedRoute allowedRoles={['organizer']}>
+            <OrganizerDashboard />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "user-dashboard",
+        element: (
+          <ProtectedRoute allowedRoles={['user']}>
+            <UserDashboard />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "dashboard",
+        element: <RedirectToDashboard />,
+      },
+    ]
   },
-  {
-    path: "/about",
-    element: <AboutUs />,
-  },
-  {
-    path: "/actors",
-    element: <Actors />,
-  },
-  {
-    path: "/contact",
-    element: <Contact />,
-  },
-  {
-    path: "/dramas",
-    element: <Dramas />,
-  },
+  // Login and Register outside of Layout (no chatbot)
   {
     path: "/login",
     element: <Login />,
@@ -86,69 +145,6 @@ const router = createBrowserRouter([
   {
     path: "/register",
     element: <Register />,
-  },
-  {
-    path: "/shows",
-    element: <Shows />,
-  },
-  {
-    path: "/drama/:id",
-    element: <DramaDetails />,
-  },
-  {
-    path: "/show/:id",
-    element: <ShowsDetails />,
-  },
-  
-  // Protected Dashboard Routes
-  {
-    path: "/admin-dashboard",
-    element: (
-      <ProtectedRoute allowedRoles={['admin']}>
-        <AdminDashboard />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/theater-manager-dashboard",
-    element: (
-      <ProtectedRoute allowedRoles={['theater manager', 'theater_manager', 'theatermanager']}>
-        <TheaterManagerDashboard />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/organizer-dashboard",
-    element: (
-      <ProtectedRoute allowedRoles={['organizer']}>
-        <OrganizerDashboard />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/user-dashboard",
-    element: (
-      <ProtectedRoute allowedRoles={['user']}>
-        <UserDashboard />
-      </ProtectedRoute>
-    ),
-  },
-  
-  // You can add more protected routes here
-  // // For example, a profile page that any authenticated user can access:
-  // {
-  //   path: "/profile",
-  //   element: (
-  //     <ProtectedRoute>
-  //       <Profile />
-  //     </ProtectedRoute>
-  //   ),
-  // },
-  
-  // Dashboard redirect route
-  {
-    path: "/dashboard",
-    element: <RedirectToDashboard />,
   },
 ]);
 
