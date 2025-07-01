@@ -23,4 +23,24 @@ export const getRatings = (page=0, size=4, dramaId) => {
       dramaId
     }
 });
-}
+};
+
+export const deleteDrama = async (id) => {
+  try {
+    const response = await axios.delete(`drama/${id}`, {
+      withCredentials: true
+    });
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      console.error('Delete drama failed:', error.response.data);
+      throw new Error(error.response.data.message || 'Failed to delete drama');
+    } else if (error.request) {
+      console.error('No response received:', error.request);
+      throw new Error('Network error - no response from server');
+    } else {
+      console.error('Request setup error:', error.message);
+      throw new Error('Failed to setup request');
+    }
+  }
+};

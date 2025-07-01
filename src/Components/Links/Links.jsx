@@ -6,8 +6,8 @@ function Links() {
   return (
     <div className="flex items-center space-x-8 text-white">
       <MenuItem linktext="Home" linkurl="/" />
-      <MenuItem linktext="Dramas" linkurl="/dramas" />
       <MenuItem linktext="Shows" linkurl="/shows" />
+      <MenuItem linktext="Dramas" linkurl="/dramas" />
       {/* <MenuItem linktext="Actors" linkurl="/actors" /> */}
       <MenuItem linktext="Terms" linkurl="/terms" />
       <MenuItem linktext="Contact US" linkurl="/contact" />

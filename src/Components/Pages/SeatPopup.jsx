@@ -5,11 +5,11 @@ const SeatPopup = ({ isOpen, onClose, showData }) => {
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [lockedSeats, setLockedSeats] = useState([]);
   const [sessionId] = useState(Math.random().toString(36).substr(2, 9));
-  const [customerInfo, setCustomerInfo] = useState({
-    name: "",
-    email: "",
-    phone: "",
-  });
+  // const [customerInfo, setCustomerInfo] = useState({
+  //   name: "",
+  //   email: "",
+  //   phone: "",
+  // });
 
   // Generate seats based on show's ticket prices
   const generateSeats = () => {
@@ -161,7 +161,6 @@ const SeatPopup = ({ isOpen, onClose, showData }) => {
     const bookingData = {
       show: showData,
       seats: selectedSeats,
-      customer: customerInfo,
       total: getTotalAmount(),
       sessionId: sessionId,
     };
@@ -178,7 +177,6 @@ const SeatPopup = ({ isOpen, onClose, showData }) => {
   const handleClose = () => {
     setSelectedSeats([]);
     setLockedSeats([]);
-    setCustomerInfo({ name: "", email: "", phone: "" });
     onClose();
   };
 
@@ -304,75 +302,10 @@ const SeatPopup = ({ isOpen, onClose, showData }) => {
                     </div>
                   </div>
                 </div>
-
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Full Name
-                    </label>
-                    <input
-                      type="text"
-                      value={customerInfo.name}
-                      onChange={(e) =>
-                        setCustomerInfo({
-                          ...customerInfo,
-                          name: e.target.value,
-                        })
-                      }
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                      placeholder="Enter your full name"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      value={customerInfo.email}
-                      onChange={(e) =>
-                        setCustomerInfo({
-                          ...customerInfo,
-                          email: e.target.value,
-                        })
-                      }
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                      placeholder="Enter your email"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Phone Number
-                    </label>
-                    <input
-                      type="tel"
-                      value={customerInfo.phone}
-                      onChange={(e) =>
-                        setCustomerInfo({
-                          ...customerInfo,
-                          phone: e.target.value,
-                        })
-                      }
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                      placeholder="Enter your phone number"
-                    />
-                  </div>
-                </div>
-
                 <button
                   onClick={() => {
-                    if (
-                      !customerInfo.name ||
-                      !customerInfo.email ||
-                      !customerInfo.phone
-                    ) {
-                      alert("Please fill in all customer information fields");
-                      return;
-                    }
-
                     const bookingData = {
                       show: showData,
-                      customer: customerInfo,
                       sessionId: sessionId,
                     };
 

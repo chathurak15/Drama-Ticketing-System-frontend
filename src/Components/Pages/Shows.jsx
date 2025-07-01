@@ -14,6 +14,7 @@ const Shows = () => {
     title: "",
     date: "",
     city: "",
+    venue: '',
   });
   const [currentPage, setCurrentPage] = useState(0); // page 1-based for UI
   const [shows, setShows] = useState([]);
@@ -22,28 +23,36 @@ const Shows = () => {
   const [error, setError] = useState(null);
 
   const fetchShows = () => {
-    setLoading(true);
-    setError(null);
+  setLoading(true);
+  setError(null);
+
+  // Simple artificial delay function
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  Promise.all([
     getShows({
-      page: currentPage, // backend expects 0-based
+      page: currentPage,
       size: ITEMS_PER_PAGE,
       title: filters.title,
       date: filters.date,
       city: filters.city,
+      venue: filters.venue,
+    }),
+    delay(300),
+  ])
+    .then(([res]) => {
+      const data = res.data;
+      setShows(data.content || []);
+      setTotalPages(data.totalPages || 1);
     })
-      .then((res) => {
-        const data = res.data;
-        setShows(data.content || []);
-        setTotalPages(data.totalPages || 1);
-      })
-      .catch((err) => {
-        console.error("Error fetching shows", err);
-        setError("Shows not found");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
+    .catch((err) => {
+      console.error("Error fetching shows", err);
+      setError("Shows not found");
+    })
+    .finally(() => {
+      setLoading(false);
+    });
+};
 
   useEffect(() => {
     fetchShows();
@@ -57,6 +66,23 @@ const Shows = () => {
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
+
+   if (loading) {
+    return (
+      <>
+        <Header />
+        <main className="min-h-screen flex items-center justify-center">
+          <div className="container mx-auto px-4 py-8">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-amber-600 mx-auto mb-4"></div>
+              <p className="text-gray-600">Loading show details...</p>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>

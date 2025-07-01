@@ -6,11 +6,11 @@
   min-height: 100vh;
 } */
 
-.shows-grid {
+/* .shows-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
-}
+} */
 
 .filter-bar .filter-input {
   padding: 10px;
@@ -21,8 +21,8 @@
 
 .shows-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(23%, 1fr));
-  gap: 30px;
+  grid-template-columns: repeat(auto-fill, minmax(18%, 1fr));
+  gap: 25px;
 }
 
 .pagination {

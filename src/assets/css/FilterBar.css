@@ -1,11 +1,6 @@
-.shows-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
-}
 
 .filter-bar .filter-input {
-  width: 23%;
+  width: 20%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -16,7 +11,7 @@
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 14px;
-  width: 250px;
+  /* width: 250px; */
   height: 42px;
 }
 
@@ -25,7 +20,7 @@
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 14px;
-  width: 250px;
+  /* width: 250px; */
   height: 42px;
 }
 
@@ -34,7 +29,7 @@
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 14px;
-  width: 250px;
+  /* width: 250px; */
   height: 42px;
 }
 
@@ -48,12 +43,12 @@
 }
 
 .filter-bar button {
-  padding: 12px 16px;
+  padding: 12px 10px;
   background-color: var(--primary-color);
   color: white;
   border: none;
   border-radius: 6px;
-  width: 280px;
+  width: 200px;
   font-size: 14px;
   font-weight: bold;
   cursor: pointer;

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "../../assets/css/FilterBar.css";
-import { getCity } from "../../services/ShowService";
+import { getCity, getLocationByCity } from "../../services/ShowService";
 
 const FilterBar = ({ filters, onFilterChange }) => {
   const [localFilters, setLocalFilters] = useState(filters);
   const [cities, setCities] = useState([]);
+  const [venues, setVenues] = useState([]);
 
   useEffect(() => {
     const fetchCities = async () => {
@@ -33,8 +34,24 @@ const FilterBar = ({ filters, onFilterChange }) => {
     return () => clearTimeout(timeout);
   }, [localFilters]);
 
+  useEffect(() => {
+  const fetchVenues = async () => {
+    if (!localFilters.city) {
+      setVenues([]);
+      return;
+    }
+    try {
+      const data = await getLocationByCity(localFilters.city);
+      setVenues(data);
+    } catch (error) {
+      console.error("Failed to load venues", error);
+    }
+  };
+  fetchVenues();
+}, [localFilters.city]);
+
   return (
-    <div className="filter-bar grid gap-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-5">
+    <div className="filter-bar grid gap-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-6">
       <input
         name="title"
         placeholder="Search by title"
@@ -62,6 +79,21 @@ const FilterBar = ({ filters, onFilterChange }) => {
           </option>
         ))}
       </select>
+
+      <select
+        name="venue"
+        value={localFilters.venue || ""}
+        onChange={handleChange}
+        className="filter-input px-3 py-2 rounded border border-gray-300"
+      >
+        <option value="">Select Venue</option>
+        {venues.map((venue, index) => (
+          <option key={index} value={venue}>
+            {venue}
+          </option>
+        ))}
+      </select>
+
       <div className="col-span-1 md:col-span-2 flex items-center">
         <button
           onClick={() => onFilterChange(localFilters)}

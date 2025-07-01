@@ -5,6 +5,7 @@ import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import { getShowById } from "../../services/ShowService.js";
 import SeatSelectionPopup from "./SeatPopup.jsx";
+import { getShowsById } from "./SampleShows.js";
 
 const ShowDetails = () => {
   const { id } = useParams();
@@ -12,6 +13,7 @@ const ShowDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);;
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [shows, setShows] = useState(null);
 
   // Helper function to format date
   const formatDate = (dateString) => {
@@ -43,8 +45,10 @@ const ShowDetails = () => {
         console.log("show response:", showResponse);
         setShow(showResponse.data);
 
-        document.title = `${showResponse.data.title}`;
+        // document.title = `${showResponse.data.title}`;
         
+        const seatData = getShowsById(id);
+        setShows(seatData);
         
       } catch (err) {
         setError("Failed to load show details");
@@ -310,7 +314,7 @@ const ShowDetails = () => {
       <SeatSelectionPopup
         isOpen={isPopupOpen}
         onClose={() => setIsPopupOpen(false)}
-        showData={show}
+        showData={shows}
       />
 
       <Footer />
