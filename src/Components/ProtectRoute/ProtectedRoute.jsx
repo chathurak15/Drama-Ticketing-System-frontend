@@ -33,9 +33,9 @@ const getDashboardRoute = (userRole) => {
   switch (userRole?.toLowerCase()) {
     case 'admin':
       return '/admin-dashboard';
-    case 'theater manager':
-    case 'theater_manager':
-    case 'theatermanager':
+    case 'theatre manager':
+    case 'theare_manager':
+    case 'theatremanager':
       return '/theater-manager-dashboard';
     case 'organizer':
       return '/organizer-dashboard';

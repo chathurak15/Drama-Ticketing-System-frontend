@@ -13,7 +13,7 @@ const ShowsContent = ({ setAddType, setShowAddModal }) => {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
-  const pageSize = 5;
+  const pageSize = 3;
 
   useEffect(() => {
     fetchShows();
@@ -63,6 +63,9 @@ const ShowsContent = ({ setAddType, setShowAddModal }) => {
       setCurrentPage(newPage);
     }
   };
+  const handleView = (showId)=>{
+    window.open(`/show/${showId}`, '_blank'); 
+  }
 
   if (loading) {
     return (
@@ -217,7 +220,10 @@ const ShowsContent = ({ setAddType, setShowAddModal }) => {
                     </td>
                     <td className="px-4 py-4 whitespace-nowrap text-sm font-medium">
                       <div className="flex space-x-2">
-                        <ActionButton icon={Eye} color="text-blue-600" />
+                        <ActionButton icon={Eye} 
+                        onClick={() => handleView(show.showId)}
+                        color="text-blue-600" 
+                        />
                         <ActionButton icon={Edit} color="text-gray-600" />
                         {show.status === 'pending' && (
                           <>

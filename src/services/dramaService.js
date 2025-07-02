@@ -1,5 +1,11 @@
 import axios from "../api/axiosInstance";
 
+export const addDrama = (dramaData) => {
+  return axios.post("drama/add", dramaData,{ 
+    withCredentials : true
+  });
+};
+
 export const getDramas = ({ page = 0, size = 12, title = '', sortByRating = 'desc' }) => {
   return axios.get("drama/all", {
     params: {

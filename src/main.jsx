@@ -6,7 +6,6 @@ import App from './App.jsx'
 
 // Import Layout component
 import Layout from './Components/Chatbot/Layout.jsx'
-
 import AboutUs from './Components/Pages/AboutUs.jsx'
 import Term from './Components/Pages/Term.jsx';
 import Contact from './Components/Pages/Contact.jsx';
@@ -19,11 +18,12 @@ import DramaDetails from './Components/Drama/DramaDetails.jsx';
 import ShowsDetails from './Components/Pages/ShowDetails.jsx';
 
 import AdminDashboard from './Components/Dashboards/AdminDashboard.jsx';
-import TheaterManagerDashboard from './Components/Dashboards/TheaterManagerDashboard.jsx';
+import TheaterManagerDashboard from './Components/Dashboards/TheatreManagerDashboard.jsx';
 import OrganizerDashboard from './Components/Dashboards/OrganizerDashboard.jsx';
 import UserDashboard from './Components/Dashboards/UserDashboard.jsx';
 
 import ProtectedRoute from './Components/ProtectRoute/ProtectedRoute.jsx'
+import Logout from "./Components/Logout/Logout.jsx";
 
 import {
   createBrowserRouter,
@@ -45,9 +45,9 @@ const RedirectToDashboard = () => {
     switch (userRole?.toLowerCase()) {
       case 'admin':
         return '/admin-dashboard';
-      case 'theater manager':
-      case 'theater_manager':
-      case 'theatermanager':
+      case 'theatre manager':
+      case 'theatre_manager':
+      case 'theatremanager':
         return '/theater-manager-dashboard';
       case 'organizer':
         return '/organizer-dashboard';
@@ -108,9 +108,9 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "theater-manager-dashboard",
+        path: "theatre-manager-dashboard",
         element: (
-          <ProtectedRoute allowedRoles={['theater manager', 'theater_manager', 'theatermanager']}>
+          <ProtectedRoute allowedRoles={['theatre manager', 'theatre_manager', 'theatremanager']}>
             <TheaterManagerDashboard />
           </ProtectedRoute>
         ),
@@ -134,6 +134,10 @@ const router = createBrowserRouter([
       {
         path: "dashboard",
         element: <RedirectToDashboard />,
+      },
+      {
+        path : "/logout",
+        element: <Logout />,
       },
     ]
   },

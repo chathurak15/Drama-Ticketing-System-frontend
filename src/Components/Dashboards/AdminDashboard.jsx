@@ -5,9 +5,10 @@ import AddModal from '../Admin/AddModel';
 import DashboardContent from '../Admin/DashboardContent';
 import ShowsContent from '../Admin/ShowsContent';
 import DramasContent from '../Admin/DramasContent';
-import ActorsContent from '../Admin/ActorsContent';
+import ActorsContent from '../Admin/Actors/ActorsContent';
 import UsersContent from '../Admin/UsersContent';
 import AnalyticsContent from '../Admin/AnalyticsContent';
+
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('dashboard');

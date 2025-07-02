@@ -106,7 +106,8 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: auto;
-  gap: 50px;
+  gap: 40px;
+  row-gap: 15px;
   width: 100%;
   align-items: center;
   justify-content: center;

@@ -44,9 +44,9 @@ const DramaContent = ({ setAddType, setShowAddModal, setEditDrama }) => {
   const handleDelete = async (dramaId) => {
     if (window.confirm("Are you sure you want to delete this drama?")) {
       try {
-        await deleteDrama(dramaId);
-        setDramas(dramas.filter(drama => drama.id !== dramaId));
-        toast.success("Drama deleted successfully!");
+        const response = await deleteDrama(dramaId);
+        alert(response.data);
+        fetchDramas();
       } catch (err) {
         console.error("Error deleting drama", err);
         toast.error("Failed to delete drama.");

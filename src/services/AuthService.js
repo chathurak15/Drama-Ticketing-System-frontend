@@ -8,9 +8,10 @@ export const login = (email, password) => {
     });
 };
 
-// Additional auth functions you might need
 export const logout = () => {
-  return axios.post("auth/logout");
+  return axios.post("auth/logout",{},{
+    withCredentials : true
+  });
 };
 
 export const register = (userData) => {
@@ -33,32 +34,14 @@ export const getCurrentUser = () => {
   return axios.get("auth/me");
 };
 
-// Token management utilities
-// export const setAuthToken = (token) => {
-//   if (token) {
-//     localStorage.setItem('authToken', token);
-//     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-//   } else {
-//     localStorage.removeItem('authToken');
-//     delete axios.defaults.headers.common['Authorization'];
-//   }
+
+// export const getAuthToken = () => {
+//   return localStorage.getItem('authToken');
 // };
 
-export const getAuthToken = () => {
-  return localStorage.getItem('authToken');
-};
-
-export const isAuthenticated = () => {
-  const token = getAuthToken();
-  return !!token;
-};
-
-// Initialize auth token on app start
-// export const initializeAuth = () => {
+// export const isAuthenticated = () => {
 //   const token = getAuthToken();
-//   if (token) {
-//     setAuthToken(token);
-//   }
+//   return !!token;
 // };
 
 export default {
@@ -69,8 +52,6 @@ export default {
   forgotPassword,
   resetPassword,
   getCurrentUser,
-  // setAuthToken,
-  getAuthToken,
-  isAuthenticated,
-  // initializeAuth
+  // getAuthToken,
+  // isAuthenticated,
 };

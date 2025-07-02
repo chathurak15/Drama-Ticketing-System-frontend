@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { User, Edit, Trash2, Eye, Calendar, Search, Plus } from "lucide-react";
-import ActionButton from "./ActionButton";
-import TableRow from "./TableRow";
-import { getActors } from "../../services/ActorService";
+import ActionButton from "../ActionButton";
+import TableRow from "../TableRow";
+import { deleteActor, getActors } from "../../../services/ActorService";
 import { toast } from "react-toastify";
 
-const ActorsContent = ({ setAddType, setShowAddModal }) => {
+const ActorsContent = ({ setAddType, setShowAddModal}) => {
   const [actors, setActors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -32,7 +32,6 @@ const ActorsContent = ({ setAddType, setShowAddModal }) => {
       });
 
       setActors(response.data.content || []);
-      console.log(actors)
       setTotalPages(response.data.totalPages || 1);
     } catch (err) {
       console.error("Error fetching actors", err);
@@ -44,13 +43,16 @@ const ActorsContent = ({ setAddType, setShowAddModal }) => {
   };
 
   const handleDelete = async (actorId) => {
+    if (window.confirm("Are you sure you want to delete this Actor?")) {
     try {
-      setActors((prev) => prev.filter((actor) => actor.id !== actorId));
-      toast.success("Actor deleted (locally).");
+      const response = await deleteActor(actorId);
+      alert(response.data);
+      await fetchActors();
     } catch (err) {
       console.error("Error deleting actor:", err);
-      toast.error("Delete failed.");
+      alert();
     }
+  }
   };
 
   const handlePageChange = (newPage) => {
@@ -196,7 +198,7 @@ const ActorsContent = ({ setAddType, setShowAddModal }) => {
                     </td>
                     <td className="px-6 py-4 text-sm font-medium">
                       <div className="flex space-x-2">
-                        <ActionButton icon={Eye} color="text-blue-600" />
+                        {/* <ActionButton icon={Eye} color="text-blue-600" /> */}
                         <ActionButton icon={Edit} color="text-gray-600" />
                         <ActionButton
                           icon={Trash2}

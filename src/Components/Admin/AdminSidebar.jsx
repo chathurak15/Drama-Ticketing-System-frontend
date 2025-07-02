@@ -17,7 +17,7 @@ const sidebarItems = [
   { key: 'users', label: 'Users', icon: Users },
   { key: 'payments', label: 'Payments', icon: CreditCard },
   { key: 'analytics', label: 'Analytics', icon: BarChart3 },
-  { key: 'settings', label: 'Settings', icon: Settings },
+  { key: 'Log Out', label: 'LogOut', icon: Settings },
 ];
 
 const AdminSidebar = ({ activeTab, setActiveTab }) => (

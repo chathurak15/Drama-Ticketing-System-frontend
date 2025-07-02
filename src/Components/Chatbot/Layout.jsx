@@ -12,7 +12,7 @@ const Layout = () => {
   return (
     <div className="app-layout">
       <Outlet />
-      {shouldShowChatbot && <Chatbot />}
+      {/* {shouldShowChatbot && <Chatbot />} */}
     </div>
   );
 };

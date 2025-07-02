@@ -50,7 +50,7 @@ const Login = ({onLoginSuccess }) => {
     try {
       const response = await login(loginData.email, loginData.password);
 
-      const {user} = response.data;
+      const user = response.data;
       if (user) {
         // Show welcome message
         alert(`Welcome ${user.fname} ${user.lname}`);

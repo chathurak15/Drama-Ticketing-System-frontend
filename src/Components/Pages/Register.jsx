@@ -4,7 +4,7 @@ import Logo from "../../assets/logo nataka white.png";
 import { register } from "../../services/AuthService";
 import { useNavigate } from "react-router-dom";
 
-function Register({ switchToLogin, onRegisterSuccess }) {
+function Register() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -14,7 +14,7 @@ function Register({ switchToLogin, onRegisterSuccess }) {
     mobileNumber: "",
     password: "",
     confirmPassword: "",
-    role: "User",
+    role: "Customer",
     showRoleSelection: false,
   });
 
@@ -91,7 +91,7 @@ function Register({ switchToLogin, onRegisterSuccess }) {
     setFormData((prev) => ({
       ...prev,
       showRoleSelection: !prev.showRoleSelection,
-      role: prev.showRoleSelection ? "User" : "",
+      role: prev.showRoleSelection ? "Customer" : "",
     }));
   };
 
@@ -116,12 +116,10 @@ function Register({ switchToLogin, onRegisterSuccess }) {
       };
       const response = await register(apiPayload);
 
-      if (response.data == "User Registered Successfully") {
+      if (response.data == "User registered successfully") {
         alert("Registration successful! Please login to continue.");
-        if (onRegisterSuccess) {
-          onRegisterSuccess(response.data);
-           navigator ("/login");
-        }
+        navigate("/login");
+
         // Reset form
         setFormData({
           firstName: "",
@@ -130,7 +128,7 @@ function Register({ switchToLogin, onRegisterSuccess }) {
           mobileNumber: "",
           password: "",
           confirmPassword: "",
-          role: "User",
+          role: "Customer",
           showRoleSelection: false,
         });
 

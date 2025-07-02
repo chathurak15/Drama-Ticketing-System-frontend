@@ -9,3 +9,15 @@ export const getActors = ({ page = 0, size = 12, name}) => {
     }
   });
 };
+
+export const addActor = (actorData)=>{
+  return axios.post("actor/add", actorData,{
+    withCredentials: true
+  });
+};
+
+export const deleteActor = async (id) => { 
+  return axios.delete(`actor/${id}`, {
+    withCredentials: true
+  });
+}

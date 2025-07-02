@@ -4,7 +4,7 @@ import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import "../../assets/css/DramaDetails.css";
 import "../Shows/ShowsData";
-import showsData from "../Shows/ShowsData";
+// import showsData from "../Shows/ShowsData";
 import { getDramaById, getRatings } from "../../services/dramaService";
 import { useNavigate } from "react-router-dom";
 import UpcomingShowsSlider from "../Home/UpcomingShowsSlider";
@@ -16,7 +16,7 @@ const DramaDetails = () => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [startIndex, setStartIndex] = useState(0);
+  // const [startIndex, setStartIndex] = useState(0);
 
   // Fetch drama details and reviews on component mount
   useEffect(() => {
@@ -59,19 +59,19 @@ const DramaDetails = () => {
     }
   }, [id]);
 
-  const visibleShows = showsData.slice(startIndex, startIndex + 4);
+  // const visibleShows = showsData.slice(startIndex, startIndex + 4);
 
-  const handleNext = () => {
-    if (startIndex + 4 < showsData.length) {
-      setStartIndex(startIndex + 1);
-    }
-  };
+  // const handleNext = () => {
+  //   if (startIndex + 4 < showsData.length) {
+  //     setStartIndex(startIndex + 1);
+  //   }
+  // };
 
-  const handlePrev = () => {
-    if (startIndex > 0) {
-      setStartIndex(startIndex - 1);
-    }
-  };
+  // const handlePrev = () => {
+  //   if (startIndex > 0) {
+  //     setStartIndex(startIndex - 1);
+  //   }
+  // };
 
   const scrollRef = useRef();
 
@@ -99,7 +99,7 @@ const DramaDetails = () => {
         return `https://www.youtube.com/embed/${match[1]}`;
       }
     } catch (err) {
-      console.error("Invalid YouTube URL:", url);
+      console.error("Invalid YouTube URL:", url,err);
     }
 
     return null;
