@@ -1,17 +1,26 @@
-import React, { useState} from "react";
+import React, { useState, useEffect } from "react";
 import { login } from "../../services/AuthService";
 import { Eye, EyeOff, Mail, Lock, LogIn } from "lucide-react";
 import Header from "../Header/Header";
 import "../../assets/css/Login.css";
 import Footer from "../Footer/Footer";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../utils/AuthContext";
 
-const Login = ({onLoginSuccess }) => {
+const Login = ({ onLoginSuccess }) => {
+  const navigate = useNavigate();
+  const { user, setUser, loading } = useAuth();
 
-   const navigate = useNavigate();
+  useEffect(() => {
+    if (loading) return;
+    if (user) {
+      const route = getDashboardRoute(user.role);
+      navigate(route);
+    }
+  }, [user, loading, navigate]);
 
   const [loginData, setLoginData] = useState({
-    email: "", 
+    email: "",
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -28,17 +37,17 @@ const Login = ({onLoginSuccess }) => {
   // Function to determine dashboard route based on user role
   const getDashboardRoute = (userRole) => {
     switch (userRole?.toLowerCase()) {
-      case 'admin':
-        return '/admin-dashboard';
-      case 'theater manager':
-      case 'theater_manager':
-      case 'theatermanager':
-        return '/theater-manager-dashboard';
-      case 'organizer':
-        return '/organizer-dashboard';
-      case 'user':
+      case "admin":
+        return "/admin-dashboard";
+      case "theater manager":
+      case "theater_manager":
+      case "theatermanager":
+        return "/theater-manager-dashboard";
+      case "organizer":
+        return "/organizer-dashboard";
+      case "user":
       default:
-        return '/user-dashboard';
+        return "/user-dashboard";
     }
   };
 
@@ -52,25 +61,16 @@ const Login = ({onLoginSuccess }) => {
 
       const user = response.data;
       if (user) {
-        // Show welcome message
         alert(`Welcome ${user.fname} ${user.lname}`);
-        
-        // Store user data in localStorage (for authentication persistence)
-        localStorage.setItem('user', JSON.stringify(user));
-        localStorage.setItem('userRole', user.role);
-        
-        // Call the parent callback if provided
+        setUser(user);
+
         if (onLoginSuccess) onLoginSuccess({ user });
-        
-        // Navigate to appropriate dashboard based on role
+
         const dashboardRoute = getDashboardRoute(user.role);
         navigate(dashboardRoute);
       }
-
     } catch (error) {
-      // Handle different error types
       if (error.response) {
-        // Server responded with error status
         const status = error.response.status;
         const message = error.response.data?.message || "Login failed";
 
@@ -94,7 +94,6 @@ const Login = ({onLoginSuccess }) => {
       setIsLoading(false);
     }
   };
-
 
   return (
     <>

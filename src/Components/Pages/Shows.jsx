@@ -104,7 +104,7 @@ const Shows = () => {
             <div className="shows-grid p-2">
               {shows.map(
                 (show) => (
-                  console.log("Shows array:", show),
+                  // console.log("Shows array:", show),
                   (<ShowCard key={show.showId} show={show} />)
                 )
               )}

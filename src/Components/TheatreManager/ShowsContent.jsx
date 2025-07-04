@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { Plus, Search, Eye, Edit,Calendar, CheckCircle, XCircle, Clock, MapPin, User } from 'lucide-react';
-import ActionButton from './ActionButton';
-import TableRow from './TableRow';
-import { getShowsAdmin , updateShowStatus } from "../../services/ShowService.js";
+import { Plus, Search, Eye, Edit,Calendar, Trash2, XCircle, Clock, MapPin, User } from 'lucide-react';
+import ActionButton from '../Admin/ActionButton';
+import TableRow from '../Admin/TableRow';
+import { getShowsByUser, deleteShow} from "../../services/ShowService.js";
+import { useAuth } from "../../utils/AuthContext";
 
 const ShowsContent = ({ setAddType, setShowAddModal }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('');
   const [shows, setShows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
-  const pageSize = 15;
+  const userId = useAuth().user?.id;
+  const pageSize = 3;
 
   useEffect(() => {
     fetchShows();
@@ -24,39 +26,59 @@ const ShowsContent = ({ setAddType, setShowAddModal }) => {
     setError(null);
     
     try {
-      const response = await getShowsAdmin({
+      let response;
+
+      if(statusFilter === ''){
+        response = await getShowsByUser({
         page: currentPage,
         size: pageSize,
-        status: statusFilter
+        userId: userId
       });
-      
+      }else{
+        response = await getShowsByUser({
+        page: currentPage,
+        size: pageSize,
+        status: statusFilter,
+        userId: userId
+      });
+      }
       setShows(response.data.content || []);
       setTotalPages(response.data.totalPages || 1);
     } catch (err) {
-      console.error("Error fetching shows", err);
-      setError("Failed to load shows. Please try again later.");
-      toast.error("Failed to update show status.");
+      if (error.response) {
+        console.error("Error fetching shows", err);
+        const status = error.response.status;
+        const message = error.response.data?.message || "Failed to fetch shows";
+
+        if (status === 401) {
+          setError("Invalid email or password");
+        } else if (status === 404) {
+          setError("No shows found");
+        } else if (status === 500) {
+          setError("Server error. Please try again later");
+        } else {
+          setError(message);
+        } 
+      }else {
+        setError("An unexpected error occurred");
+      }
     } finally {
       setLoading(false);
     }
   };
 
-  const handleShowAction = async (showId, action) => {
-    try {
-      await updateShowStatus({ id: showId, status: action });
-
-    // Optimistic UI update
-    setShows(shows.map(show =>
-      show.showId === showId ? { ...show, status: action } : show
-    ));
-
-    toast.success(`Show ${action} successfully!`);
-
-    } catch (err) {
-      console.error("Error updating show status", err);
-      setError("Failed to update show status");
-    }
-  };
+  const handleDelete = async (showId) => {
+      if (window.confirm("Are you sure you want to delete this show?")) {
+        try {
+          const response = await deleteShow(showId,userId);
+          alert(response.data);
+          fetchShows();
+        } catch (err) {
+          console.error("Error deleting drama", err);
+          toast.error("Failed to delete drama.");
+        }
+      }
+    };
 
   const handlePageChange = (newPage) => {
     if (newPage >= 0 && newPage < totalPages) {
@@ -134,7 +156,7 @@ const ShowsContent = ({ setAddType, setShowAddModal }) => {
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
             >
-              <option value="all">All Status</option>
+              <option value="">All Status</option>
               <option value="pending">Pending</option>
               <option value="approved">Approved</option>
               <option value="rejected">Rejected</option>
@@ -148,7 +170,6 @@ const ShowsContent = ({ setAddType, setShowAddModal }) => {
               <tr>
                 <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
                 <th className="px-0 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Show</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Organizer</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time</th>
                 <th className="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Venue</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Drama</th>
@@ -175,15 +196,6 @@ const ShowsContent = ({ setAddType, setShowAddModal }) => {
                           <div className="text-sm font-medium text-gray-900">{show.title}</div>
                         </div>
                       </div>
-                    </td>
-                    <td className="px-4 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <User className="w-4 h-4 text-gray-400 mr-1" />
-                        <span className="text-sm text-gray-900">
-                          {show.user?.fname} {show.user?.lname}
-                        </span>
-                      </div>
-                      <div className="text-xs text-gray-500">{show.user?.email}</div>
                     </td>
                     <td className="px-4 py-4 whitespace-nowrap">
                       <div className="flex items-center">
@@ -225,25 +237,12 @@ const ShowsContent = ({ setAddType, setShowAddModal }) => {
                         color="text-blue-600" 
                         />
                         <ActionButton icon={Edit} color="text-gray-600" />
-                        {show.status === 'pending' && (
-                          <>
-                            <ActionButton
-                              icon={CheckCircle}
-                              onClick={() => handleShowAction(show.showId, 'approved')}
-                              color="text-green-600"
-                            />
-                            <ActionButton
-                              icon={XCircle}
-                              onClick={() => handleShowAction(show.showId, 'rejected')}
-                              color="text-red-600"
-                            />
-                          </>
-                        )}
-                        {/* <ActionButton 
+          
+                        <ActionButton 
                           icon={Trash2} 
                           color="text-red-600" 
-                          onClick={() => handleShowAction(show.showId, 'deleted')}
-                        /> */}
+                          onClick={() => handleDelete(show.showId)}
+                        />
                       </div>
                     </td>
                   </TableRow>

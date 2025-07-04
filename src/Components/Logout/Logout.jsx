@@ -1,11 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../../services/AuthService";
+import { useAuth } from "../../utils/AuthContext";
 
 const Logout = () => {
   const navigate = useNavigate();
+  const { logout } = useAuth();
+  const hasRun = useRef(false); 
 
   useEffect(() => {
+    if (hasRun.current) return; 
+    hasRun.current = true;
+
     const performLogout = async () => {
       const confirmed = window.confirm("Are you sure you want to logout?");
       if (!confirmed) {
@@ -14,18 +19,15 @@ const Logout = () => {
       }
 
       try {
-        await logout(); 
+        await logout(); // await to ensure it's complete
+        navigate("/login");
       } catch (err) {
         console.error("Logout failed", err);
       }
-
-      localStorage.clear();
-      sessionStorage.clear();
-      navigate("/login");
     };
 
     performLogout();
-  }, [navigate]);
+  }, [logout, navigate]);
 
   return (
     <div className="text-center mt-10 text-lg text-gray-600">

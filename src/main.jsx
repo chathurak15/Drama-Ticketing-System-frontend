@@ -1,108 +1,87 @@
-import React from 'react';
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
-
-// Import Layout component
-import Layout from './Components/Chatbot/Layout.jsx'
-import AboutUs from './Components/Pages/AboutUs.jsx'
-import Term from './Components/Pages/Term.jsx';
-import Contact from './Components/Pages/Contact.jsx';
-import Dramas from './Components/Pages/Dramas.jsx';
-import Login from './Components/Pages/Login.jsx';
-import Register from './Components/Pages/Register.jsx';
-import Shows from './Components/Pages/Shows.jsx';
-import Home from './Components/Pages/Home.jsx';
-import DramaDetails from './Components/Drama/DramaDetails.jsx';
-import ShowsDetails from './Components/Pages/ShowDetails.jsx';
-
-import AdminDashboard from './Components/Dashboards/AdminDashboard.jsx';
-import TheaterManagerDashboard from './Components/Dashboards/TheatreManagerDashboard.jsx';
-import OrganizerDashboard from './Components/Dashboards/OrganizerDashboard.jsx';
-import UserDashboard from './Components/Dashboards/UserDashboard.jsx';
-
-import ProtectedRoute from './Components/ProtectRoute/ProtectedRoute.jsx'
-import Logout from "./Components/Logout/Logout.jsx";
-
 import {
   createBrowserRouter,
   RouterProvider,
   Navigate,
 } from "react-router-dom";
 
-// Helper component to redirect to appropriate dashboard based on user role
+import { AuthProvider } from "./utils/AuthContext.jsx";
+
+// Pages & Layout
+import Layout from "./Components/Chatbot/Layout.jsx";
+import AboutUs from "./Components/Pages/AboutUs.jsx";
+import Term from "./Components/Pages/Term.jsx";
+import Contact from "./Components/Pages/Contact.jsx";
+import Dramas from "./Components/Pages/Dramas.jsx";
+import Login from "./Components/Pages/Login.jsx";
+import Register from "./Components/Pages/Register.jsx";
+import Shows from "./Components/Pages/Shows.jsx";
+import Home from "./Components/Pages/Home.jsx";
+import DramaDetails from "./Components/Drama/DramaDetails.jsx";
+import ShowsDetails from "./Components/Pages/ShowDetails.jsx";
+
+// Dashboards
+import AdminDashboard from "./Components/Dashboards/AdminDashboard.jsx";
+import TheaterManagerDashboard from "./Components/Dashboards/TheatreManagerDashboard.jsx";
+import OrganizerDashboard from "./Components/Dashboards/OrganizerDashboard.jsx";
+import UserDashboard from "./Components/Dashboards/UserDashboard.jsx";
+
+// Utils
+import ProtectedRoute from "./Components/ProtectRoute/ProtectedRoute.jsx";
+import Logout from "./Components/Logout/Logout.jsx";
+import TheatresContent from "./Components/TheatreManager/TheatresContent.jsx";
+import { useAuth } from "./utils/AuthContext.jsx";
+
+// RedirectToDashboard Component
 const RedirectToDashboard = () => {
-  const user = JSON.parse(localStorage.getItem('user') || 'null');
-  const userRole = localStorage.getItem('userRole');
-  
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-  
-  // Redirect to appropriate dashboard
-  const getDashboardRoute = (userRole) => {
-    switch (userRole?.toLowerCase()) {
-      case 'admin':
-        return '/admin-dashboard';
-      case 'theatre manager':
-      case 'theatre_manager':
-      case 'theatremanager':
-        return '/theater-manager-dashboard';
-      case 'organizer':
-        return '/organizer-dashboard';
-      case 'user':
+  const { user, loading } = useAuth();
+
+  if (loading) return <div>Loading...</div>;
+  if (!user) return <Navigate to="/login" replace />;
+
+  const userRole = user.role?.toLowerCase();
+
+  const getDashboardRoute = (role) => {
+    switch (role) {
+      case "admin":
+        return "/admin-dashboard";
+      case "theatre manager":
+      case "theatre_manager":
+      case "theatremanager":
+        return "/theatre-manager-dashboard";
+      case "organizer":
+        return "/organizer-dashboard";
+      case "user":
       default:
-        return '/user-dashboard';
+        return "/user-dashboard";
     }
   };
-  
+
   return <Navigate to={getDashboardRoute(userRole)} replace />;
 };
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />, 
+    element: <Layout />,
     children: [
-      {
-        index: true, // This makes it the default route for "/"
-        element: <Home />,
-      },
-      {
-        path: "about",
-        element: <AboutUs />,
-      },
-      {
-        path: "terms",
-        element: <Term />,
-      },
-      {
-        path: "contact",
-        element: <Contact />,
-      },
-      {
-        path: "dramas",
-        element: <Dramas />,
-      },
-      {
-        path: "shows",
-        element: <Shows />,
-      },
-      {
-        path: "drama/:id",
-        element: <DramaDetails />,
-      },
-      {
-        path: "show/:id",
-        element: <ShowsDetails />,
-      },
-      
+      { index: true, element: <Home /> },
+      { path: "about", element: <AboutUs /> },
+      { path: "terms", element: <Term /> },
+      { path: "contact", element: <Contact /> },
+      { path: "dramas", element: <Dramas /> },
+      { path: "shows", element: <Shows /> },
+      { path: "drama/:id", element: <DramaDetails /> },
+      { path: "show/:id", element: <ShowsDetails /> },
+
       // Protected Dashboard Routes
       {
         path: "admin-dashboard",
         element: (
-          <ProtectedRoute allowedRoles={['admin']}>
+          <ProtectedRoute allowedRoles={["admin"]}>
             <AdminDashboard />
           </ProtectedRoute>
         ),
@@ -110,7 +89,9 @@ const router = createBrowserRouter([
       {
         path: "theatre-manager-dashboard",
         element: (
-          <ProtectedRoute allowedRoles={['theatre manager', 'theatre_manager', 'theatremanager']}>
+          <ProtectedRoute
+            allowedRoles={["theatre manager", "theatre_manager", "theatremanager"]}
+          >
             <TheaterManagerDashboard />
           </ProtectedRoute>
         ),
@@ -118,7 +99,7 @@ const router = createBrowserRouter([
       {
         path: "organizer-dashboard",
         element: (
-          <ProtectedRoute allowedRoles={['organizer']}>
+          <ProtectedRoute allowedRoles={["organizer"]}>
             <OrganizerDashboard />
           </ProtectedRoute>
         ),
@@ -126,7 +107,7 @@ const router = createBrowserRouter([
       {
         path: "user-dashboard",
         element: (
-          <ProtectedRoute allowedRoles={['user']}>
+          <ProtectedRoute allowedRoles={["user"]}>
             <UserDashboard />
           </ProtectedRoute>
         ),
@@ -136,24 +117,25 @@ const router = createBrowserRouter([
         element: <RedirectToDashboard />,
       },
       {
-        path : "/logout",
+        path: "/logout",
         element: <Logout />,
       },
-    ]
+      {
+        path: "/view-theatres",
+        element: <TheatresContent />,
+      },
+    ],
   },
-  // Login and Register outside of Layout (no chatbot)
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/register",
-    element: <Register />,
-  },
+  // Login and Register (outside layout)
+  { path: "/login", element: <Login /> },
+  { path: "/register", element: <Register /> },
 ]);
 
-createRoot(document.getElementById('root')).render(
+// Render App
+createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router} />
-  </StrictMode>,
-)
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  </StrictMode>
+);

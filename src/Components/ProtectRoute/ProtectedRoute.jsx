@@ -1,47 +1,42 @@
-// ProtectedRoute.js
-import React from 'react';
-import { Navigate } from 'react-router-dom';
+import React from "react";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../../utils/AuthContext";
 
 const ProtectedRoute = ({ children, allowedRoles = [] }) => {
-  // Check if user is logged in
-  const user = JSON.parse(localStorage.getItem('user') || 'null');
-  const userRole = localStorage.getItem('userRole');
-  
-  // If no user, redirect to login
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-  
-  // If specific roles are required, check if user has permission
+  const { user, loading } = useAuth();
+
+  if (loading) return <div>Loading...</div>;
+
+  if (!user) return <Navigate to="/login" replace />;
+
+  const userRole = user.role?.toLowerCase();
+
   if (allowedRoles.length > 0) {
-    const hasPermission = allowedRoles.some(role => 
-      role.toLowerCase() === userRole?.toLowerCase()
+    const hasPermission = allowedRoles.some(
+      (role) => role.toLowerCase() === userRole
     );
-    
+
     if (!hasPermission) {
-      // Redirect to appropriate dashboard based on their actual role
-      const userDashboard = getDashboardRoute(userRole);
-      return <Navigate to={userDashboard} replace />;
+      return <Navigate to={getDashboardRoute(userRole)} replace />;
     }
   }
-  
+
   return children;
 };
 
-// Helper function to get dashboard route (same as in Login component)
 const getDashboardRoute = (userRole) => {
-  switch (userRole?.toLowerCase()) {
-    case 'admin':
-      return '/admin-dashboard';
-    case 'theatre manager':
-    case 'theare_manager':
-    case 'theatremanager':
-      return '/theater-manager-dashboard';
-    case 'organizer':
-      return '/organizer-dashboard';
-    case 'user':
+  switch (userRole) {
+    case "admin":
+      return "/admin-dashboard";
+    case "theatre manager":
+    case "theatre_manager":
+    case "theatremanager":
+      return "/theatre-manager-dashboard";
+    case "organizer":
+      return "/organizer-dashboard";
+    case "user":
     default:
-      return '/user-dashboard';
+      return "/user-dashboard";
   }
 };
 

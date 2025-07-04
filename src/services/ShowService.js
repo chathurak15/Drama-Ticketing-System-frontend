@@ -1,5 +1,11 @@
 import axios from "../api/axiosInstance";
+// import showsData from "../Components/Shows/ShowsData";
 
+export const addShow = (showData) => {
+  return axios.post("show/add", showData,{
+    withCredentials:true 
+  })
+}
 export const getShows = ({ page = 0, size = 12, title, date, city, venue}) => {
   return axios.get("show/all", {
     params: {
@@ -31,21 +37,23 @@ export const getShowById = (id) => {
 };
 
 export const getCity = async () => {
-  const response = await axios.get(`/city/all`);
+  const response = await axios.get(`city/all`);
   return response.data;
 };
+
 
 export const getLocationByCity = async (id) => {
-  const response = await axios.get(`/city/venue/${id}`);
+  const response = await axios.get(`city/venue/${id}`);
   return response.data;
 };
 
-export const deleteShow = async ({showId,userId}) =>{
-  return axios.delete(`/show/delete`, {
+export const deleteShow = async (showId,id) =>{
+  return axios.delete("show/delete", {
     params:{
       showId,
-      id:userId
-    }
+      id
+    },
+    withCredentials:true
   });
 };
 
@@ -55,4 +63,17 @@ export const updateShowStatus = async ({ id, status }) => {
     withCredentials: true
   });
   return response.data;
+};
+
+export const getShowsByUser = async ({ page = 0, size = 10, title="", status, userId}) => { 
+  return axios.get("show/all/user", {
+    params: {
+      page,
+      size,
+      title,
+      status,
+      userId
+    },
+    withCredentials: true
+  });
 };

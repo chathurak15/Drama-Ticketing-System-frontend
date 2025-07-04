@@ -1,15 +1,17 @@
 import React, { useState, useRef } from "react";
 import { XCircle } from "lucide-react";
-import EventForm from "./ShowForm";
+import ShowForm from "../../TheatreManager/AddModel/ShowForm";
 import DramaForm from "./DramaForm";
 import ActorForm from "../Actors/ActorForm";
 import { addDrama } from "../../../services/dramaService";
 import { addActor } from "../../../services/ActorService";
+import { addShow } from "../../../services/ShowService";
 
 const AddModal = ({ show, onClose, type}) => {
   const [formData, setFormData] = useState({});
   const dramaFormRef = useRef();
   const actorFormRef = useRef();
+  const showFormRef = useRef();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,7 +21,9 @@ const AddModal = ({ show, onClose, type}) => {
       isValid = dramaFormRef.current?.validate();
     } else if (type === "actor") {
       isValid = actorFormRef.current?.validate();
-    }
+    }else if (type === "show") {
+      isValid = showFormRef.current?.validate();
+    } 
 
     if (!isValid) return;
 
@@ -29,6 +33,9 @@ const AddModal = ({ show, onClose, type}) => {
         alert(response.data);
       } else if (type === "actor") {
         const response = await addActor(formData);
+        alert(response.data);
+      } else if (type === "show") {
+        const response = await addShow(formData);
         alert(response.data);
       } else {
         console.log(`${type} submitted:`, formData);
@@ -44,8 +51,13 @@ const AddModal = ({ show, onClose, type}) => {
 
   const renderForm = () => {
     switch (type) {
-      case "event":
-        return <EventForm formData={formData} setFormData={setFormData} />;
+      case "show":
+        return (
+        <ShowForm
+        ref={showFormRef} 
+        formData={formData} 
+        setFormData={setFormData} />
+      );
       case "drama":
         return (
           <DramaForm

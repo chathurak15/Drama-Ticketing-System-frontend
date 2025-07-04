@@ -34,7 +34,6 @@ export const sampleShows = [
         available: true,
         description: 'Best view seats in the center section',
         totalSeats: 70,
-        availableSeats: 72,
         seatsPerRow: 10
       },
       // {

@@ -28,3 +28,8 @@ export const updateStatus = (id, status) => {
   );
 };
 
+export const getUser = async () =>{
+    return await axios.get("user/me", {
+      withCredentials : true
+    });
+}

@@ -1,10 +1,9 @@
 import React from 'react';
-import { Users, TheaterIcon, Calendar, Settings } from 'lucide-react';
-import { authUtils } from '../../utils/authUtils';
+import { useAuth } from '../../utils/AuthContext';
 import LogoutButton from '../Logout/LogoutButton';
 
 const OrganizerDashboard = () => {
-  const user = authUtils.getCurrentUser();
+  const { user } = useAuth();
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -13,7 +12,9 @@ const OrganizerDashboard = () => {
           <div className="flex justify-between items-center py-4">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">Organizer Dashboard</h1>
-              <p className="text-gray-600">Welcome, {user?.fname} {user?.lname}</p>
+              <p className="text-gray-600">
+                Welcome, {user?.fname} {user?.lname}
+              </p>
             </div>
             <LogoutButton />
           </div>

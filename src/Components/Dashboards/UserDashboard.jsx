@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import '../../assets/css/MyProfile.css';
 import { Users, TheaterIcon, Calendar, Settings } from 'lucide-react';
-import { authUtils } from '../../utils/authUtils';
+import { useAuth } from '../../utils/AuthContext';
 import LogoutButton from '../Logout/LogoutButton';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 
 const UserDashboard = () => {
-  const user = authUtils.getCurrentUser();
+  const { user } = useAuth();
+  
   const [activeTab, setActiveTab] = useState('profile');
 
   const renderContent = () => {
