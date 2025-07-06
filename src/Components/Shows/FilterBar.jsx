@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "../../assets/css/FilterBar.css";
 import { getCity, getLocationByCity } from "../../services/ShowService";
+import { useNavigate } from "react-router-dom";
 
 const FilterBar = ({ filters, onFilterChange }) => {
   const [localFilters, setLocalFilters] = useState(filters);
   const [cities, setCities] = useState([]);
   const [venues, setVenues] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCities = async () => {
@@ -27,6 +29,23 @@ const FilterBar = ({ filters, onFilterChange }) => {
     }));
   };
 
+  const handleClear = () => {
+    setLocalFilters({
+      title: "",
+      date: "",
+      city: "",
+      venue: "",
+    });
+    onFilterChange({
+      title: "",
+      date: "",
+      city: "",
+      venue: "",
+    });
+    navigate("/shows");
+  };
+
+  
   useEffect(() => {
     const timeout = setTimeout(() => {
       onFilterChange(localFilters);
@@ -96,10 +115,10 @@ const FilterBar = ({ filters, onFilterChange }) => {
 
       <div className="col-span-1 md:col-span-2 flex items-center">
         <button
-          onClick={() => onFilterChange(localFilters)}
+          onClick={handleClear}
           className="w-full bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-700 transition"
         >
-          Search
+          Clear
         </button>
       </div>
     </div>

@@ -5,7 +5,7 @@ import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import { getShowById } from "../../services/ShowService.js";
 import SeatSelectionPopup from "./SeatPopup.jsx";
-import { getShowsById } from "./SampleShows.js";
+// import { getShowsById } from "./SampleShows.js";
 
 const ShowDetails = () => {
   const { id } = useParams();
@@ -13,7 +13,7 @@ const ShowDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);;
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [shows, setShows] = useState(null);
+
 
   // Helper function to format date
   const formatDate = (dateString) => {
@@ -42,16 +42,16 @@ const ShowDetails = () => {
 
         // Fetch drama details
         const showResponse = await getShowById(id);
-        console.log("show response:", showResponse);
         setShow(showResponse.data);
 
         // document.title = `${showResponse.data.title}`;
         
-        const seatData = getShowsById(id);
-        setShows(seatData);
+        // const seatData = getShowsById(id);
+        // setShows(seatData);
         
       } catch (err) {
         setError("Failed to load show details");
+        console.error("Error fetching show details:", err);
       } finally {
         setLoading(false);
       }
@@ -225,6 +225,18 @@ const ShowDetails = () => {
                       {show.status}
                     </span>
                   </div>
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">VIP:</span>
+                    <span
+                      className={`font-bold capitalize ${
+                        show.status === "approved"
+                          ? "text-green-600"
+                          : "text-yellow-600"
+                      }`}
+                    >
+                      {show.status}
+                    </span>
+                  </div>
                 </div>
                 <button
                   onClick={() => setIsPopupOpen(true)}
@@ -314,7 +326,7 @@ const ShowDetails = () => {
       <SeatSelectionPopup
         isOpen={isPopupOpen}
         onClose={() => setIsPopupOpen(false)}
-        showData={shows}
+        showId={id}
       />
 
       <Footer />

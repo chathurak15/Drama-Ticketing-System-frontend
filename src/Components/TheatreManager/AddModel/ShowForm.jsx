@@ -23,7 +23,7 @@ const ShowForm = forwardRef(({ formData, setFormData }, ref) => {
       setFormData((prev) => ({
         ...prev, 
         temporaryTheatre: null,
-        userId: 18,
+        userId: userId,
         pricing: [],
       }));
     }

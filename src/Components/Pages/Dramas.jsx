@@ -20,10 +20,10 @@ const Dramas = () => {
       page: currentPage,
       size: dramasPerPage,
       title: searchTerm,
-      sortByRating: selectedCategory === 'Top Rated'? 'desc' : selectedCategory === 'Newest' ? 'desc': ''
+      sortByRating: selectedCategory === 'Top Rated'? 'ASC' : selectedCategory === 'Newest' ? 'desc': ''
     }).then((res) => {
       const data = res.data;
-      setDramas(data.content || []); // depends on your backend structure
+      setDramas(data.content || []);
       setTotalPages(data.totalPages || 1);
     }).catch((err) => {
       console.error("Error fetching dramas", err);
@@ -32,7 +32,7 @@ const Dramas = () => {
 
   useEffect(() => {
     fetchDramas();
-  }, [currentPage]);
+  }, [currentPage,selectedCategory]);
 
   const handleSearch = () => {
     setCurrentPage(0);

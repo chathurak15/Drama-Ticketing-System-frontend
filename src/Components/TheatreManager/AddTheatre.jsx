@@ -88,7 +88,7 @@ const AddTheatre = () => {
         {/* Screen */}
         <div className="bg-gray-300 h-3 rounded-full mb-6 relative">
           <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs text-gray-400">
-            SCREEN
+            STAGE
           </div>
         </div>
 

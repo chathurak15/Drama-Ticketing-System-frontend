@@ -29,7 +29,7 @@ const DramaDetails = () => {
         const dramaResponse = await getDramaById(id);
         setDrama(dramaResponse.data);
 
-        document.title = `${dramaResponse.data.title}`;
+        // document.title = `${dramaResponse.data.title}`;
 
         // Fetch reviews/ratings
         try {
@@ -58,20 +58,6 @@ const DramaDetails = () => {
       fetchDramaData();
     }
   }, [id]);
-
-  // const visibleShows = showsData.slice(startIndex, startIndex + 4);
-
-  // const handleNext = () => {
-  //   if (startIndex + 4 < showsData.length) {
-  //     setStartIndex(startIndex + 1);
-  //   }
-  // };
-
-  // const handlePrev = () => {
-  //   if (startIndex > 0) {
-  //     setStartIndex(startIndex - 1);
-  //   }
-  // };
 
   const scrollRef = useRef();
 
@@ -142,7 +128,7 @@ const DramaDetails = () => {
             </div>
             <div className="flex justify-center mt-3">
               <button
-                onClick={() => navigate(`/show-by-drama/${id}`)}
+                onClick={() => navigate(`/shows/${id}`)}
                 className="mt-3 booking-btn hover:bg-amber-700 text-white px-13 py-3 rounded-full font-semibold shadow-md transition duration-300"
               >
                 Book a Show
@@ -225,32 +211,7 @@ const DramaDetails = () => {
         <UpcomingShowsSlider/>
        </div>
         
-        <div className="upcoming-section mb-15" >
-          {/* <div className="slide-container">
-            <button onClick={handlePrev} className="arrow-btn">
-              ←
-            </button>
-            <div className="card-slider">
-              {visibleShows.map((show) => (
-                <div className="show-card" key={show.id}>
-                  <div className="image-container">
-                    <img src={show.image} alt={show.name} />
-                    <div className="city-overlay">{show.city}</div>
-                  </div>
-                  <h3>{show.title}</h3>
-                  <p>
-                    {show.date} | {show.time}
-                  </p>
-                  <p className="location">{show.location}</p>
-                  <button className="book-btn">Booking</button>
-                </div>
-              ))}
-            </div>
-            <button onClick={handleNext} className="arrow-btn">
-              →
-            </button>
-          </div> */}
-        </div>
+       
       </div>
       <Footer />
     </>

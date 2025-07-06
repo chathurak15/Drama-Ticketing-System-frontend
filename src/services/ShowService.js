@@ -6,7 +6,7 @@ export const addShow = (showData) => {
     withCredentials:true 
   })
 }
-export const getShows = ({ page = 0, size = 12, title, date, city, venue}) => {
+export const getShows = ({ page = 0, size = 12, title, date, city, venue,dramaId}) => {
   return axios.get("show/all", {
     params: {
       page,
@@ -14,8 +14,18 @@ export const getShows = ({ page = 0, size = 12, title, date, city, venue}) => {
       title: title,
       date: date,
       city: city,
-      location: venue
+      location: venue,
+      dramaId : dramaId
+    }
+  });
+};
 
+export const getShowsByDramaId = ({ page = 0, size = 12, dramaId}) => {
+  return axios.get("show/get-shows-by-drama-id", {
+    params: {
+      page,
+      size,
+      dramaId
     }
   });
 };

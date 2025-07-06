@@ -6,6 +6,7 @@ import Header from "../Header/Header.jsx";
 import Footer from "../Footer/Footer.jsx";
 import { getShows } from "../../services/ShowService.js";
 import Pagination from "../Drama/Pagination";
+import { useParams } from "react-router-dom";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -21,6 +22,7 @@ const Shows = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { id } = useParams();
 
   const fetchShows = () => {
   setLoading(true);
@@ -37,6 +39,7 @@ const Shows = () => {
       date: filters.date,
       city: filters.city,
       venue: filters.venue,
+      dramaId: id? id : null, 
     }),
     delay(300),
   ])

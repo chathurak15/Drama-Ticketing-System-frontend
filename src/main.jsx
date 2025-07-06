@@ -22,6 +22,8 @@ import Shows from "./Components/Pages/Shows.jsx";
 import Home from "./Components/Pages/Home.jsx";
 import DramaDetails from "./Components/Drama/DramaDetails.jsx";
 import ShowsDetails from "./Components/Pages/ShowDetails.jsx";
+import Booking from "./Components/Pages/Booking.jsx";
+import TicketView from "./Components/Pages/TicketView.jsx";
 
 // Dashboards
 import AdminDashboard from "./Components/Dashboards/AdminDashboard.jsx";
@@ -76,6 +78,9 @@ const router = createBrowserRouter([
       { path: "shows", element: <Shows /> },
       { path: "drama/:id", element: <DramaDetails /> },
       { path: "show/:id", element: <ShowsDetails /> },
+      { path: "shows/:id", element: <Shows /> },
+      { path: "booking", element: <Booking /> },
+      { path: "booking/ticket/:id", element: <TicketView /> },
 
       // Protected Dashboard Routes
       {
