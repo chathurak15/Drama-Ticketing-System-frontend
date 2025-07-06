@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {Calendar,Clock,MapPin,Users,CreditCard,Phone,CheckCircle,ArrowLeft} from "lucide-react";
+import {Calendar,Clock,MapPin,Users,CreditCard,Phone,CheckCircle,ArrowLeft,QrCode,Download} from "lucide-react";
 import { useAuth } from "../../utils/AuthContext";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getShowById } from "../../services/ShowService.js";
@@ -106,34 +106,11 @@ const BookingPage = () => {
         <p className="text-gray-600 text-lg">Loading booking details...</p>
       </div>
     );
-  }
+  };
+  
 
-  if (bookingSuccess) {
-    return (
-      <div className="min-h-screen flex items-center justify-center p-6">
-        <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-center">
-          <CheckCircle className="w-16 h-16 mx-auto text-emerald-500 mb-4" />
-          <h1 className="text-2xl font-bold mb-2 text-gray-800">
-            Booking Confirmed!
-          </h1>
-          <p className="text-gray-600 mb-6">
-            Booking ID: <span className="font-semibold">{bookingId}</span>
-          </p>
-          <button
-            onClick={() => navigate(`/booking/ticket/`,{bookingId})}
-            className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white py-3 rounded-lg font-semibold mb-4 hover:from-emerald-700 hover:to-teal-700 transition-all"
-          >
-            Download Ticket
-          </button>
-          <button
-            onClick={() => navigate("/")}
-            className="w-full bg-gray-200 text-gray-800 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-all"
-          >
-            Back to Home
-          </button>
-        </div>
-      </div>
-    );
+   if (bookingSuccess) {
+    navigate("/booking/ticket/" + bookingId)
   }
 
   return (

@@ -33,3 +33,9 @@ export const getUser = async () =>{
       withCredentials : true
     });
 }
+
+export const updateUser = async (userData) => {
+  return await axios.put("user/update", userData, {
+    withCredentials: true,
+  });
+}

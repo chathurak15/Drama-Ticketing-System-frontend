@@ -1,7 +1,7 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import App from "./App.jsx";
 import {
   createBrowserRouter,
   RouterProvider,
@@ -24,6 +24,8 @@ import DramaDetails from "./Components/Drama/DramaDetails.jsx";
 import ShowsDetails from "./Components/Pages/ShowDetails.jsx";
 import Booking from "./Components/Pages/Booking.jsx";
 import TicketView from "./Components/Pages/TicketView.jsx";
+import Bookings from "./Components/Customer/Bookings.jsx";
+import Profile from "./Components/Customer/Profile.jsx";
 
 // Dashboards
 import AdminDashboard from "./Components/Dashboards/AdminDashboard.jsx";
@@ -56,7 +58,8 @@ const RedirectToDashboard = () => {
         return "/theatre-manager-dashboard";
       case "organizer":
         return "/organizer-dashboard";
-      case "user":
+      case "customer":
+        return "/user-dashboard";
       default:
         return "/user-dashboard";
     }
@@ -95,7 +98,11 @@ const router = createBrowserRouter([
         path: "theatre-manager-dashboard",
         element: (
           <ProtectedRoute
-            allowedRoles={["theatre manager", "theatre_manager", "theatremanager"]}
+            allowedRoles={[
+              "theatre manager",
+              "theatre_manager",
+              "theatremanager",
+            ]}
           >
             <TheaterManagerDashboard />
           </ProtectedRoute>
@@ -112,11 +119,17 @@ const router = createBrowserRouter([
       {
         path: "user-dashboard",
         element: (
-          <ProtectedRoute allowedRoles={["user"]}>
+          <ProtectedRoute allowedRoles={["customer"]}>
             <UserDashboard />
           </ProtectedRoute>
         ),
+        children: [
+          { path: "bookings", element: <Bookings /> },
+          { path: "profile", element: <Profile /> },
+          { index: true, element: <Navigate to="bookings" replace /> }, // Optional: default tab
+        ],
       },
+
       {
         path: "dashboard",
         element: <RedirectToDashboard />,

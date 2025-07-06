@@ -34,7 +34,8 @@ const getDashboardRoute = (userRole) => {
       return "/theatre-manager-dashboard";
     case "organizer":
       return "/organizer-dashboard";
-    case "user":
+    case "customer":
+      return "/user-dashboard";
     default:
       return "/user-dashboard";
   }

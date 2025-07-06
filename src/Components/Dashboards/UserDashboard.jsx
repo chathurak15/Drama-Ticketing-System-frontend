@@ -1,69 +1,62 @@
-import React, { useState } from 'react';
-import '../../assets/css/MyProfile.css';
-import { Users, TheaterIcon, Calendar, Settings } from 'lucide-react';
-import { useAuth } from '../../utils/AuthContext';
-import LogoutButton from '../Logout/LogoutButton';
+// components/dashboard/UserDashboard.jsx
+import React from 'react';
+import { NavLink, Outlet } from 'react-router-dom';
+import { Calendar, LogOut, User } from 'lucide-react';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 
 const UserDashboard = () => {
-  const { user } = useAuth();
-  
-  const [activeTab, setActiveTab] = useState('profile');
-
-  const renderContent = () => {
-    switch (activeTab) {
-      case 'profile':
-        return (
-          <div className="profile-content">
-            <h2>Profile</h2>
-            <p><strong>Full Name:   </strong>   {user.fname} {user.lname}</p>
-            <p><strong>Email:   </strong>   {user.email}</p>
-            <p><strong>Phone Number:   </strong>   {user.contact}</p>
-          </div>
-        );
-      case 'tickets':
-        return <div className="profile-content">My Tickets</div>;
-      case 'wishlist':
-        return <div className="profile-content">My Wishlist</div>;
-      case 'history':
-        return <div className="profile-content">My Booking History</div>;
-      case 'logout':
-        return <div className="profile-content text-red-500">You have been logged out.</div>;
-      default:
-        return null;
-    }
-  };
-
   return (
     <>
-    <Header/>
-    <div className="profile-page">
-      <div className="profile-container">
-        <div className="profile-header">
-          <img src="" alt="Profile" className="profile-image" />
-          <div className="profile-info">
-            <h2>{user.firstName} {user.lastName}</h2>
-            <p>{user.email}</p>
-            <p>{user.mobileNumber}</p>
-          </div>
-        </div>
+      <Header />
+      <div className="min-h-screen bg-gray-100">
+        <div className="max-w-6xl mx-auto py-6 px-4">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome back!</h1>
+          <p className="text-gray-600 mb-4">Manage your bookings and profile</p>
 
-        <div className="profile-body">
-          <div className="profile-sidebar">
-            <button onClick={() => setActiveTab('profile')}>My Profile</button>
-            <button onClick={() => setActiveTab('tickets')}>My Tickets</button>
-            <button onClick={() => setActiveTab('wishlist')}>Wishlist</button>
-            <button onClick={() => setActiveTab('history')}>Booking History</button>
-            <button onClick={() => setActiveTab('logout')} className="logout-btn">Log out</button>
+          {/* Navigation Tabs */}
+          <div className="bg-white rounded-lg shadow mb-6">
+            <nav className="flex">
+              <NavLink
+                to="bookings"
+                className={({ isActive }) =>
+                  `flex items-center gap-2 px-6 py-4 font-medium transition-colors ${
+                    isActive ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600 hover:text-gray-900'
+                  }`
+                }
+              >
+                <Calendar className="w-5 h-5" />
+                My Bookings
+              </NavLink>
+              <NavLink
+                to="profile"
+                className={({ isActive }) =>
+                  `flex items-center gap-2 px-6 py-4 font-medium transition-colors ${
+                    isActive ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600 hover:text-gray-900'
+                  }`
+                }
+              >
+                <User className="w-5 h-5" />
+                Profile
+              </NavLink>
+              <NavLink
+                to="../logout"
+                className={({ isActive }) =>
+                  `flex items-center gap-2 px-6 py-4 font-medium transition-colors ${
+                    isActive ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600 hover:text-gray-900'
+                  }`
+                }
+              >
+                <LogOut className="w-5 h-5" />
+                Logout
+              </NavLink>
+            </nav>
           </div>
-          <div className="profile-main">
-            {renderContent()}
-          </div>
+
+          <Outlet />
         </div>
       </div>
-    </div>
-    <Footer/>
+      <Footer />
     </>
   );
 };
