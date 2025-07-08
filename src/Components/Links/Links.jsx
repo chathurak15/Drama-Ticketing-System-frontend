@@ -11,7 +11,8 @@ function Links() {
       {/* <MenuItem linktext="Actors" linkurl="/actors" /> */}
       <MenuItem linktext="Terms" linkurl="/terms" />
       <MenuItem linktext="Contact US" linkurl="/contact" />
-      <MenuItem linktext = "Login/Register" linkurl="/login" isButton={true}/>
+      <MenuItem linktext = "Login" linkurl="/login" isButton={true}/>
+      <MenuItem linktext = "Register" linkurl="/register" isButton={true}/>
       <button id="languagebtn" className="cursor-pointer"><img src = {language} className="h-9 w-auto"/></button>
     </div>
   )

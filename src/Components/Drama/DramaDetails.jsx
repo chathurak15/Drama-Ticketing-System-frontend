@@ -18,6 +18,8 @@ const DramaDetails = () => {
   const [error, setError] = useState(null);
   // const [startIndex, setStartIndex] = useState(0);
 
+  const BACKEND_IMAGE_URL = "http://localhost:8080/uploads/dramas/";
+
   // Fetch drama details and reviews on component mount
   useEffect(() => {
     const fetchDramaData = async () => {
@@ -85,7 +87,7 @@ const DramaDetails = () => {
         return `https://www.youtube.com/embed/${match[1]}`;
       }
     } catch (err) {
-      console.error("Invalid YouTube URL:", url,err);
+      console.error("Invalid YouTube URL:", url, err);
     }
 
     return null;
@@ -108,7 +110,11 @@ const DramaDetails = () => {
       <div className="drama-page container mx-auto px-4 py-8 ">
         <div className="top-section">
           <img
-            src={`/public/images/upload/drama/${drama.image}`}
+            src={
+              drama.image
+                ? `${BACKEND_IMAGE_URL}${drama.image}`
+                : "/images/default.png"
+            }
             className="drama-poster"
             alt={drama.title}
           />
@@ -136,7 +142,7 @@ const DramaDetails = () => {
             </div>
           </div>
         </div>
-       
+
         <div className="description-section mt-30 mb-20">
           <div className="description-text">
             <h2>Description</h2>
@@ -157,7 +163,7 @@ const DramaDetails = () => {
             ></iframe>
           </div>
         </div>
-       
+
         <div className="cast-section mb-20">
           <h2>Cast</h2>
           <div className="cast-grid">
@@ -207,11 +213,9 @@ const DramaDetails = () => {
             </button>
           </div>
         </div>
-       <div>
-        <UpcomingShowsSlider/>
-       </div>
-        
-       
+        <div>
+          <UpcomingShowsSlider />
+        </div>
       </div>
       <Footer />
     </>

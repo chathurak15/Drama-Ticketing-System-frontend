@@ -11,9 +11,9 @@ const ShowDetails = () => {
   const { id } = useParams();
   const [show, setShow] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);;
+  const [error, setError] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-
+  const BACKEND_IMAGE_URL = "http://localhost:8080/uploads/shows/";
 
   // Helper function to format date
   const formatDate = (dateString) => {
@@ -45,10 +45,9 @@ const ShowDetails = () => {
         setShow(showResponse.data);
 
         // document.title = `${showResponse.data.title}`;
-        
+
         // const seatData = getShowsById(id);
         // setShows(seatData);
-        
       } catch (err) {
         setError("Failed to load show details");
         console.error("Error fetching show details:", err);
@@ -59,7 +58,6 @@ const ShowDetails = () => {
 
     if (id) {
       fetchShowDetails();
-      
     }
   }, [id]);
 
@@ -117,7 +115,11 @@ const ShowDetails = () => {
               {/* Poster Image */}
               <div className="lg:w-1/4 p-0 h-100 flex items-center justify-center">
                 <img
-                  src={show.image ? `/public/images/upload/show/${show.image}` : "/images/default-show.jpg"}
+                  src={
+                    show.image
+                      ? `${BACKEND_IMAGE_URL}${show.image}`
+                      : "/images/default.png"
+                  }
                   alt={show.title}
                   className="w-full h-full object-cover"
                 />
@@ -254,7 +256,7 @@ const ShowDetails = () => {
                   <div className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center">
                     {show.user?.image ? (
                       <img
-                        src= {`/public/images/upload/user/${show.user.image}`}
+                        src={`/public/images/upload/user/${show.user.image}`}
                         alt="Organizer"
                         className="w-16 h-16 rounded-full object-cover"
                       />

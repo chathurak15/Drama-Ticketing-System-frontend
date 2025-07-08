@@ -1,18 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
-import { Plus, Search, Edit, Trash2, Clock, Theater,Star } from 'lucide-react';
-import ActionButton from './ActionButton';
-import TableRow from './TableRow';
+import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import { Plus, Search, Edit, Trash2, Clock, Star } from "lucide-react";
+import ActionButton from "./ActionButton";
+import TableRow from "./TableRow";
 import { getDramas, deleteDrama } from "../../services/dramaService";
 
-const DramaContent = ({ setAddType, setShowAddModal, setEditDrama }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+const DramasContent = ({ setAddType, setShowAddModal, setEditDrama }) => {
+  const [searchTerm, setSearchTerm] = useState("");
   const [dramas, setDramas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 15;
+  
+  const BACKEND_IMAGE_URL = "http://localhost:8080/uploads/dramas/";
 
   useEffect(() => {
     fetchDramas();
@@ -21,15 +23,15 @@ const DramaContent = ({ setAddType, setShowAddModal, setEditDrama }) => {
   const fetchDramas = async () => {
     setLoading(true);
     setError(null);
-    
+
     try {
       const response = await getDramas({
         page: currentPage,
         size: pageSize,
-        title : '', 
-        sortByRating : 'desc'
+        title: "",
+        sortByRating: "desc",
       });
-      
+
       setDramas(response.data.content || []);
       setTotalPages(response.data.totalPages || 1);
     } catch (err) {
@@ -56,7 +58,7 @@ const DramaContent = ({ setAddType, setShowAddModal, setEditDrama }) => {
 
   const handleEdit = (drama) => {
     setEditDrama(drama);
-    setAddType('drama');
+    setAddType("drama");
     setShowAddModal(true);
   };
 
@@ -82,7 +84,7 @@ const DramaContent = ({ setAddType, setShowAddModal, setEditDrama }) => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center text-red-500 p-4 bg-red-50 rounded-lg">
           <p>{error}</p>
-          <button 
+          <button
             onClick={fetchDramas}
             className="mt-2 px-4 py-2 bg-[#661F19] text-white rounded hover:bg-[#541612]"
           >
@@ -93,9 +95,10 @@ const DramaContent = ({ setAddType, setShowAddModal, setEditDrama }) => {
     );
   }
 
-  const filteredDramas = dramas.filter(drama => 
-    drama.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    drama.description.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredDramas = dramas.filter(
+    (drama) =>
+      drama.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      drama.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -103,7 +106,11 @@ const DramaContent = ({ setAddType, setShowAddModal, setEditDrama }) => {
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-gray-800">Drama Management</h2>
         <button
-          onClick={() => { setAddType('drama'); setShowAddModal(true); setEditDrama(null); }}
+          onClick={() => {
+            setAddType("drama");
+            setShowAddModal(true);
+            setEditDrama(null);
+          }}
           className="bg-[#661F19] text-white px-4 py-2 rounded-lg hover:bg-[#541612] transition-colors flex items-center space-x-2"
         >
           <Plus className="w-5 h-5" />
@@ -133,11 +140,21 @@ const DramaContent = ({ setAddType, setShowAddModal, setEditDrama }) => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-m font-semibold text-gray-900 uppercase tracking-wider">Drama Title</th>
-                <th className="px-6 py-3 text-left text-m font-semibold text-gray-900 uppercase tracking-wider">Duration</th>
-                <th className="px-6 py-3 text-left text-m font-semibold text-gray-900 uppercase tracking-wider">Rating</th>
-                <th className="px-6 py-3 text-left text-m font-semibold text-gray-900 uppercase tracking-wider">Video</th>
-                <th className="px-6 py-3 text-left text-m font-semibold text-gray-900 uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-3 text-left text-m font-semibold text-gray-900 uppercase tracking-wider">
+                  Drama Title
+                </th>
+                <th className="px-6 py-3 text-left text-m font-semibold text-gray-900 uppercase tracking-wider">
+                  Duration
+                </th>
+                <th className="px-6 py-3 text-left text-m font-semibold text-gray-900 uppercase tracking-wider">
+                  Rating
+                </th>
+                <th className="px-6 py-3 text-left text-m font-semibold text-gray-900 uppercase tracking-wider">
+                  Video
+                </th>
+                <th className="px-6 py-3 text-left text-m font-semibold text-gray-900 uppercase tracking-wider">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -146,15 +163,23 @@ const DramaContent = ({ setAddType, setShowAddModal, setEditDrama }) => {
                   <TableRow key={drama.id}>
                     <td className="px-6 py-4">
                       <div className="flex items-center">
-                          <img 
-                            src={`/images/upload/drama/${drama.image}`} 
-                            alt={drama.title} 
-                            className="w-30 h-20 object-cover rounded mr-4"
-                          />
+                        <img
+                          src={
+                            drama.image
+                              ? `${BACKEND_IMAGE_URL}${drama.image}`
+                              : "/images/default.png"
+                          }
+                          alt={drama.title}
+                          className="w-30 h-20 object-cover rounded mr-4"
+                        />
 
                         <div>
-                          <div className="text-m font-semibold text-black-900">{drama.title}</div>
-                          <div className="text-xs text-gray-500 line-clamp-2">{drama.description}</div>
+                          <div className="text-m font-semibold text-black-900">
+                            {drama.title}
+                          </div>
+                          <div className="text-xs text-gray-500 line-clamp-2">
+                            {drama.description}
+                          </div>
                         </div>
                       </div>
                     </td>
@@ -162,7 +187,7 @@ const DramaContent = ({ setAddType, setShowAddModal, setEditDrama }) => {
                       <div className="flex items-center">
                         <Clock className="w-4 h-4 text-brown-800 mr-1" />
                         <span className="text-m font-semibold text-gray-900">
-                          {Math.floor(drama.duration/60)}h {drama.duration%60}m
+                          {Math.floor(drama.duration / 60)}h {drama.duration % 60}m
                         </span>
                       </div>
                     </td>
@@ -175,9 +200,9 @@ const DramaContent = ({ setAddType, setShowAddModal, setEditDrama }) => {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <a 
-                        href={drama.videoUrl} 
-                        target="_blank" 
+                      <a
+                        href={drama.videoUrl}
+                        target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-600 hover:underline text-sm"
                       >
@@ -186,14 +211,14 @@ const DramaContent = ({ setAddType, setShowAddModal, setEditDrama }) => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-m font-medium">
                       <div className="flex space-x-2">
-                        <ActionButton 
-                          icon={Edit} 
+                        <ActionButton
+                          icon={Edit}
                           color="text-gray-600"
                           onClick={() => handleEdit(drama)}
                           tooltip="Edit drama"
                         />
-                        <ActionButton 
-                          icon={Trash2} 
+                        <ActionButton
+                          icon={Trash2}
                           color="text-red-600"
                           onClick={() => handleDelete(drama.id)}
                           tooltip="Delete drama"
@@ -204,7 +229,10 @@ const DramaContent = ({ setAddType, setShowAddModal, setEditDrama }) => {
                 ))
               ) : (
                 <TableRow>
-                  <td colSpan="4" className="px-6 py-4 text-center text-sm text-gray-500">
+                  <td
+                    colSpan="5"
+                    className="px-6 py-4 text-center text-sm text-gray-500"
+                  >
                     No dramas found matching your criteria
                   </td>
                 </TableRow>
@@ -224,7 +252,9 @@ const DramaContent = ({ setAddType, setShowAddModal, setEditDrama }) => {
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 0}
                 className={`px-4 py-2 border rounded-lg flex items-center ${
-                  currentPage === 0 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'hover:bg-gray-50'
+                  currentPage === 0
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "hover:bg-gray-50"
                 }`}
               >
                 Previous
@@ -233,7 +263,9 @@ const DramaContent = ({ setAddType, setShowAddModal, setEditDrama }) => {
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages - 1}
                 className={`px-4 py-2 border rounded-lg flex items-center ${
-                  currentPage === totalPages - 1 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'hover:bg-gray-50'
+                  currentPage === totalPages - 1
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "hover:bg-gray-50"
                 }`}
               >
                 Next
@@ -246,4 +278,4 @@ const DramaContent = ({ setAddType, setShowAddModal, setEditDrama }) => {
   );
 };
 
-export default DramaContent;
+export default DramasContent;

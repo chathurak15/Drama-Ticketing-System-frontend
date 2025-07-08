@@ -6,9 +6,12 @@ import React, {
 } from "react";
 import { Theater, Clock, Upload } from "lucide-react";
 import { getActors } from "../../../services/ActorService";
+import { uploadFile } from "../../../services/FileService";
 
 const DramaForm = forwardRef(({ formData, setFormData }, ref) => {
-  const [imagePreview, setImagePreview] = useState(formData.image || null);
+  const [imagePreview, setImagePreview] = useState(
+    formData.image ? `http://localhost:8080/uploads/${formData.image}` : null
+  );
   const [availableActors, setAvailableActors] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -75,19 +78,37 @@ const DramaForm = forwardRef(({ formData, setFormData }, ref) => {
     loadActors(currentPage + 1);
   };
 
-  const handleImageUpload = (e) => {
+  const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
+    if (!file.type.startsWith("image/")) {
+      alert("Only image files are allowed.");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert("File size must be under 5MB.");
+      return;
+    }
+
     setIsUploading(true);
-    
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImagePreview(reader.result);
-      setFormData((prev) => ({ ...prev, image: file.name }));
+
+    try {
+      const category = "dramas";
+      const title = formData.title || "drama";
+
+      const uploadRes = await uploadFile(file, category, title);
+      const uploadedFileName = uploadRes.fileName;
+
+      setImagePreview(`http://localhost:8080/uploads/${uploadedFileName}`);
+      setFormData((prev) => ({ ...prev, image: uploadedFileName }));
+    } catch (err) {
+      alert("Image upload failed");
+      console.error("Image upload error:", err);
+    } finally {
       setIsUploading(false);
-    };
-    reader.readAsDataURL(file);
+    }
   };
 
   const handleActorSelect = (actorId) => {
@@ -205,8 +226,12 @@ const DramaForm = forwardRef(({ formData, setFormData }, ref) => {
                 accept="image/*"
                 className="sr-only"
                 onChange={handleImageUpload}
+                disabled={isUploading}
               />
             </label>
+            {isUploading && (
+              <p className="text-sm text-blue-500 mt-1">Uploading...</p>
+            )}
             {errors.image && (
               <p className="text-sm text-red-500">{errors.image}</p>
             )}
@@ -223,6 +248,9 @@ const DramaForm = forwardRef(({ formData, setFormData }, ref) => {
               value={searchTerm}
               onChange={handleSearchChange}
             />
+            <p className="text-sm text-gray-500 mb-1">
+              {formData.actorIds?.length || 0} actor(s) selected
+            </p>
             <div className="max-h-40 overflow-y-auto border rounded-lg p-2">
               {availableActors.map((actor) => (
                 <div key={actor.id} className="flex items-center">

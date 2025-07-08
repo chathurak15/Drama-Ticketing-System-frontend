@@ -16,6 +16,7 @@ const ShowsContent = ({ setAddType, setShowAddModal }) => {
   const [totalPages, setTotalPages] = useState(1);
   const userId = useAuth().user?.id;
   const pageSize = 3;
+  const BACKEND_IMAGE_URL = "http://localhost:8080/uploads/shows/";
 
   useEffect(() => {
     fetchShows();
@@ -128,7 +129,10 @@ const ShowsContent = ({ setAddType, setShowAddModal }) => {
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-gray-800">Show Management</h2>
         <button
-          onClick={() => { setAddType('show'); setShowAddModal(true); }}
+          onClick={() => {
+            setAddType("show");
+            setShowAddModal(true);
+          }}
           className="bg-[#661F19] text-white px-4 py-2 rounded-lg hover:bg-[#541612] transition-colors flex items-center space-x-2"
         >
           <Plus className="w-5 h-5" />
@@ -151,7 +155,7 @@ const ShowsContent = ({ setAddType, setShowAddModal }) => {
                 />
               </div>
             </div>
-            <select 
+            <select
               className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#661F19]"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
@@ -169,12 +173,24 @@ const ShowsContent = ({ setAddType, setShowAddModal }) => {
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
-                <th className="px-0 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Show</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time</th>
-                <th className="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Venue</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Drama</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                <th className="px-0 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Show
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Date & Time
+                </th>
+                <th className="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Venue
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Drama
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Status
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -183,17 +199,23 @@ const ShowsContent = ({ setAddType, setShowAddModal }) => {
                   <TableRow key={show.showId}>
                     <td className="px-2 py-4">
                       <div className="flex items-center">
-                          <img 
-                            src={`public/images/upload/show/${show.image}`} 
-                            alt={show.title} 
-                            className="w-30 h-25 object-cover rounded mr-3"
-                          />
+                        <img
+                          src={
+                            show.image
+                              ? `${BACKEND_IMAGE_URL}${show.image}`
+                              : "/images/default.png"
+                          }
+                          alt={show.title}
+                          className="w-30 h-25 object-cover rounded mr-3"
+                        />
                       </div>
                     </td>
                     <td className="px-0 py-4">
                       <div className="flex items-center">
                         <div>
-                          <div className="text-sm font-medium text-gray-900">{show.title}</div>
+                          <div className="text-sm font-medium text-gray-900">
+                            {show.title}
+                          </div>
                         </div>
                       </div>
                     </td>
@@ -206,41 +228,54 @@ const ShowsContent = ({ setAddType, setShowAddModal }) => {
                       </div>
                       <div className="flex items-center mt-1">
                         <Clock className="w-4 h-4 text-gray-400 mr-1" />
-                        <span className="text-sm text-gray-900">{show.showTime}</span>
+                        <span className="text-sm text-gray-900">
+                          {show.showTime}
+                        </span>
                       </div>
                     </td>
                     <td className="px-5 py-4">
                       <div className="flex items-center">
                         <MapPin className="w-4 h-4 text-gray-400 mr-1 flex-shrink-0" />
                         <div>
-                          <div className="text-sm text-gray-900">{show.location}</div>
-                          <div className="text-xs text-gray-500">{show.city.cityName}</div>
+                          <div className="text-sm text-gray-900">
+                            {show.location}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {show.city.cityName}
+                          </div>
                         </div>
                       </div>
                     </td>
                     <td className="px-4 py-4">
-                      <div className="text-sm text-gray-900 font-medium">{show.drama?.title}</div>
+                      <div className="text-sm text-gray-900 font-medium">
+                        {show.drama?.title}
+                      </div>
                     </td>
                     <td className="px-4 py-4 whitespace-nowrap">
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                        show.status === 'approved' ? 'bg-green-100 text-green-800' :
-                        show.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-red-100 text-red-800'
-                      }`}>
+                      <span
+                        className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                          show.status === "approved"
+                            ? "bg-green-100 text-green-800"
+                            : show.status === "pending"
+                            ? "bg-yellow-100 text-yellow-800"
+                            : "bg-red-100 text-red-800"
+                        }`}
+                      >
                         {show.status}
                       </span>
                     </td>
                     <td className="px-4 py-4 whitespace-nowrap text-sm font-medium">
                       <div className="flex space-x-2">
-                        <ActionButton icon={Eye} 
-                        onClick={() => handleView(show.showId)}
-                        color="text-blue-600" 
+                        <ActionButton
+                          icon={Eye}
+                          onClick={() => handleView(show.showId)}
+                          color="text-blue-600"
                         />
                         <ActionButton icon={Edit} color="text-gray-600" />
-          
-                        <ActionButton 
-                          icon={Trash2} 
-                          color="text-red-600" 
+
+                        <ActionButton
+                          icon={Trash2}
+                          color="text-red-600"
                           onClick={() => handleDelete(show.showId)}
                         />
                       </div>
@@ -249,7 +284,10 @@ const ShowsContent = ({ setAddType, setShowAddModal }) => {
                 ))
               ) : (
                 <TableRow>
-                  <td colSpan="7" className="px-6 py-4 text-center text-sm text-gray-500">
+                  <td
+                    colSpan="7"
+                    className="px-6 py-4 text-center text-sm text-gray-500"
+                  >
                     No shows found matching your criteria
                   </td>
                 </TableRow>
@@ -262,14 +300,17 @@ const ShowsContent = ({ setAddType, setShowAddModal }) => {
         {totalPages > 1 && (
           <div className="px-6 py-4 border-t flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="text-sm text-gray-700">
-              Showing page {currentPage + 1} of {totalPages} • {shows.length} shows
+              Showing page {currentPage + 1} of {totalPages} • {shows.length}{" "}
+              shows
             </div>
             <div className="flex space-x-2">
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 0}
                 className={`px-4 py-2 border rounded-lg flex items-center ${
-                  currentPage === 0 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'hover:bg-gray-50'
+                  currentPage === 0
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "hover:bg-gray-50"
                 }`}
               >
                 Previous
@@ -278,7 +319,9 @@ const ShowsContent = ({ setAddType, setShowAddModal }) => {
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages - 1}
                 className={`px-4 py-2 border rounded-lg flex items-center ${
-                  currentPage === totalPages - 1 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'hover:bg-gray-50'
+                  currentPage === totalPages - 1
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "hover:bg-gray-50"
                 }`}
               >
                 Next

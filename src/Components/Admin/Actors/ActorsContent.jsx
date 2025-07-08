@@ -14,6 +14,7 @@ const ActorsContent = ({ setAddType, setShowAddModal}) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 25;
+  const BACKEND_IMAGE_URL = "http://localhost:8080/uploads/actors/";
 
   useEffect(() => {
     fetchActors();
@@ -121,7 +122,7 @@ const ActorsContent = ({ setAddType, setShowAddModal}) => {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onKeyUp={() => {
-                   fetchActors();
+                  fetchActors();
                 }}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#661F19]"
               />
@@ -165,7 +166,11 @@ const ActorsContent = ({ setAddType, setShowAddModal}) => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <img
-                          src={`/images/upload/actor/${actor.photo}`}
+                          src={
+                            actor.photo
+                              ? `${BACKEND_IMAGE_URL}${actor.photo}`
+                              : "/images/default.png"
+                          }
                           alt={actor.name}
                           className="w-10 h-10 rounded-full object-cover mr-3"
                         />

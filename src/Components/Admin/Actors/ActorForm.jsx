@@ -1,8 +1,10 @@
 import React, { useState, forwardRef, useImperativeHandle } from "react";
 import { User, Upload, Calendar, User as UserIcon } from "lucide-react";
+import { uploadFile } from "../../../services/FileService.Js";
 
 const ActorForm = forwardRef(({ formData, setFormData }, ref) => {
-  const [imagePreview, setImagePreview] = useState(null);
+  const [imagePreview, setImagePreview] = useState(
+      formData.image ? `http://localhost:8080/uploads/actors/${formData.image}` : null);
   const [isUploading, setIsUploading] = useState(false);
   const [errors, setErrors] = useState({});
 
@@ -22,21 +24,38 @@ const ActorForm = forwardRef(({ formData, setFormData }, ref) => {
     validate: () => validateForm(),
   }));
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    setIsUploading(true);
-    if (isUploading) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-        setFormData((prev) => ({ ...prev, image: file.name }));
+  const handleImageUpload = async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+  
+      if (!file.type.startsWith("image/")) {
+        alert("Only image files are allowed.");
+        return;
+      }
+  
+      if (file.size > 5 * 1024 * 1024) {
+        alert("File size must be under 5MB.");
+        return;
+      }
+  
+      setIsUploading(true);
+  
+      try {
+        const category = "actors";
+        const title = formData.name || "actors";
+  
+        const uploadRes = await uploadFile(file, category, title);
+        const uploadedFileName = uploadRes.fileName;
+  
+        setImagePreview(`http://localhost:8080/uploads/actors/${uploadedFileName}`);
+        setFormData((prev) => ({ ...prev, photo: uploadedFileName }));
+      } catch (err) {
+        alert("Image upload failed");
+        console.error("Image upload error:", err);
+      } finally {
         setIsUploading(false);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+      }
+    };
 
   return (
     <div className="space-y-6 w-full max-w-6xl mx-auto">

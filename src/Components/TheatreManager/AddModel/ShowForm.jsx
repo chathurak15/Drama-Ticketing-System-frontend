@@ -1,9 +1,10 @@
 import React, {useState, useEffect,forwardRef, useImperativeHandle,} from "react";
-import { Calendar,Clock,MapPin,Theater,Image,FileText, Armchair,} from "lucide-react";
+import { Calendar,Clock,MapPin,Theater,Upload,FileText, Armchair,Image} from "lucide-react";
 import { getCity } from "../../../services/ShowService";
 import { getTheatresByUserId, getSeatTypesByTheatreId,} from "../../../services/TheatreService";
 import { getDramas } from "../../../services/dramaService";
 import { useAuth } from "../../../utils/AuthContext";
+import { uploadFile } from "../../../services/FileService.Js";
 
 const ShowForm = forwardRef(({ formData, setFormData }, ref) => {
   const [cities, setCities] = useState([]);
@@ -15,6 +16,12 @@ const ShowForm = forwardRef(({ formData, setFormData }, ref) => {
   const [isLoadingDramas, setIsLoadingDramas] = useState(false);
   const [isLoadingTheatres, setIsLoadingTheatres] = useState(false);
   const [isLoadingSeatTypes, setIsLoadingSeatTypes] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [imagePreview, setImagePreview] = useState(
+    formData.image
+      ? `http://localhost:8080/uploads/shows/${formData.image}`
+      : null
+  );
   const userId = useAuth().user?.id;
 
   // Initialize form data with default values
@@ -171,6 +178,40 @@ const ShowForm = forwardRef(({ formData, setFormData }, ref) => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const handleImageUpload = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  if (!file.type.startsWith("image/")) {
+    alert("Only image files are allowed.");
+    return;
+  }
+
+  if (file.size > 5 * 1024 * 1024) {
+    alert("File size must be under 5MB.");
+    return;
+  }
+
+  setIsUploading(true);
+
+  try {
+    const category = "shows";
+    const title = formData.title || "show";
+
+    const uploadRes = await uploadFile(file, category, title);
+    const uploadedFileName = uploadRes.fileName;
+
+    const imageUrl = `http://localhost:8080/uploads/shows/${uploadedFileName}`;
+    setImagePreview(imageUrl);
+    setFormData((prev) => ({ ...prev, image: uploadedFileName }));
+  } catch (err) {
+    alert("Image upload failed");
+    console.error("Image upload error:", err);
+  } finally {
+    setIsUploading(false);
+  }
+};
+
   useImperativeHandle(ref, () => ({
     validate: () => validateForm(),
   }));
@@ -245,32 +286,33 @@ const ShowForm = forwardRef(({ formData, setFormData }, ref) => {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               <Image className="inline w-4 h-4 mr-1" />
-              Image URL
+              Banner Image*
             </label>
-            <input
-              type="url"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#661F19] focus:border-transparent"
-              placeholder="Enter image URL"
-              value={formData.image || ""}
-              onChange={(e) => handleInputChange("image", e.target.value)}
-            />
-          </div>
-
-          {/* Location */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              <MapPin className="inline w-4 h-4 mr-1" />
-              Location*
+            <label className="cursor-pointer">
+              <div className="flex justify-center items-center border-2 border-dashed rounded-lg h-48">
+                {imagePreview ? (
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="h-full w-full object-cover rounded-lg"
+                  />
+                ) : (
+                  <Upload className="w-10 h-10 text-gray-400" />
+                )}
+              </div>
+              <input
+                type="file"
+                accept="image/*"
+                className="sr-only"
+                onChange={handleImageUpload}
+                disabled={isUploading}
+              />
             </label>
-            <input
-              type="text"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#661F19] focus:border-transparent"
-              placeholder="Enter venue location"
-              value={formData.location || ""}
-              onChange={(e) => handleInputChange("location", e.target.value)}
-            />
-            {errors.location && (
-              <p className="text-sm text-red-500">{errors.location}</p>
+            {isUploading && (
+              <p className="text-sm text-blue-500 mt-1">Uploading...</p>
+            )}
+            {errors.image && (
+              <p className="text-sm text-red-500">{errors.image}</p>
             )}
           </div>
         </div>
@@ -341,7 +383,25 @@ const ShowForm = forwardRef(({ formData, setFormData }, ref) => {
             )}
           </div>
 
-           <div>
+          {/* Location */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              <MapPin className="inline w-4 h-4 mr-1" />
+              Venue*
+            </label>
+            <input
+              type="text"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#661F19] focus:border-transparent"
+              placeholder="Enter venue location"
+              value={formData.location || ""}
+              onChange={(e) => handleInputChange("location", e.target.value)}
+            />
+            {errors.location && (
+              <p className="text-sm text-red-500">{errors.location}</p>
+            )}
+          </div>
+
+          <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Drama*
             </label>
