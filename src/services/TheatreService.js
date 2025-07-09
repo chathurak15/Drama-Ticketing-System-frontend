@@ -18,3 +18,13 @@ export const getTheatresByUserId = (id)=>{
         withCredentials:true
     })
 }
+
+export const deleteTheatre = (theatreId,userId) => {
+    return axios.delete(`/theatre/delete`, {
+        params: {
+            theatreId: theatreId,
+            id: userId
+        },
+        withCredentials:true
+    });
+};

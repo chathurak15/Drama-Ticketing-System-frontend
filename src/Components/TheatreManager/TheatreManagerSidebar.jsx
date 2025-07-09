@@ -15,7 +15,7 @@ const sidebarItems = [
   { key: 'shows', label: 'Shows', icon: Calendar },
   { key: 'theatres', label: 'Theatres', icon: Theater },
   { key: 'add-theatre', label: 'Add theatre', icon: Plus},
-  { key: 'payments', label: 'Payments', icon: CreditCard },
+  { key: 'Bookings', label: 'Bookings', icon: CreditCard },
   { key: 'analytics', label: 'Analytics', icon: BarChart3 },
   { key: 'Log Out', label: 'LogOut', icon: Settings },
 ];

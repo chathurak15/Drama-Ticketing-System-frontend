@@ -105,7 +105,7 @@ const DashboardContent = () => {
             />
             <StatCard
               title="Total Revenue"
-              value={`$${stats.totalRevenue.toLocaleString()}`}
+              value={`LKR ${stats.totalRevenue.toLocaleString()}`}
               icon={DollarSign}
               color="text-green-600"
               trend={15.2}
@@ -150,12 +150,23 @@ const DashboardContent = () => {
               <h3 className="text-lg font-semibold text-gray-800 mb-4">
                 Quick Actions
               </h3>
+              <div className="grid grid-cols-2 gap-4">
               <button
                 onClick={() => setShowAddTheatre(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                className="p-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2"
               >
                 <Plus className="w-4 h-4" /> Add Theatre
               </button>
+
+              <button
+              onClick={() => {
+                setAddType("Show");
+                setShowAddModal(true);
+              }}
+              className="p-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center space-x-2"
+            ><Plus className="w-4 h-4" />Add Show</button>
+              
+              </div>
             </div>
           </div>
         </>
