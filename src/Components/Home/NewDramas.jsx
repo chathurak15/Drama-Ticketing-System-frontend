@@ -1,57 +1,22 @@
-import React, { useRef } from 'react';
-
-const dramas = [
-  {
-    title: "මම නෙමෙයි වෙන කෙනෙක්",
-    image: "/images/drama1.jpg",
-  },
-  {
-    title: "ගුරු තරු",
-    image: "/images/drama3.jpg",
-  },
-  {
-    title: "පිරිමියෙක්ගෙන් පැමිණිල්ලක්",
-    image: "/images/drama4.jpg",
-  },
-  {
-    title: "ලෝරන්ස්ගේ මනමාලි",
-    image: "/images/drama5.jpg",
-  },
-  {
-    title: "Drama",
-    image: "/images/drama1.jpg",
-  },
-  {
-    title: "Drama",
-    image: "/images/drama1.jpg",
-  },
-  {
-    title: "Drama",
-    image: "/images/drama1.jpg",
-  },
-  {
-    title: "Drama",
-    image: "/images/drama1.jpg",
-  },
-  {
-    title: "Drama",
-    image: "/images/drama1.jpg",
-  },
-  {
-    title: "Drama",
-    image: "/images/drama1.jpg",
-  },
-  {
-    title: "Drama",
-    image: "/images/drama1.jpg",
-  },
-  {
-    title: "Drama",
-    image: "/images/drama1.jpg",
-  },
-];
+import React, { useRef, useState, useEffect } from 'react';
+import { getDramas } from '../../services/dramaService';
 
 const NewDramas = () => {
+  const [dramas, setDramas] = useState([]);
+
+   useEffect(() => {
+    const fetchDramas = async () => {
+      try {
+        const response = await getDramas({ page: 0, size: 16, sortByRating: 'ASC' });
+        setDramas(response.data.content || response.data);
+      } catch (error) {
+        console.error('Error fetching dramas:', error);
+      }
+    };
+
+    fetchDramas();
+  }, []);
+
     const scrollRef = useRef(null);
     const cardWidth = 280;
     const scroll = (direction) => {

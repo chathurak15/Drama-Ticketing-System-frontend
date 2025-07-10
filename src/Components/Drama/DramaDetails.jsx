@@ -3,11 +3,11 @@ import React, { useState, useRef, useEffect } from "react";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import "../../assets/css/DramaDetails.css";
-import "../Shows/ShowsData";
-// import showsData from "../Shows/ShowsData";
 import { getDramaById, getRatings } from "../../services/dramaService";
 import { useNavigate } from "react-router-dom";
 import UpcomingShowsSlider from "../Home/UpcomingShowsSlider";
+import { getShowsByDramaId } from "../../services/ShowService";
+
 const DramaDetails = () => {
   const navigate = useNavigate();
 
@@ -16,6 +16,7 @@ const DramaDetails = () => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [upcomingShows, setUpcomingShows] = useState([]);
   // const [startIndex, setStartIndex] = useState(0);
 
   const BACKEND_IMAGE_URL = "http://localhost:8080/uploads/dramas/";
@@ -31,9 +32,6 @@ const DramaDetails = () => {
         const dramaResponse = await getDramaById(id);
         setDrama(dramaResponse.data);
 
-        // document.title = `${dramaResponse.data.title}`;
-
-        // Fetch reviews/ratings
         try {
           const reviewsResponse = await getRatings(0, 12, id);
           console.log("Reviews response:", reviewsResponse);
@@ -60,6 +58,19 @@ const DramaDetails = () => {
       fetchDramaData();
     }
   }, [id]);
+
+  useEffect(() => {
+      const fetchUpcomingShows = async () => {
+        try {
+          const response = await getShowsByDramaId({page: 0, size: 16 ,dramaId:id});
+          setUpcomingShows(response.data.content);
+        } catch (error) {
+          console.error("Error fetching upcoming shows:", error);
+        }
+      };
+  
+      fetchUpcomingShows();
+    }, []);
 
   const scrollRef = useRef();
 
@@ -93,7 +104,7 @@ const DramaDetails = () => {
     return null;
   };
 
-  // Helper function to format duration
+  // format duration
   const formatDuration = (minutes) => {
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
@@ -214,7 +225,7 @@ const DramaDetails = () => {
           </div>
         </div>
         <div>
-          <UpcomingShowsSlider />
+          <UpcomingShowsSlider upcomingShows={upcomingShows} />
         </div>
       </div>
       <Footer />

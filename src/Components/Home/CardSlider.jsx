@@ -1,70 +1,23 @@
-import React, { useRef } from 'react';
-
-const dramas = [
-  {
-    id: 1,
-    title: "මම නෙමෙයි වෙන කෙනෙක්",
-    rating: 4.8,
-    image: "/images/drama1.jpg",
-  },
-  {
-    title: "ගුරු තරු",
-    rating: 4.8,
-    image: "/images/drama3.jpg",
-  },
-  {
-    title: "පිරිමියෙක්ගෙන් පැමිණිල්ලක්",
-    rating: 4.8,
-    image: "/images/drama4.jpg",
-  },
-  {
-    title: "ලෝරන්ස්ගේ මනමාලි",
-    rating: 4.7,
-    image: "/images/drama5.jpg",
-  },
-  {
-    title: "Drama",
-    rating: 4.9,
-    image: "/images/drama1.jpg",
-  },
-  {
-    title: "Drama",
-    rating: 5.0,
-    image: "/images/drama1.jpg",
-  },
-  {
-    title: "Drama",
-    rating: 4.9,
-    image: "/images/drama1.jpg",
-  },
-  {
-    title: "Drama",
-    rating: 4.7,
-    image: "/images/drama1.jpg",
-  },
-  {
-    title: "Drama",
-    rating: 4.6,
-    image: "/images/drama1.jpg",
-  },
-  {
-    title: "Drama",
-    rating: 4.8,
-    image: "/images/drama1.jpg",
-  },
-  {
-    title: "Drama",
-    rating: 4.7,
-    image: "/images/drama1.jpg",
-  },
-  {
-    title: "Drama",
-    rating: 4.9,
-    image: "/images/drama1.jpg",
-  },
-];
+import React, { useRef,useEffect,useState } from 'react';
+import { getDramas } from '../../services/dramaService';
 
 const CardSlider = () => {
+
+  const [dramas, setDramas] = useState([]);
+
+  useEffect(() => {
+      const fetchDramas = async () => {
+        try {
+          const response = await getDramas({ page: 0, size: 16, sortByRating: 'desc' });
+          setDramas(response.data.content || response.data);
+        } catch (error) {
+          console.error('Error fetching dramas:', error);
+        }
+      };
+  
+      fetchDramas();
+    }, []);
+
     const scrollRef = useRef(null);
     const cardWidth = 280;
     const scroll = (direction) => {

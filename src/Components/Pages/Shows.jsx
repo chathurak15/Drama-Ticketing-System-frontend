@@ -6,23 +6,29 @@ import Header from "../Header/Header.jsx";
 import Footer from "../Footer/Footer.jsx";
 import { getShows } from "../../services/ShowService.js";
 import Pagination from "../Drama/Pagination";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 
 const ITEMS_PER_PAGE = 12;
 
 const Shows = () => {
+  
+  const location = useLocation();
+  const query = new URLSearchParams(location.search);
+
   const [filters, setFilters] = useState({
-    title: "",
-    date: "",
-    city: "",
-    venue: '',
+    title: query.get("title") || "",
+    date: query.get("date") || "",
+    city: query.get("city") || "",
+    venue: "",
   });
+
   const [currentPage, setCurrentPage] = useState(0); // page 1-based for UI
   const [shows, setShows] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { id } = useParams();
+
 
   const fetchShows = () => {
   setLoading(true);
@@ -57,9 +63,9 @@ const Shows = () => {
     });
 };
 
-  useEffect(() => {
-    fetchShows();
-  }, [currentPage, filters]);
+ useEffect(() => {
+  fetchShows();
+}, [currentPage, filters, location.search]);
 
   const handleFilterChange = (updatedFilters) => {
     setFilters(updatedFilters);

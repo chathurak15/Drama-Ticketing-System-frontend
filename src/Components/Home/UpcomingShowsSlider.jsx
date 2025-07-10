@@ -1,48 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom"; // For navigation
 
-const upcomingShows = [
-  {
-    id: 1,
-    image: "/images/upload/show/drama7.jpg",
-    title: "Mama Nemeyi Wena Kenek – Colombo Premiere",
-    date: "October 26, 2025",
-    time: "7:00 PM",
-    venue: "Lionel Wendt Theatre",
-  },
-  {
-    id: 2,
-    image: "/images/drama3.jpg",
-    title: "ගුරු තරු",
-    date: "November 3, 2025",
-    time: "6:30 PM",
-    venue: "Nelum Pokuna Theatre",
-  },
-   {
-    id: 3,
-   image: "/images/upload/show/drama7.jpg",
-    title: "Mama Nemeyi Wena Kenek – Colombo Premiere",
-    date: "October 26, 2025",
-    time: "7:00 PM",
-    venue: "Lionel Wendt Theatre",
-  },
-  {
-    image: "/images/drama3.jpg",
-    title: "ගුරු තරු",
-    date: "November 3, 2025",
-    time: "6:30 PM",
-    venue: "Nelum Pokuna Theatre",
-  },
-  {
-    image: "/images/drama4.jpg",
-    title: "පිරිමියෙක්ගෙන් පැමිණිල්ලක්",
-    date: "November 10, 2025",
-    time: "6:00 PM",
-    venue: "Town Hall Theatre",
-  },
-];
-
-const UpcomingShowsSlider = () => {
+const UpcomingShowsSlider = ({ upcomingShows }) => {
   const sliderRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
@@ -78,7 +37,7 @@ const UpcomingShowsSlider = () => {
   };
 
   const handleBooking = (showId) => {
-    navigate(`/book/${showId}`);
+    navigate(`/show/${showId}`);
   };
 
   return (
@@ -128,7 +87,7 @@ const UpcomingShowsSlider = () => {
                 </p>
               </div>
               <div style={{ padding: "10px", textAlign: "center" }}>
-                <button className="u5" onClick={() => handleBooking(show.id)}>
+                <button className="u5" onClick={() => handleBooking(show.showId)}>
                   Book Your Seat Now
                 </button>
               </div>
