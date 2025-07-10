@@ -15,7 +15,7 @@ const ShowsContent = ({ setAddType, setShowAddModal }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const userId = useAuth().user?.id;
-  const pageSize = 3;
+  const pageSize = 10;
   const BACKEND_IMAGE_URL = "http://localhost:8080/uploads/shows/";
 
   useEffect(() => {

@@ -91,7 +91,7 @@ const DashboardContent = ({ setAddType, setShowAddModal }) => {
         />
         <StatCard
           title="Total Revenue"
-          value={`$${stats.totalRevenue.toLocaleString()}`}
+          value={`LKR ${stats.totalRevenue.toLocaleString()}`}
           icon={DollarSign}
           color="text-green-600"
           trend={15.2}

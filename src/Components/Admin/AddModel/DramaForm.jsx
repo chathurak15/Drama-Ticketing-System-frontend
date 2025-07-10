@@ -101,7 +101,7 @@ const DramaForm = forwardRef(({ formData, setFormData }, ref) => {
       const uploadRes = await uploadFile(file, category, title);
       const uploadedFileName = uploadRes.fileName;
 
-      setImagePreview(`http://localhost:8080/uploads/${uploadedFileName}`);
+      setImagePreview(`http://localhost:8080/uploads/dramas/${uploadedFileName}`);
       setFormData((prev) => ({ ...prev, image: uploadedFileName }));
     } catch (err) {
       alert("Image upload failed");

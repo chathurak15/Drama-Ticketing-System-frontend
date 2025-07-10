@@ -1,10 +1,13 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { getDramas } from '../../services/dramaService';
+import useTranslation from '../../hooks/useTranslation'; 
 
 const NewDramas = () => {
   const [dramas, setDramas] = useState([]);
+  const { translatedTexts } = useTranslation();
+  const BACKEND_IMAGE_URL = "http://localhost:8080/uploads/dramas/"; 
 
-   useEffect(() => {
+  useEffect(() => {
     const fetchDramas = async () => {
       try {
         const response = await getDramas({ page: 0, size: 16, sortByRating: 'ASC' });
@@ -17,39 +20,49 @@ const NewDramas = () => {
     fetchDramas();
   }, []);
 
-    const scrollRef = useRef(null);
-    const cardWidth = 280;
-    const scroll = (direction) => {
-        if (scrollRef.current) {
-            scrollRef.current.scrollBy({
-            left: direction === 'left' ? -cardWidth * 4 : cardWidth * 4,
-            behavior: 'smooth',
-            });
-        }
-    };
+  const scrollRef = useRef(null);
+  const cardWidth = 280;
 
-    return (
-    <div style={{ position: 'relative', width: '100%', padding: '40px 0'}}>
+  const scroll = (direction) => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({
+        left: direction === 'left' ? -cardWidth * 4 : cardWidth * 4,
+        behavior: 'smooth',
+      });
+    }
+  };
 
-      <h2 className='home-title'>New Dramas</h2>
+  return (
+    <div style={{ position: 'relative', width: '100%', padding: '40px 0' }}>
+      <h2 className="home-title">
+        {translatedTexts?.home?.newDramasTitle || "New Dramas"}
+      </h2>
+
       <button onClick={() => scroll('left')} className="c1"> ◀ </button>
 
       <div ref={scrollRef} className="c2">
         {dramas.map((drama, index) => (
           <div key={index} className="c3">
             <a href={`/drama/${drama.id}`} style={{ textDecoration: 'none' }}>
-            <img
-              src={drama.image}
-              alt={drama.title}
-              style={{ width: '100%', height: '200px', objectFit: 'cover' }}
-            />
-            <div style={{ padding: '10px' }}>
-              <h3 style={{ margin: '10px 0 5px', fontSize: '16px', color: 'white' }}>{drama.title}</h3>
-            </div>
+              <img
+                src={
+            drama.image
+              ? `${BACKEND_IMAGE_URL}${drama.image}`
+              : "/images/default.png"
+          }
+          alt={drama.title}
+                style={{ width: '100%', height: '200px', objectFit: 'cover' }}
+              />
+              <div style={{ padding: '10px' }}>
+                <h3 style={{ margin: '10px 0 5px', fontSize: '16px', color: 'white' }}>
+                  {drama.title}
+                </h3>
+              </div>
             </a>
           </div>
         ))}
       </div>
+
       <button onClick={() => scroll('right')} className="c4"> ▶ </button>
     </div>
   );

@@ -1,6 +1,22 @@
 import React from "react";
+import useTranslation from "../../hooks/useTranslation";
 
 const HowToBook = () => {
+  const { translatedTexts } = useTranslation();
+
+  const title = translatedTexts?.howToBook?.title || "How to Book A Ticket";
+  const fallbackSteps = [
+  "Browse Dramas – Search by category, city, or date",
+  "Select Your Show – View details and choose your seat",
+  "Make Payment – Pay securely online",
+  "Get Your Ticket – Receive QR e-ticket via email/SMS",
+  "Enjoy the Show – Scan your ticket at the entrance",
+];
+
+let stepsRaw = translatedTexts?.howToBook?.steps;
+const steps = Array.isArray(stepsRaw) ? stepsRaw : fallbackSteps;
+
+
   return (
     <div className="c5">
       {/* Left: Steps */}
@@ -12,25 +28,14 @@ const HowToBook = () => {
             marginBottom: "20px",
           }}
         >
-          How to Book A Ticket
+          {title}
         </h2>
         <ol style={{ lineHeight: "1.8", fontSize: "20px", color: "black" }}>
-          <li>
-            <strong>Browse Dramas</strong> – Search by category, city, or date
-          </li>
-          <li>
-            <strong>Select Your Show</strong> – View details and choose your
-            seat
-          </li>
-          <li>
-            <strong>Make Payment</strong> – Pay securely online
-          </li>
-          <li>
-            <strong>Get Your Ticket</strong> – Receive QR e-ticket via email/SMS
-          </li>
-          <li>
-            <strong>Enjoy the Show</strong> – Scan your ticket at the entrance
-          </li>
+          {steps.map((step, index) => (
+            <li key={index}>
+              {step}
+            </li>
+          ))}
         </ol>
       </div>
 

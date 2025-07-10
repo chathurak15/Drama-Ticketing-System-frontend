@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom"; // For navigation
+import { useNavigate } from "react-router-dom";
+import useTranslation from "../../hooks/useTranslation"; 
 
 const UpcomingShowsSlider = ({ upcomingShows }) => {
   const sliderRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
 
+  const { translatedTexts } = useTranslation(); 
   useEffect(() => {
     const interval = setInterval(() => {
       if (sliderRef.current && !isHovered) {
@@ -14,26 +16,16 @@ const UpcomingShowsSlider = ({ upcomingShows }) => {
           behavior: "smooth",
         });
       }
-    }, 2000); // Adjust scroll interval for better experience
+    }, 2000);
     return () => clearInterval(interval);
   }, [isHovered]);
 
   const scrollLeft = () => {
-    if (sliderRef.current) {
-      sliderRef.current.scrollBy({
-        left: -280,
-        behavior: "smooth",
-      });
-    }
+    sliderRef.current?.scrollBy({ left: -280, behavior: "smooth" });
   };
 
   const scrollRight = () => {
-    if (sliderRef.current) {
-      sliderRef.current.scrollBy({
-        left: 280,
-        behavior: "smooth",
-      });
-    }
+    sliderRef.current?.scrollBy({ left: 280, behavior: "smooth" });
   };
 
   const handleBooking = (showId) => {
@@ -46,7 +38,9 @@ const UpcomingShowsSlider = ({ upcomingShows }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <h2 className="home-title">Upcoming Shows</h2>
+      <h2 className="home-title">
+        {translatedTexts?.home?.upcomingShowsTitle || "Upcoming Shows"}
+      </h2>
 
       <div style={{ position: "relative", overflow: "hidden" }}>
         <button onClick={scrollLeft} className="c1">◀</button>
@@ -88,7 +82,7 @@ const UpcomingShowsSlider = ({ upcomingShows }) => {
               </div>
               <div style={{ padding: "10px", textAlign: "center" }}>
                 <button className="u5" onClick={() => handleBooking(show.showId)}>
-                  Book Your Seat Now
+                  {translatedTexts?.home?.bookNowButton || "Book Your Seat Now"}
                 </button>
               </div>
             </div>

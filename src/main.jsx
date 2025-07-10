@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 
 import { AuthProvider } from "./utils/AuthContext.jsx";
+import { TranslationProvider } from "./context/TranslationContext.jsx";
 
 // Pages & Layout
 import Layout from "./Components/Chatbot/Layout.jsx";
@@ -153,7 +154,9 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
-      <RouterProvider router={router} />
+      <TranslationProvider>
+        <RouterProvider router={router} />
+      </TranslationProvider>
     </AuthProvider>
   </StrictMode>
 );
