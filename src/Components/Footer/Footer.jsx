@@ -11,11 +11,11 @@ const Footer = () => {
                     <div className="logo-title">
                         <img src={logo} alt="Nataka.LK" className="logo" />
                     </div>
-                    <div className="social-icons">
+                    {/* <div className="social-icons">
                         <a href="#"><img src="/images/instagram.avif" alt="Instagram" /></a>
                         <a href="#"><img src="/images/youtube.svg" alt="YouTube" /></a>
                         <a href="#"><img src="/images/linkedin.svg" alt="LinkedIn" /></a>
-                    </div>
+                    </div> */}
                     
                 </div>
 

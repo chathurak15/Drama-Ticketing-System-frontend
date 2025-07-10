@@ -34,3 +34,26 @@ export const cancelBooking = (bookingId,userId) => {
     }
   );
 };
+
+export const getBookingsByShow = (userId,page,size,showId='',ticketId='') => {
+  return axios.get("booking/all/byShow", {
+    params: {
+      userId,
+      page,
+      size,
+      showId,
+      ticketId
+    },
+    withCredentials: true
+  });
+}
+
+export const updateStatus = (bookingId,status) => {
+  return axios.put("booking/status",[],{
+    params: {
+      bookingId,
+      status
+    },
+    withCredentials:true
+  });
+}

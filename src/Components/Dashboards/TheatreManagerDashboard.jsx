@@ -9,6 +9,7 @@ import AddModal from '../Admin/AddModel';
 import ShowsContent from '../TheatreManager/ShowsContent';
 import AddTheatre from '../TheatreManager/AddTheatre'
 import TheatresContent from '../TheatreManager/TheatresContent';
+import BookingsContent from '../TheatreManager/BookingsContent';
 
 const TheaterManagerDashboard = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -23,13 +24,14 @@ const TheaterManagerDashboard = () => {
         case 'theatres': return <TheatresContent setAddType={setAddType} setShowAddModal={setShowAddModal} />;
         case 'add-theatre': return <AddTheatre />;
         case 'analytics': return <AnalyticsContent />;
-        case 'payments': return (
-          <div className="text-center py-20">
-            <CreditCard className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-600 mb-2">Payment Management</h3>
-            <p className="text-gray-500">Connect your Spring Boot API to manage payments and transactions</p>
-          </div>
-        );
+        case 'bookings': return <BookingsContent />;
+        // case 'payments': return (
+        //   <div className="text-center py-20">
+        //     <CreditCard className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+        //     <h3 className="text-lg font-semibold text-gray-600 mb-2">Payment Management</h3>
+        //     <p className="text-gray-500">Connect your Spring Boot API to manage payments and transactions</p>
+        //   </div>
+        // );
         case 'settings': return (
           <div className="text-center py-20">
             <Settings className="w-16 h-16 text-gray-400 mx-auto mb-4" />

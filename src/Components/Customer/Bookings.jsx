@@ -7,6 +7,7 @@ import {
 import { useAuth } from "../../utils/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { getShowById } from "../../services/ShowService";
+import { addReview } from "../../services/ReviewService"; 
 
 const Bookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -74,15 +75,48 @@ const Bookings = () => {
     }
   };
 
-  const handleReviewSubmit = (id) => {
-    setBookings((prev) =>
-      prev.map((b) =>
-        b.id === id ? { ...b, hasReview: true, review: reviewData } : b
-      )
-    );
-    setReviewModal(null);
-    setReviewData({ ratingValue: 5, comment: "" });
-  };
+ const handleReviewSubmit = async (bookingId) => {
+  if (!reviewData.ratingValue || !reviewData.comment) {
+    alert("Please provide a rating and comment for your review.");
+    return;
+  }
+
+  try {
+    const booking = bookings.find((b) => b.id === bookingId);
+    const drama = showDetails[booking.showId]?.drama;
+
+    if (!drama || !drama.id) {
+      alert("Drama information is not available for this booking.");
+      return;
+    }
+
+    const reviewPayload = {
+      ratingValue: reviewData.ratingValue,
+      comment: reviewData.comment,
+      userId: user.id,
+      dramaId: drama.id, 
+    };
+
+    const response = await addReview(reviewPayload);
+    if (response.status === 200 || response.status === 201) {
+      alert(response.data || "Review submitted successfully!");
+
+      // setBookings((prev) =>
+      //   prev.map((b) =>
+      //     b.id === bookingId
+      //       ? { ...b, hasReview: true, review: reviewData }
+      //       : b
+      //   )
+      // );
+
+      setReviewModal(null);
+      setReviewData({ ratingValue: 5, comment: "" });
+    }
+  } catch (error) {
+    console.error("Failed to submit review:", error);
+    alert("Something went wrong while submitting your review.");
+  }
+};
 
   const getStatusColor = (status) => {
     switch (status.toLowerCase()) {
