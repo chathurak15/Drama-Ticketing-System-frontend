@@ -20,6 +20,7 @@ const DramaDetails = () => {
   // const [startIndex, setStartIndex] = useState(0);
 
   const BACKEND_IMAGE_URL = "http://localhost:8080/uploads/dramas/";
+  const BACKEND_Actor_IMAGE_URL = "http://localhost:8080/uploads/actors/";
 
   // Fetch drama details and reviews on component mount
   useEffect(() => {
@@ -182,7 +183,9 @@ const DramaDetails = () => {
               drama.actors.map((actor, index) => (
                 <div className="cast-card" key={actor.id || index}>
                   <img
-                    src={`/public/images/upload/actor/${actor.photo}`}
+                    src={ actor.photo
+                ? `${BACKEND_Actor_IMAGE_URL}${actor.photo}`
+                : "/images/default.png"}
                     className="cast-photo"
                     alt={actor.name}
                   />

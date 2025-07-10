@@ -6,6 +6,7 @@ const UpcomingShowsSlider = ({ upcomingShows }) => {
   const sliderRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
+  const BACKEND_IMAGE_URL = "http://localhost:8080/uploads/shows/";
 
   const { translatedTexts } = useTranslation(); 
   useEffect(() => {
@@ -58,7 +59,11 @@ const UpcomingShowsSlider = ({ upcomingShows }) => {
           {upcomingShows.map((show, index) => (
             <div key={index} className="u4" style={{ minWidth: "260px" }}>
               <img
-                src={show.image}
+                src={
+              show.image
+                ? `${BACKEND_IMAGE_URL}${show.image}`
+                : "/images/default.png"
+            }
                 alt={show.title}
                 style={{ width: "100%", height: "320px", objectFit: "cover" }}
               />
