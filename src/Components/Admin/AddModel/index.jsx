@@ -1,17 +1,32 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { XCircle } from "lucide-react";
 import ShowForm from "../../TheatreManager/AddModel/ShowForm";
 import DramaForm from "./DramaForm";
 import ActorForm from "../Actors/ActorForm";
 import { addDrama } from "../../../services/dramaService";
 import { addActor } from "../../../services/ActorService";
-import { addShow } from "../../../services/ShowService";
+import { addShow, updateShow } from "../../../services/ShowService";
 
-const AddModal = ({ show, onClose, type}) => {
+const AddModal = ({ show, onClose, type, editData }) => {
   const [formData, setFormData] = useState({});
   const dramaFormRef = useRef();
   const actorFormRef = useRef();
   const showFormRef = useRef();
+
+  // Strip nested objects and initialize clean formData
+  useEffect(() => {
+    if (editData && type === "show") {
+      const { city, drama, user, ...rest } = editData;
+      setFormData({
+        ...rest,
+        cityId: city?.id || rest.cityId,
+        dramaId: drama?.id || rest.dramaId,
+        userId: user?.id || rest.userId,
+      });
+    } else {
+      setFormData(editData || {});
+    }
+  }, [editData, type]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,9 +36,9 @@ const AddModal = ({ show, onClose, type}) => {
       isValid = dramaFormRef.current?.validate();
     } else if (type === "actor") {
       isValid = actorFormRef.current?.validate();
-    }else if (type === "show") {
+    } else if (type === "show") {
       isValid = showFormRef.current?.validate();
-    } 
+    }
 
     if (!isValid) return;
 
@@ -35,10 +50,22 @@ const AddModal = ({ show, onClose, type}) => {
         const response = await addActor(formData);
         alert(response.data);
       } else if (type === "show") {
-        const response = await addShow(formData);
-        alert(response.data);
-      } else {
-        console.log(`${type} submitted:`, formData);
+        const sanitizedData = {
+          ...formData,
+          city: undefined,
+          drama: undefined,
+          user: undefined,
+          status:undefined,
+        };
+
+        let response;
+        if (formData.showId) {
+          response = await updateShow(sanitizedData);
+        } else {
+          response = await addShow(sanitizedData);
+        }
+        alert(response.data || "Show saved successfully")
+        ;
       }
 
       onClose();
@@ -53,11 +80,12 @@ const AddModal = ({ show, onClose, type}) => {
     switch (type) {
       case "show":
         return (
-        <ShowForm
-        ref={showFormRef} 
-        formData={formData} 
-        setFormData={setFormData} />
-      );
+          <ShowForm
+            ref={showFormRef}
+            formData={formData}
+            setFormData={setFormData}
+          />
+        );
       case "drama":
         return (
           <DramaForm
@@ -86,11 +114,13 @@ const AddModal = ({ show, onClose, type}) => {
       <div className="bg-white w-full max-w-7xl mx-auto rounded-lg shadow-xl overflow-y-auto p-10 max-h-[90vh]">
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-2xl font-bold text-[#661F19]">
-            Add New {type?.charAt(0).toUpperCase() + type?.slice(1)}
+            {formData.showId ? "Edit" : "Add"}{" "}
+            {type?.charAt(0).toUpperCase() + type?.slice(1)}
           </h3>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600"
+            aria-label="Close modal"
           >
             <XCircle className="w-8 h-8" />
           </button>
@@ -110,7 +140,8 @@ const AddModal = ({ show, onClose, type}) => {
               type="submit"
               className="px-6 py-2 bg-[#661F19] text-white rounded-lg hover:bg-[#4e1612]"
             >
-              Add {type?.charAt(0).toUpperCase() + type?.slice(1)}
+              {formData.showId ? "Update" : "Add"}{" "}
+              {type?.charAt(0).toUpperCase() + type?.slice(1)}
             </button>
           </div>
         </form>

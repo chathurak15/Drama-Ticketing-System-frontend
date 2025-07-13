@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Plus, Trash2, Eye, MapPin } from "lucide-react";
-import { addTheatre } from "../../services/TheatreService";
+import { addTheatre,updateTheatre } from "../../services/TheatreService";
 import { useAuth } from "../../utils/AuthContext";
 
-const AddTheatre = () => {
+const AddTheatre = ({theatreToEdit, onSuccess = () => {}}) => {
   const user = useAuth();
-
   const [theaterData, setTheaterData] = useState({
     name: "",
     areaType: "THEATRE",
@@ -14,6 +13,12 @@ const AddTheatre = () => {
     openAreaPrice: 0,
     seatTypes: [{ typeName: "VIP", totalSeats: 30, seatsPerRow: 15 }],
   });
+
+   useEffect(() => {
+    if (theatreToEdit) {
+      setTheaterData(theatreToEdit);
+    }
+  }, [theatreToEdit]);
   
   const [showPreview, setShowPreview] = useState(true);
 
@@ -53,18 +58,32 @@ const AddTheatre = () => {
 
  const handleSubmit = async () => {
     try {
-      const response = await addTheatre(theaterData, user.user?.id);
-      alert(response.data);
-      if (response.data === "Theatre Added Successfully!") {
-        setTheaterData({
-        name: "",
-        areaType: "THEATRE",
-        status: "PERMANENT",
-        totalCapacity: 0,
-        openAreaPrice: 0,
-        seatTypes: [{ typeName: "VIP", totalSeats: 30, seatsPerRow: 15 }],
-      });
+      let response;
+      if (theatreToEdit) {
+        response = await updateTheatre(theaterData);
+        if(response.status === 200){
+          alert(response.data)
+          if (onSuccess) onSuccess();
+        }else{
+          alert("update Failed! try Again!")
+        }
+      } else {
+        response = await addTheatre(theaterData, user.user?.id);
+        if(response.status === 200){
+          alert(response.data)
+          if (onSuccess) onSuccess();
+        }
       }
+      // if (response.data === "Theatre Added Successfully!") {
+      //   setTheaterData({
+      //   name: "",
+      //   areaType: "THEATRE",
+      //   status: "PERMANENT",
+      //   totalCapacity: 0,
+      //   openAreaPrice: 0,
+      //   seatTypes: [{ typeName: "VIP", totalSeats: 30, seatsPerRow: 15 }],
+      // });
+      // }
     } catch (err) {
       console.log(err);
     }
@@ -345,7 +364,7 @@ const AddTheatre = () => {
             disabled={!theaterData.name.trim()}
             className="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors text-lg font-semibold"
           >
-            Submit Theater Configuration
+             {theatreToEdit ? "Update Theater" : "Submit Theater Configuration"}
           </button>
         </div>
       </div>

@@ -20,11 +20,17 @@ export const getTheatresByUserId = (id)=>{
 }
 
 export const deleteTheatre = (theatreId,userId) => {
-    return axios.delete(`/theatre/delete`, {
+    return axios.delete(`theatre/delete`, {
         params: {
             theatreId: theatreId,
             id: userId
         },
+        withCredentials:true
+    });
+};
+
+export const updateTheatre = (theatreData) => {
+    return axios.put(`theatre/update`, theatreData,{
         withCredentials:true
     });
 };

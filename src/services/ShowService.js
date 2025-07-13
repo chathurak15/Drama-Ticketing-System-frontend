@@ -87,3 +87,9 @@ export const getShowsByUser = async ({ page = 0, size = 10, title="", status, us
     withCredentials: true
   });
 };
+
+export const updateShow = async (data) => {
+  return axios.put(`show/update`, data, {
+    withCredentials: true,
+  });
+};

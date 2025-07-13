@@ -63,11 +63,11 @@ function Home() {
           >
             {/* Overlay content */}
             <div className="overlay-content container mx-auto px-4 py-8">
-              <h1>{translatedTexts?.home?.headerTitle || "Book Your Seats Now"}</h1>
-              <p>{translatedTexts?.home?.headerSubtitle || "Easy stage drama ticket booking."}</p>
-              <button onClick={handleBookClick}>
-                {translatedTexts?.home?.bookButton || "Book Tickets"}
-              </button>
+              <h1>
+                Book Your <br /> Seats Now
+              </h1>
+              <p>Easy stage drama ticket booking.</p>
+              <button onClick={handleBookClick}>Book Tickets</button>
             </div>
           </div>
           <div>

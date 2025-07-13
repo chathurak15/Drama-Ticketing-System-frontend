@@ -118,9 +118,9 @@ const DashboardContent = () => {
                 Recent Events
               </h3>
               <div className="space-y-0">
-                {shows.slice(0, 5).map((show) => (
+                {shows.slice(0, 5).map((show,index) => (
                   <div
-                    key={show.id}
+                    key={show.id|| index}
                     className="flex items-center justify-between p-1 bg-gray-50 rounded-lg"
                   >
                     <div>

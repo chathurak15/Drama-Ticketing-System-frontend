@@ -21,6 +21,7 @@ import TableRow from "../Admin/TableRow";
 import { useAuth } from "../../utils/AuthContext";
 import { getShowsByUser } from "../../services/ShowService";
 import { getBookingsByShow, updateStatus } from "../../services/BookingService";
+import QrReader from "react-qr-reader";
 
 const BookingsContent = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -36,13 +37,7 @@ const BookingsContent = () => {
   const [pageSize, setPageSize] = useState(20);
   const [totalElements, setTotalElements] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const userId = useAuth().user?.id;
-
-  const sampleShows = [
-    { id: 35, title: "test", date: "2025-07-16", time: "18:21" },
-    { id: 42, title: "Romeo and Juliet", date: "2025-07-18", time: "19:30" },
-    { id: 50, title: "Hamlet", date: "2025-07-20", time: "20:00" },
-  ];
+  const userId = useAuth().user.id;
 
   useEffect(() => {
     fetchBookings();
@@ -74,15 +69,15 @@ const BookingsContent = () => {
   };
 
   const fetchShows = async () => {
-    // try {
-    //   const response = await getShowsByUser(userId);
-    //  if (!response || !response.data) {
-    //     alert("No shows found for you.");
-    //  }
-    setShows(sampleShows);
-    // } catch (err) {
-    //   console.error("Error fetching shows", err);
-    // }
+    try {
+      const response = await getShowsByUser({ userId: userId });
+      if (!response || !response.data) {
+        alert("No shows found for you.");
+      }
+      setShows(response.data.content);
+    } catch (err) {
+      console.error("Error fetching shows", err);
+    }
   };
 
   const handleQRScan = (result) => {
@@ -113,7 +108,7 @@ const BookingsContent = () => {
   };
 
   const handleSearch = () => {
-    setCurrentPage(0); // Reset to first page when searching
+    setCurrentPage(0);
     fetchBookings();
   };
 
@@ -243,6 +238,7 @@ const BookingsContent = () => {
               <p className="text-2xl font-bold text-gray-900">
                 LKR{" "}
                 {filteredBookings
+                  .filter((booking) => booking.status !== "Canceled")
                   .reduce((sum, booking) => sum + booking.totalAmount, 0)
                   .toFixed(2)}
               </p>
@@ -268,15 +264,19 @@ const BookingsContent = () => {
         <div className="bg-white rounded-lg shadow-md p-6">
           <h3 className="text-lg font-semibold mb-4">QR Code Scanner</h3>
           <div className="bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-            <QrCode className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-600 mb-4">
-              QR Code scanner would be implemented here using a camera library
-            </p>
+            <QrReader
+              delay={300}
+              onError={(err) => toast.error("QR Scan error")}
+              onScan={(result) => {
+                if (result) handleQRScan(result);
+              }}
+              style={{ width: "100%" }}
+            />
             <button
-              onClick={() => handleQRScan("THE-035-NOMALE7-21DCA")}
-              className="bg-[#661F19] text-white px-4 py-2 rounded-lg hover:bg-[#541612]"
+              onClick={() => setShowQRScanner(false)}
+              className="mt-4 bg-[#661F19] text-white px-4 py-2 rounded-lg hover:bg-[#541612]"
             >
-              Simulate QR Scan
+              Close Scanner
             </button>
           </div>
         </div>
@@ -325,8 +325,8 @@ const BookingsContent = () => {
               >
                 <option value="">All Shows</option>
                 {shows.map((show) => (
-                  <option key={show.id} value={show.id}>
-                    {show.title} - {show.date}
+                  <option key={show.showId} value={show.showId}>
+                    {show.title} - {show.showDate}
                   </option>
                 ))}
               </select>
@@ -453,16 +453,17 @@ const BookingsContent = () => {
                           onClick={() => handleViewDetails(booking.id)}
                           title="View Details"
                         /> */}
-                        {booking.status.toLowerCase() !== "complete" && booking.status.toLowerCase() !== "canceled" && (
-                          <ActionButton
-                            icon={CheckCircle}
-                            color="text-green-600"
-                            onClick={() =>
-                              handleStatusChange(booking.id, "Complete")
-                            }
-                            title="Mark as Complete"
-                          />
-                        )}
+                        {booking.status.toLowerCase() !== "complete" &&
+                          booking.status.toLowerCase() !== "canceled" && (
+                            <ActionButton
+                              icon={CheckCircle}
+                              color="text-green-600"
+                              onClick={() =>
+                                handleStatusChange(booking.id, "Complete")
+                              }
+                              title="Mark as Complete"
+                            />
+                          )}
                       </div>
                     </td>
                   </TableRow>

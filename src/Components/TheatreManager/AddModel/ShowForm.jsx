@@ -17,11 +17,7 @@ const ShowForm = forwardRef(({ formData, setFormData }, ref) => {
   const [isLoadingTheatres, setIsLoadingTheatres] = useState(false);
   const [isLoadingSeatTypes, setIsLoadingSeatTypes] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [imagePreview, setImagePreview] = useState(
-    formData.image
-      ? `http://localhost:8080/uploads/shows/${formData.image}`
-      : null
-  );
+  const [imagePreview, setImagePreview] = useState(null);
   const userId = useAuth().user?.id;
 
   // Initialize form data with default values
@@ -35,6 +31,14 @@ const ShowForm = forwardRef(({ formData, setFormData }, ref) => {
       }));
     }
   }, [formData.temporaryTheatre, setFormData]);
+
+  useEffect(() => {
+  if (formData.image) {
+    setImagePreview(`http://localhost:8080/uploads/shows/${formData.image}`);
+  } else {
+    setImagePreview(null);
+  }
+}, [formData.image]);
 
   // Load cities on component mount
   useEffect(() => {

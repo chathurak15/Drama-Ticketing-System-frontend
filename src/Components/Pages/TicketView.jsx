@@ -1,79 +1,27 @@
-import React, { useEffect, useState } from "react";
-import {CheckCircle,QrCode,Calendar,Clock,MapPin,Download,Theater,Smartphone,Sparkles,} from "lucide-react";
+import React, { useEffect, useState,useRef } from "react";
+import {QrCode, Calendar, Clock, MapPin, Download, Theater, Smartphone } from "lucide-react";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 import { useParams } from "react-router-dom";
 import { getBooking } from "../../services/BookingService";
 import { getShowById } from "../../services/ShowService";
+import { QRCodeSVG } from "qrcode.react";
 
 const TicketView = () => {
   const { id } = useParams();
   const [bookingData, setBookingData] = useState(null);
   const [showData, setShowData] = useState({});
-  const [qrCode, setQrCode] = useState(null);
-
-  const generateQRCode = (ticketId, showId, seatCount) => {
-    const qrData = `BOOKING:${ticketId}:${showId}:${seatCount}`;
-
-    const size = 200;
-    const moduleSize = 8;
-    const modules = size / moduleSize;
-    
-    let qrPattern = [];
-    for (let i = 0; i < modules; i++) {
-      qrPattern[i] = [];
-      for (let j = 0; j < modules; j++) {
-        // Create finder patterns (corners)
-        if ((i < 7 && j < 7) || (i < 7 && j >= modules - 7) || (i >= modules - 7 && j < 7)) {
-          qrPattern[i][j] = (i === 0 || i === 6 || j === 0 || j === 6 || 
-                           (i >= 2 && i <= 4 && j >= 2 && j <= 4));
-        }
-        // Timing patterns
-        else if (i === 6 || j === 6) {
-          qrPattern[i][j] = (i + j) % 2 === 0;
-        }
-        // Data pattern (pseudo-random based on ticket data)
-        else {
-          const hash = (i * 31 + j * 17 + ticketId.length * 7) % 100;
-          qrPattern[i][j] = hash > 45;
-        }
-      }
-    }
-    
-    // Generate SVG
-    let rects = '';
-    for (let i = 0; i < modules; i++) {
-      for (let j = 0; j < modules; j++) {
-        if (qrPattern[i][j]) {
-          rects += `<rect x="${j * moduleSize}" y="${i * moduleSize}" width="${moduleSize}" height="${moduleSize}" fill="#1f2937"/>`;
-        }
-      }
-    }
-    
-    const svg = `
-      <svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
-        <rect width="${size}" height="${size}" fill="white" rx="8"/>
-        ${rects}
-      </svg>
-    `;
-    
-    return `data:image/svg+xml;base64,${btoa(svg)}`;
-  };
+  const ticketRef = useRef();
 
   useEffect(() => {
     const fetchBookingData = async () => {
       try {
         const booking = await getBooking(id);
         setBookingData(booking.data);
-        const qrCodeData = generateQRCode(
-          booking.data.ticketId,
-          booking.data.showId,
-          booking.data.seatCount
-        );
-        setQrCode(qrCodeData);
       } catch (error) {
         console.error("Error fetching booking data:", error);
       }
     };
-
     fetchBookingData();
   }, [id]);
 
@@ -87,7 +35,6 @@ const TicketView = () => {
         console.error("Error fetching show data:", error);
       }
     };
-
     fetchShowData();
   }, [bookingData]);
 
@@ -102,116 +49,126 @@ const TicketView = () => {
     );
   }
 
-  const handleDownloadTicket = () => {
-    const link = document.createElement("a");
-    link.href = qrCode;
-    link.download = `${bookingData.ticketId}_ticket.svg`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+  const handleDownloadTicket = async () => {
+  const ticketElement = ticketRef.current;
+  if (!ticketElement) return;
+  try {
+    const canvas = await html2canvas(ticketElement, {
+      scale: 1.5,
+      useCORS: true,
+    });
+    const imgData = canvas.toDataURL("image/jpeg", 1); 
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "px",
+      format: "a4",
+    });
+    pdf.addImage(
+      imgData,
+      "JPEG",
+      0,
+      0,
+      pdf.internal.pageSize.getWidth(),
+      pdf.internal.pageSize.getHeight()
+    );
+    pdf.save(`ticket_${bookingData.ticketId}.pdf`);
+  } catch (err) {
+    alert("Failed to generate PDF. See console for details.");
+    console.error(err);
+  }
+};
+
+ 
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
-      <div className="max-w-4xl mx-auto">
-        {/* <div className="text-center mb-8 animate-fade-in">
-          <div className="relative inline-block">
-            <div className="absolute inset-0 bg-emerald-500 rounded-full animate-ping opacity-20"></div>
-            <CheckCircle className="w-16 h-16 text-emerald-400 relative z-10" />
-          </div>
-          <h1 className="text-4xl font-bold text-white mt-4 mb-2">
-            Booking {bookingData.status}!
-          </h1>
-          <p className="text-purple-200 text-lg">
-            Your digital tickets are ready
-          </p>
-        </div> */}
-
-        {/* Main Ticket Card */}
-        <div className="bg-white/10 backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl overflow-hidden">
-          {/* Header with gradient */}
-          <div className="bg-gradient-to-r from-[#3f110f] via-[#661F19] to-[#8b2a21] px-8 py-3 text-white relative overflow-hidden">
-            <div className="absolute inset-0 bg-black/20"></div>
-            <div className="relative z-10">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                 <img src="/public/images/logo nataka white.png" alt="logo" className="w-50" />
+    <div style={{ minHeight: "100vh", background: "#f3f4f6", padding: "1rem" }}>
+      <div style={{ maxWidth: "900px", margin: "0 auto" }}>
+        <div
+          ref={ticketRef}
+          style={{
+            background: "rgba(255,255,255,0.1)",
+            borderRadius: "2rem",
+            border: "1px solid rgba(255,255,255,0.2)",
+            boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+            overflow: "hidden"
+          }}
+        >
+          {/* Header with gradient (replace oklab with hex) */}
+          <div style={{
+            background: "linear-gradient(to right, #3f110f, #661F19, #8b2a21)",
+            padding: "2rem 0.5rem 1rem 2rem",
+            color: "#fff",
+            position: "relative",
+            overflow: "hidden"
+          }}>
+            <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.2)" }}></div>
+            <div style={{ position: "relative", zIndex: 10 }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                  <img src="/public/images/logo nataka white.png" alt="logo" style={{ width: "140px" }} />
                 </div>
-                <div className="text-right">
-                  <div className="text-sm opacity-90">Ticket ID</div>
-                  <div className="font-mono text-lg">{bookingData.ticketId}</div>
+                <div style={{ textAlign: "right" }}>
+                  <div style={{ fontSize: "0.9rem", opacity: 0.9 }}>Ticket ID</div>
+                  <div style={{ fontFamily: "monospace", fontSize: "1.2rem" }}>{bookingData.ticketId}</div>
                 </div>
               </div>
-              <h2 className="text-3xl font-bold mb-2">{showData.title}</h2>
+              <h2 style={{ fontSize: "2rem", fontWeight: "bold", marginBottom: "0.5rem" }}>{showData.title}</h2>
             </div>
           </div>
 
-          <div className="p-8">
+          <div style={{ padding: "2rem" }}>
             {/* QR Code Section */}
-            <div className="grid lg:grid-cols-2 gap-8 mb-8">
-              <div className="text-center">
-                <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
-                  <div className="flex items-center justify-center gap-2 mb-4">
-                    <QrCode className="w-6 h-6 text-gray-600" />
-                    <span className="font-semibold text-gray-800">Scan to Enter</span>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem", marginBottom: "2rem" }}>
+              <div style={{ textAlign: "center" }}>
+                <div style={{ background: "rgba(255,255,255,0.8)", borderRadius: "1rem", padding: "1.5rem", boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", marginBottom: "1rem" }}>
+                    <QrCode style={{ width: "24px", height: "24px", color: "#4b5563" }} />
+                    <span style={{ fontWeight: 600, color: "#1f2937" }}>Scan to Enter</span>
                   </div>
-                  <div className="bg-white rounded-xl p-4 shadow-inner">
-                    <img
-                      src={qrCode}
-                      alt="Booking QR Code"
-                      className="w-48 h-48 mx-auto"
-                    />
+                  <div style={{ background: "#fff", borderRadius: "0.75rem", padding: "1rem", boxShadow: "0 1px 4px rgba(0,0,0,0.04)", display: "flex", justifyContent: "center" }}>
+                    <QRCodeSVG value={`${bookingData.ticketId}`} size={192} />
                   </div>
-                  <div className="flex items-center justify-center gap-2 mt-4 text-sm text-gray-600">
-                    <Smartphone className="w-4 h-4" />
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", marginTop: "1rem", fontSize: "0.9rem", color: "#4b5563" }}>
+                    <Smartphone style={{ width: "16px", height: "16px" }} />
                     <span>Show this code at the venue</span>
                   </div>
                 </div>
               </div>
 
               {/* Show Details */}
-              <div className="space-y-6">
-                <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
-                  <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                    <Calendar className="w-5 h-5 text-purple-600" />
+              <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                <div style={{ background: "rgba(255,255,255,0.8)", borderRadius: "1rem", padding: "1.5rem", boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}>
+                  <h3 style={{ fontSize: "1.2rem", fontWeight: "bold", color: "#1f2937", marginBottom: "1rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                    <Calendar style={{ width: "20px", height: "20px", color: "#9333ea" }} />
                     Event Details
                   </h3>
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3 p-3 bg-purple-50 rounded-lg">
-                      <Calendar className="w-5 h-5 text-purple-600" />
+                  <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "0.75rem", background: "#f3e8ff", borderRadius: "0.5rem" }}>
+                      <Calendar style={{ width: "20px", height: "20px", color: "#9333ea" }} />
                       <div>
-                        <div className="font-semibold text-gray-800">Date</div>
-                        <div className="text-gray-600">
-                          {new Date(showData.showDate).toLocaleDateString('en-US', {
-                            weekday: 'long',
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric'
-                          })}
-                        </div>
+                        <div style={{ fontWeight: 600, color: "#1f2937" }}>Date</div>
+                        <div style={{ color: "#4b5563" }}>{new Date(showData.showDate).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
-                      <Clock className="w-5 h-5 text-blue-600" />
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "0.75rem", background: "#eff6ff", borderRadius: "0.5rem" }}>
+                      <Clock style={{ width: "20px", height: "20px", color: "#2563eb" }} />
                       <div>
-                        <div className="font-semibold text-gray-800">Time</div>
-                        <div className="text-gray-600">{showData.showTime}</div>
+                        <div style={{ fontWeight: 600, color: "#1f2937" }}>Time</div>
+                        <div style={{ color: "#4b5563" }}>{showData.showTime}</div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
-                      <MapPin className="w-5 h-5 text-green-600" />
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "0.75rem", background: "#ecfdf5", borderRadius: "0.5rem" }}>
+                      <MapPin style={{ width: "20px", height: "20px", color: "#059669" }} />
                       <div>
-                        <div className="font-semibold text-gray-800">Venue</div>
-                        <div className="text-gray-600">
-                          {showData?.location || "Unknown Location"} - {showData?.city?.cityName || "Unknown City"}
-                        </div>
+                        <div style={{ fontWeight: 600, color: "#1f2937" }}>Venue</div>
+                        <div style={{ color: "#4b5563" }}>{showData?.location || "Unknown Location"} - {showData?.city?.cityName || "Unknown City"}</div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3 p-3 bg-orange-50 rounded-lg">
-                      <Theater className="w-5 h-5 text-orange-600" />
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "0.75rem", background: "#fff7ed", borderRadius: "0.5rem" }}>
+                      <Theater style={{ width: "20px", height: "20px", color: "#ea580c" }} />
                       <div>
-                        <div className="font-semibold text-gray-800">Theater</div>
-                        <div className="text-gray-600">{bookingData.theatreName}</div>
+                        <div style={{ fontWeight: 600, color: "#1f2937" }}>Theater</div>
+                        <div style={{ color: "#4b5563" }}>{bookingData.theatreName}</div>
                       </div>
                     </div>
                   </div>
@@ -220,63 +177,56 @@ const TicketView = () => {
             </div>
 
             {/* Seat Details */}
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg mb-8">
-              <h3 className="text-xl font-bold text-gray-800 mb-4">Your Seats</h3>
-              <div className="grid gap-3">
+            <div style={{ background: "rgba(255,255,255,0.8)", borderRadius: "1rem", padding: "1.5rem", boxShadow: "0 2px 8px rgba(0,0,0,0.08)", marginBottom: "2rem" }}>
+              <h3 style={{ fontSize: "1.2rem", fontWeight: "bold", color: "#1f2937", marginBottom: "1rem" }}>Your Seats</h3>
+              <div style={{ display: "grid", gap: "0.75rem" }}>
                 {bookingData.seats.map((seat, index) => (
-                  <div
-                    key={seat.id}
-                    className="flex justify-between items-center p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border border-purple-100"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-gradient-to-r from-[#3f110f] via-[#661F19] to-[#8b2a21] text-white rounded-lg flex items-center justify-center font-bold">
-                        {index + 1}
-                      </div>
+                  <div key={seat.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1rem", background: "linear-gradient(to right, #f3e8ff, #fce7f3)", borderRadius: "0.5rem", border: "1px solid #e9d5ff" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                      <div style={{ width: "40px", height: "40px", background: "linear-gradient(to right, #3f110f, #661F19, #8b2a21)", color: "#fff", borderRadius: "0.5rem", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold" }}>{index + 1}</div>
                       <div>
-                        <div className="font-semibold text-gray-800">Seat {seat.seatIdentifier}</div>
-                        <div className="text-sm text-gray-600">Premium Seat</div>
+                        <div style={{ fontWeight: 600, color: "#1f2937" }}>Seat {seat.seatIdentifier}</div>
+                        <div style={{ fontSize: "0.9rem", color: "#4b5563" }}>Premium Seat</div>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <div className="font-bold text-gray-800">
-                        LKR {seat.price ? seat.price.toLocaleString() : "0.00"}
-                      </div>
+                    <div style={{ textAlign: "right" }}>
+                      <div style={{ fontWeight: "bold", color: "#1f2937" }}>LKR {seat.price ? seat.price.toLocaleString() : "0.00"}</div>
                     </div>
                   </div>
                 ))}
-                <div className="border-t-2 border-purple-200 pt-4 mt-4">
-                  <div className="flex justify-between items-center p-4 bg-gradient-to-r from-[#3f110f] via-[#661F19] to-[#8b2a21] text-white rounded-lg">
-                    <span className="text-xl font-bold">Total Amount</span>
-                    <span className="text-2xl font-bold">LKR {bookingData.totalAmount.toLocaleString()}</span>
+                <div style={{ borderTop: "2px solid #e9d5ff", paddingTop: "1rem", marginTop: "1rem" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1rem", background: "linear-gradient(to right, #3f110f, #661F19, #8b2a21)", color: "#fff", borderRadius: "0.5rem" }}>
+                    <span style={{ fontSize: "1.1rem", fontWeight: "bold" }}>Total Amount</span>
+                    <span style={{ fontSize: "1.3rem", fontWeight: "bold" }}>LKR {bookingData.totalAmount.toLocaleString()}</span>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Action Buttons */}
-            <div className="grid sm:grid-cols-2 gap-4">
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
               <button
                 onClick={handleDownloadTicket}
-                className="group bg-gradient-to-r from-[#3f110f] via-[#661F19] to-[#8b2a21] text-white py-4 px-6 rounded-xl font-semibold hover:from-purple-700 hover:to-pink-700 transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                style={{ background: "linear-gradient(to right, #3f110f, #661F19, #8b2a21)", color: "#fff", padding: "1rem 1.5rem", borderRadius: "1rem", fontWeight: "bold", boxShadow: "0 2px 8px rgba(0,0,0,0.12)", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.75rem", fontSize: "1rem", border: "none", cursor: "pointer" }}
               >
-                <Download className="w-5 h-5 group-hover:animate-bounce" />
+                <Download style={{ width: "20px", height: "20px" }} />
                 Download Ticket
               </button>
               <button
                 onClick={() => (window.location.href = "/")}
-                className="bg-black/60 backdrop-blur-sm border border-white/30 text-white py-4 px-6 rounded-xl font-semibold hover:bg-white/30 transition-all duration-300 flex items-center justify-center gap-3"
+                style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(2px)", border: "1px solid rgba(255,255,255,0.3)", color: "#fff", padding: "1rem 1.5rem", borderRadius: "1rem", fontWeight: "bold", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.75rem", fontSize: "1rem", cursor: "pointer" }}
               >
                 <span>Back to Home</span>
               </button>
             </div>
 
             {/* Additional Info */}
-            <div className="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
-              <div className="flex items-start gap-3">
-                <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
-                <div className="text-sm text-blue-800">
-                  <p className="font-semibold mb-1">Important Instructions:</p>
-                  <ul className="space-y-1 text-blue-700">
+            <div style={{ marginTop: "2rem", padding: "1rem", background: "#eff6ff", borderRadius: "0.75rem", border: "1px solid #bae6fd" }}>
+              <div style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
+                <div style={{ width: "8px", height: "8px", background: "#3b82f6", borderRadius: "9999px", marginTop: "0.5rem", flexShrink: 0 }}></div>
+                <div style={{ fontSize: "0.95rem", color: "#1e40af" }}>
+                  <p style={{ fontWeight: "bold", marginBottom: "0.5rem" }}>Important Instructions:</p>
+                  <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>
                     <li>• Please arrive 30 minutes before the show time</li>
                     <li>• Keep your QR code ready for scanning</li>
                     <li>• Screenshots or printed copies are accepted</li>

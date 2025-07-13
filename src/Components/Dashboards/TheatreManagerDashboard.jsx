@@ -18,6 +18,7 @@ const TheaterManagerDashboard = () => {
   const [addType, setAddType] = useState("");
   const navigate = useNavigate();
   const user = useAuth().user?.status;
+  const [editData, setEditData] = useState(null);
 
   useEffect(() => {
     
@@ -41,6 +42,7 @@ const TheaterManagerDashboard = () => {
           <ShowsContent
             setAddType={setAddType}
             setShowAddModal={setShowAddModal}
+            setEditData={setEditData}
           />
         );
       case "dramas":
@@ -112,6 +114,7 @@ const TheaterManagerDashboard = () => {
         show={showAddModal}
         onClose={() => setShowAddModal(false)}
         type={addType}
+        editData={editData}
       />
     </div>
   );

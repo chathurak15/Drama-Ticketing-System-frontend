@@ -15,6 +15,7 @@ const TheatersContent = () => {
   const [error, setError] = useState(null);
   const userId = useAuth().user?.id;
   const [showAddTheatre, setShowAddTheatre] = useState(false);
+  const [editingTheatre, setEditingTheatre] = useState(null);
 
   useEffect(() => {
     fetchTheaters();
@@ -71,8 +72,9 @@ const TheatersContent = () => {
   };
 
   const handleEdit = (theaterId) => {
-    // Handle edit functionality
-    console.log("Edit theater:", theaterId);
+    const theatre = theaters.find((t) => t.id === theaterId);
+    setEditingTheatre(theatre);
+    setShowAddTheatre(true);
   };
 
   const calculateTotalCapacity = (seatTypes) => {
@@ -135,7 +137,10 @@ const TheatersContent = () => {
   return (
     <div className="space-y-6">
       {showAddTheatre ? (
-        <AddTheatre onSuccess={handleTheatreAddSuccess} />
+        <AddTheatre
+          theatreToEdit={editingTheatre}
+          onSuccess={handleTheatreAddSuccess}
+        />
       ) : (
         <>
           <div className="flex justify-between items-center">

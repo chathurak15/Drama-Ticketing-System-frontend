@@ -1,14 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
-import { Plus, Search, Eye, Edit,Calendar, Trash2, XCircle, Clock, MapPin, User } from 'lucide-react';
-import ActionButton from '../Admin/ActionButton';
-import TableRow from '../Admin/TableRow';
-import { getShowsByUser, deleteShow} from "../../services/ShowService.js";
-import { useAuth } from "../../utils/AuthContext";
+import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import {
+  Plus,
+  Search,
+  Eye,
+  Edit,
+  Calendar,
+  Trash2,
+  Clock,
+  MapPin,
+} from "lucide-react";
+import ActionButton from "../Admin/ActionButton";
+import TableRow from "../Admin/TableRow";
+import { getShowsByUser, deleteShow } from "../../services/ShowService.js";
+import { useAuth } from "../../utils/AuthContext.jsx";
 
-const ShowsContent = ({ setAddType, setShowAddModal }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
+const ShowsContent = ({ setAddType, setShowAddModal, setEditData }) => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
   const [shows, setShows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -25,31 +34,31 @@ const ShowsContent = ({ setAddType, setShowAddModal }) => {
   const fetchShows = async () => {
     setLoading(true);
     setError(null);
-    
+
     try {
       let response;
 
-      if(statusFilter === ''){
+      if (statusFilter === "") {
         response = await getShowsByUser({
-        page: currentPage,
-        size: pageSize,
-        userId: userId
-      });
-      }else{
+          page: currentPage,
+          size: pageSize,
+          userId: userId,
+        });
+      } else {
         response = await getShowsByUser({
-        page: currentPage,
-        size: pageSize,
-        status: statusFilter,
-        userId: userId
-      });
+          page: currentPage,
+          size: pageSize,
+          status: statusFilter,
+          userId: userId,
+        });
       }
+
       setShows(response.data.content || []);
       setTotalPages(response.data.totalPages || 1);
     } catch (err) {
-      if (error.response) {
-        console.error("Error fetching shows", err);
-        const status = error.response.status;
-        const message = error.response.data?.message || "Failed to fetch shows";
+      if (err.response) {
+        const status = err.response.status;
+        const message = err.response.data?.message || "Failed to fetch shows";
 
         if (status === 401) {
           setError("Invalid email or password");
@@ -59,8 +68,8 @@ const ShowsContent = ({ setAddType, setShowAddModal }) => {
           setError("Server error. Please try again later");
         } else {
           setError(message);
-        } 
-      }else {
+        }
+      } else {
         setError("An unexpected error occurred");
       }
     } finally {
@@ -69,26 +78,26 @@ const ShowsContent = ({ setAddType, setShowAddModal }) => {
   };
 
   const handleDelete = async (showId) => {
-      if (window.confirm("Are you sure you want to delete this show?")) {
-        try {
-          const response = await deleteShow(showId,userId);
-          alert(response.data);
-          fetchShows();
-        } catch (err) {
-          console.error("Error deleting drama", err);
-          toast.error("Failed to delete drama.");
-        }
+    if (window.confirm("Are you sure you want to delete this show?")) {
+      try {
+        const response = await deleteShow(showId, userId);
+        alert(response.data);
+        fetchShows();
+      } catch (err) {
+        toast.error("Failed to delete show.");
       }
-    };
+    }
+  };
 
   const handlePageChange = (newPage) => {
     if (newPage >= 0 && newPage < totalPages) {
       setCurrentPage(newPage);
     }
   };
-  const handleView = (showId)=>{
-    window.open(`/show/${showId}`, '_blank'); 
-  }
+
+  const handleView = (showId) => {
+    window.open(`/show/${showId}`, "_blank");
+  };
 
   if (loading) {
     return (
@@ -106,7 +115,7 @@ const ShowsContent = ({ setAddType, setShowAddModal }) => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center text-red-500 p-4 bg-red-50 rounded-lg">
           <p>{error}</p>
-          <button 
+          <button
             onClick={fetchShows}
             className="mt-2 px-4 py-2 bg-[#661F19] text-white rounded hover:bg-[#541612]"
           >
@@ -117,11 +126,14 @@ const ShowsContent = ({ setAddType, setShowAddModal }) => {
     );
   }
 
-  const filteredShows = shows.filter(show => 
-    show.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (show.user?.fname + ' ' + show.user?.lname).toLowerCase().includes(searchTerm.toLowerCase()) ||
-    show.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    show.city.cityName.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredShows = shows.filter(
+    (show) =>
+      show.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (show.user?.fname + " " + show.user?.lname)
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      show.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      show.city.cityName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -143,17 +155,15 @@ const ShowsContent = ({ setAddType, setShowAddModal }) => {
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         <div className="p-6 border-b">
           <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  type="text"
-                  placeholder="Search shows by title, organizer, or location..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#661F19] focus:border-transparent"
-                />
-              </div>
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Search shows by title, organizer, or location..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#661F19] focus:border-transparent"
+              />
             </div>
             <select
               className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#661F19]"
@@ -271,8 +281,15 @@ const ShowsContent = ({ setAddType, setShowAddModal }) => {
                           onClick={() => handleView(show.showId)}
                           color="text-blue-600"
                         />
-                        <ActionButton icon={Edit} color="text-gray-600" />
-
+                        <ActionButton
+                          icon={Edit}
+                          color="text-gray-600"
+                          onClick={() => {
+                            setEditData(show); 
+                            setAddType("show"); 
+                            setShowAddModal(true);
+                          }}
+                        />
                         <ActionButton
                           icon={Trash2}
                           color="text-red-600"

@@ -9,9 +9,9 @@ const i18nTexts = {
     register: "Register"
   },
   home: {
-    headerTitle: "Book Your Seats Now",
-    headerSubtitle: "Easy stage drama ticket booking.",
-    bookButton: "Book Tickets",
+    // headerTitle: "Book Your Seats Now",
+    // headerSubtitle: "Easy stage drama ticket booking.",
+    // bookButton: "Book Tickets",
     upcomingShowsTitle: "Upcoming Shows",
     bookNowButton: "Book Your Seat Now",
     newDramasTitle: "New Dramas",
