@@ -11,17 +11,13 @@ import {
   CheckCircle,
   XCircle,
   Clock,
-  Eye,
-  Download,
-  ChevronLeft,
-  ChevronRight,
 } from "lucide-react";
 import ActionButton from "../Admin/ActionButton";
 import TableRow from "../Admin/TableRow";
 import { useAuth } from "../../utils/AuthContext";
 import { getShowsByUser } from "../../services/ShowService";
 import { getBookingsByShow, updateStatus } from "../../services/BookingService";
-import QrReader from "react-qr-reader";
+
 
 const BookingsContent = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -38,11 +34,108 @@ const BookingsContent = () => {
   const [totalElements, setTotalElements] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const userId = useAuth().user.id;
+  const qrCodeInstanceRef = React.useRef(null);
+  const qrCodeRunningRef = React.useRef(false);
+ 
+  useEffect(() => {
+    let isMounted = true;
+    if (showQRScanner) {
+      const prevInstance = qrCodeInstanceRef.current;
+      if (prevInstance) {
+        try {
+          prevInstance.stop().catch((err) => {
+            if (
+              err &&
+              typeof err.message === "string" &&
+              err.message.includes("scanner is not running")
+            ) {
+              // Ignore this error
+            } else {
+              console.warn("QR scanner stop error:", err);
+            }
+          });
+        } catch (err) {
+          // Ignore if not running
+        }
+        try {
+          prevInstance.clear();
+        } catch (err) {
+          // Ignore clear errors
+        }
+        qrCodeInstanceRef.current = null;
+        qrCodeRunningRef.current = false;
+      }
+      qrCodeRunningRef.current = true; 
+      import('html5-qrcode').then(({ Html5Qrcode }) => {
+        if (!isMounted) return;
+        const html5QrCode = new Html5Qrcode("qr-scanner-container");
+        qrCodeInstanceRef.current = html5QrCode;
+        html5QrCode
+          .start(
+            { facingMode: "environment" },
+            {
+              fps: 10,
+              qrbox: { width: 250, height: 250 },
+            },
+            async (decodedText) => {
+              if (qrCodeRunningRef.current) {
+                qrCodeRunningRef.current = false;
+                await html5QrCode.stop().catch(() => {});
+                html5QrCode.clear();
+                handleQRScan(decodedText);
+              }
+            },
+            (errorMessage) => {
+            }
+          )
+          .then(() => {
+      
+          })
+          .catch((err) => {
+            toast.error("Unable to start QR scanner: " + err);
+          });
+      });
+    }
+    return () => {
+      isMounted = false;
+      const html5QrCode = qrCodeInstanceRef.current;
+      if (html5QrCode) {
+        qrCodeRunningRef.current = false;
+        try {
+          html5QrCode.stop().catch((err) => {
+            if (
+              err &&
+              typeof err.message === "string" &&
+              err.message.includes("scanner is not running")
+            ) {
+              // Ignore this error
+            } else {
+              console.warn("QR scanner stop error:", err);
+            }
+          });
+        } catch (err) {
+          // Ignore if not running
+        }
+        try {
+          html5QrCode.clear();
+        } catch (err) {
+          // Ignore clear errors
+        }
+      }
+    };
+  }, [showQRScanner]);
 
   useEffect(() => {
     fetchBookings();
     fetchShows();
   }, [statusFilter, showFilter, currentPage, pageSize]);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      fetchBookings();
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [searchTerm]);
 
   const fetchBookings = async () => {
     setLoading(true);
@@ -89,7 +182,7 @@ const BookingsContent = () => {
   };
 
   const handleStatusChange = async (bookingId, newStatus = "Complete") => {
-    if (window.confirm("Are you sure you want to delete this show?")) {
+    if (window.confirm("Are you sure you want to Complete this show?")) {
       try {
         const response = await updateStatus(bookingId, newStatus);
         alert(response.data);
@@ -250,7 +343,10 @@ const BookingsContent = () => {
         <h2 className="text-2xl font-bold text-gray-800">Booking Management</h2>
         <div className="flex space-x-2">
           <button
-            onClick={() => setShowQRScanner(!showQRScanner)}
+            onClick={() => {
+              setSearchTerm("");
+              setShowQRScanner(!showQRScanner);
+            }}
             className="bg-[#661F19] text-white px-4 py-2 rounded-lg hover:bg-[#541612] transition-colors flex items-center space-x-2"
           >
             <QrCode className="w-5 h-5" />
@@ -264,14 +360,7 @@ const BookingsContent = () => {
         <div className="bg-white rounded-lg shadow-md p-6">
           <h3 className="text-lg font-semibold mb-4">QR Code Scanner</h3>
           <div className="bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-            <QrReader
-              delay={300}
-              onError={(err) => toast.error("QR Scan error")}
-              onScan={(result) => {
-                if (result) handleQRScan(result);
-              }}
-              style={{ width: "100%" }}
-            />
+            <div id="qr-scanner-container" style={{ width: "100%", margin: "auto" }} />
             <button
               onClick={() => setShowQRScanner(false)}
               className="mt-4 bg-[#661F19] text-white px-4 py-2 rounded-lg hover:bg-[#541612]"
@@ -294,7 +383,6 @@ const BookingsContent = () => {
                 placeholder="Search by ticket ID..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                onKeyPress={(e) => e.key === "Enter" && handleSearch()}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#661F19] focus:border-transparent"
               />
             </div>
