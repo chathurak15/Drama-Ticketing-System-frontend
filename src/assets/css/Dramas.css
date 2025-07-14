@@ -1,3 +1,25 @@
+@media (max-width: 640px) {
+  .dramas-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px;
+  }
+  .search-input,
+  .filter-left-bar {
+    width: 100% !important;
+    min-width: 0 !important;
+    margin-bottom: 8px;
+  }
+  .filter-right {
+    flex-direction: column !important;
+    gap: 8px !important;
+    align-items: stretch !important;
+  }
+  .filter-bar {
+    flex-direction: column !important;
+    gap: 8px !important;
+    align-items: stretch !important;
+  }
+}
 /* Dramas.css
 .dramas-container {
   max-width: 1300px;

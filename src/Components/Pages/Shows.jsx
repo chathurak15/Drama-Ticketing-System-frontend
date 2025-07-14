@@ -96,9 +96,9 @@ const Shows = () => {
   return (
     <>
       <Header />
-      <div className="upcoming-shows container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold mb-4">Upcoming Shows</h1>
+      <div className="upcoming-shows container mx-auto px-2 sm:px-4 py-4 sm:py-8">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-center sm:text-left">Upcoming Shows</h1>
           <FilterBar filters={filters} onFilterChange={handleFilterChange} />
         </div>
 
@@ -110,10 +110,9 @@ const Shows = () => {
           <div className="text-center py-10 text-red-500">{error}</div>
         ) : (
           <>
-            <div className="shows-grid p-2">
+            <div className="shows-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-2">
               {shows.map(
                 (show) => (
-                  // console.log("Shows array:", show),
                   (<ShowCard key={show.showId} show={show} />)
                 )
               )}

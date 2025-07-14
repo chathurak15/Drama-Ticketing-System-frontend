@@ -65,24 +65,9 @@ const TheaterManagerDashboard = () => {
         return <AnalyticsContent />;
       case "bookings":
         return <BookingsContent />;
-      // case 'payments': return (
-      //   <div className="text-center py-20">
-      //     <CreditCard className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-      //     <h3 className="text-lg font-semibold text-gray-600 mb-2">Payment Management</h3>
-      //     <p className="text-gray-500">Connect your Spring Boot API to manage payments and transactions</p>
-      //   </div>
-      // );
-      case "settings":
+      case "logout":
         return (
-          <div className="text-center py-20">
-            <Settings className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-600 mb-2">
-              System Settings
-            </h3>
-            <p className="text-gray-500">
-              Configure your platform settings and preferences
-            </p>
-          </div>
+          navigate("/logout")
         );
       default:
         return (

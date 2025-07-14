@@ -46,33 +46,33 @@ const Dramas = () => {
   return (
     <>
       <Header />
-      <div className="bg-gray-100 h-28 mb-5">
-        <div className="container mx-auto px-4 py-8">
-          <div className="filter-bar flex justify-between items-center">
-            <h1>Stage Dramas</h1>
+      <div className="bg-gray-100 mb-5">
+        <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
+          <div className="filter-bar flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+            <h1 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-0">Stage Dramas</h1>
             <div>
-              <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} className="filter-left-bar">
+              <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} className="filter-left-bar px-2 py-2 rounded border border-gray-300">
                 <option value="">Filter by default</option>
                 <option value="Newest">Newest</option>
                 <option value="Top Rated">Top Rated</option>
               </select>
             </div>
-            <div className="filter-right">
+            <div className="filter-right flex gap-2">
               <input
-                className="search-input"
+                className="search-input px-2 py-2 rounded border border-gray-300"
                 type="text"
                 placeholder="Search by Drama Name"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
-              <button className="search-button" onClick={handleSearch}>Search</button>
+              <button className="search-button bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-700 transition" onClick={handleSearch}>Search</button>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-4">
-        <div className="dramas-grid">
+      <div className="container mx-auto px-2 sm:px-4">
+        <div className="dramas-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {dramas.map(drama => (
             <DramaCard key={drama.id} drama={drama} />
           ))}

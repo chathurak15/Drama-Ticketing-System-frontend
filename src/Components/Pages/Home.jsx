@@ -70,7 +70,7 @@ function Home() {
               <button onClick={handleBookClick}>Book Tickets</button>
             </div>
           </div>
-          <div>
+          <div >
             <SearchShows />
           </div>
           <br />

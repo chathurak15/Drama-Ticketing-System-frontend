@@ -70,26 +70,26 @@ const FilterBar = ({ filters, onFilterChange }) => {
 }, [localFilters.city]);
 
   return (
-    <div className="filter-bar grid gap-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-6">
+    <div className="filter-bar grid gap-x-2 gap-y-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6">
       <input
         name="title"
         placeholder="Search by title"
         value={localFilters.title}
         onChange={handleChange}
-        className="filter-input px-3 py-2 rounded border border-gray-300"
+        className="filter-input px-3 py-2 rounded border border-gray-300 w-full"
       />
       <input
         type="date"
         name="date"
         value={localFilters.date}
         onChange={handleChange}
-        className="filter-input px-3 py-2 rounded border border-gray-300"
+        className="filter-input px-3 py-2 rounded border border-gray-300 w-full"
       />
       <select
         name="city"
         value={localFilters.city}
         onChange={handleChange}
-        className="filter-input px-3 py-2 rounded border border-gray-300"
+        className="filter-input px-3 py-2 rounded border border-gray-300 w-full"
       >
         <option value="">Select City</option>
         {cities.map((city) => (
@@ -103,7 +103,7 @@ const FilterBar = ({ filters, onFilterChange }) => {
         name="venue"
         value={localFilters.venue || ""}
         onChange={handleChange}
-        className="filter-input px-3 py-2 rounded border border-gray-300"
+        className="filter-input px-3 py-2 rounded border border-gray-300 w-full"
       >
         <option value="">Select Venue</option>
         {venues.map((venue, index) => (
@@ -113,10 +113,10 @@ const FilterBar = ({ filters, onFilterChange }) => {
         ))}
       </select>
 
-      <div className="col-span-1 md:col-span-2 flex items-center">
+      <div className="col-span-1 sm:col-span-2 flex items-center">
         <button
           onClick={handleClear}
-          className="w-full bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-700 transition"
+          className="w-full sm:w-auto bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-700 transition"
         >
           Clear
         </button>

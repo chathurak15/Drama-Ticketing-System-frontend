@@ -16,8 +16,8 @@ const sidebarItems = [
   { key: 'theatres', label: 'Theatres', icon: Theater },
   { key: 'add-theatre', label: 'Add theatre', icon: Plus},
   { key: 'bookings', label: 'Bookings', icon: CreditCard },
-  { key: 'analytics', label: 'Analytics', icon: BarChart3 },
-  { key: 'Log Out', label: 'LogOut', icon: Settings },
+  // { key: 'analytics', label: 'Analytics', icon: BarChart3 },
+  { key: 'logout', label: 'LogOut', icon: Settings },
 ];
 
 const TheatreManagerSideBar = ({ activeTab, setActiveTab }) => (
