@@ -15,9 +15,9 @@ const sidebarItems = [
   { key: 'dramas', label: 'Dramas', icon: Theater },
   { key: 'actors', label: 'Actors', icon: UserCheck },
   { key: 'users', label: 'Users', icon: Users },
-  { key: 'payments', label: 'Payments', icon: CreditCard },
+  // { key: 'payments', label: 'Payments', icon: CreditCard },
   { key: 'analytics', label: 'Analytics', icon: BarChart3 },
-  { key: 'Log Out', label: 'LogOut', icon: Settings },
+  { key: 'logout', label: 'LogOut', icon: Settings },
 ];
 
 const AdminSidebar = ({ activeTab, setActiveTab }) => (

@@ -121,7 +121,7 @@ const ShowsContent = ({ setAddType, setShowAddModal }) => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-gray-800">Show Management</h2>
-        <button
+        {/* <button
           onClick={() => {
             setAddType("show");
             setShowAddModal(true);
@@ -130,7 +130,7 @@ const ShowsContent = ({ setAddType, setShowAddModal }) => {
         >
           <Plus className="w-5 h-5" />
           <span>Add Show</span>
-        </button>
+        </button> */}
       </div>
 
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -278,7 +278,7 @@ const ShowsContent = ({ setAddType, setShowAddModal }) => {
                           onClick={() => handleView(show.showId)}
                           color="text-blue-600"
                         />
-                        <ActionButton icon={Edit} color="text-gray-600" />
+                        {/* <ActionButton icon={Edit} color="text-gray-600" /> */}
                         {show.status === "pending" && (
                           <>
                             <ActionButton

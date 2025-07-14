@@ -47,7 +47,7 @@ const Dramas = () => {
     <>
       <Header />
       <div className="bg-gray-100 mb-5">
-        <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
+        <div className="container mx-auto px-2 sm:px-4 py-1 sm:pt-8">
           <div className="filter-bar flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
             <h1 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-0">Stage Dramas</h1>
             <div>

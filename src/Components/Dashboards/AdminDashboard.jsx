@@ -8,11 +8,14 @@ import DramasContent from '../Admin/DramasContent';
 import ActorsContent from '../Admin/Actors/ActorsContent';
 import UsersContent from '../Admin/UsersContent';
 import AnalyticsContent from '../Admin/AnalyticsContent';
+import { useNavigate } from "react-router-dom";
+
 
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [showAddModal, setShowAddModal] = useState(false);
+  const navigate = useNavigate();
   const [addType, setAddType] = useState('');
 
   const renderContent = () => {
@@ -23,20 +26,18 @@ const AdminDashboard = () => {
       case 'actors': return <ActorsContent setAddType={setAddType} setShowAddModal={setShowAddModal} />;
       case 'users': return <UsersContent />;
       case 'analytics': return <AnalyticsContent />;
-      case 'payments': return (
-        <div className="text-center py-20">
-          <CreditCard className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-gray-600 mb-2">Payment Management</h3>
-          <p className="text-gray-500">Connect your Spring Boot API to manage payments and transactions</p>
-        </div>
+      // case 'payments': return (
+      //   <div className="text-center py-20">
+      //     <CreditCard className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+      //     <h3 className="text-lg font-semibold text-gray-600 mb-2">Payment Management</h3>
+      //     <p className="text-gray-500">Connect your Spring Boot API to manage payments and transactions</p>
+      //   </div>
+      // );
+      case "logout":
+        return (
+          navigate("/logout")
       );
-      case 'settings': return (
-        <div className="text-center py-20">
-          <Settings className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-gray-600 mb-2">System Settings</h3>
-          <p className="text-gray-500">Configure your platform settings and preferences</p>
-        </div>
-      );
+
       default: return <DashboardContent setAddType={setAddType} setShowAddModal={setShowAddModal} />;
     }
   };

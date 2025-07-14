@@ -108,7 +108,7 @@ const ShowDetails = () => {
       <Header />
       {/* Main Content */}
       <main className="min-h-screen">
-        <div className="container mx-auto px-18 py-0 mb-15">
+        <div className="container mx-auto lg:px-18 py-0 mb-15">
           {/* Show Details Card */}
           <div className="lg:w-4/4 rounded-2xl shadow-lg overflow-hidden my-12">
             <div className="flex flex-col lg:flex-row">
