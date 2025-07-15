@@ -5,7 +5,7 @@ import ActionButton from "./ActionButton";
 import TableRow from "./TableRow";
 import { getDramas, deleteDrama } from "../../services/dramaService";
 
-const DramasContent = ({ setAddType, setShowAddModal, setEditDrama }) => {
+const DramasContent = ({ setAddType, setShowAddModal, setEditData }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [dramas, setDramas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -56,12 +56,6 @@ const DramasContent = ({ setAddType, setShowAddModal, setEditDrama }) => {
     }
   };
 
-  const handleEdit = (drama) => {
-    setEditDrama(drama);
-    setAddType("drama");
-    setShowAddModal(true);
-  };
-
   const handlePageChange = (newPage) => {
     if (newPage >= 0 && newPage < totalPages) {
       setCurrentPage(newPage);
@@ -109,7 +103,6 @@ const DramasContent = ({ setAddType, setShowAddModal, setEditDrama }) => {
           onClick={() => {
             setAddType("drama");
             setShowAddModal(true);
-            setEditDrama(null);
           }}
           className="bg-[#661F19] text-white px-4 py-2 rounded-lg hover:bg-[#541612] transition-colors flex items-center space-x-2"
         >
@@ -195,7 +188,7 @@ const DramasContent = ({ setAddType, setShowAddModal, setEditDrama }) => {
                       <div className="flex items-center">
                         <Star className="w-4 h-4 text-yellow-500 mr-1" />
                         <span className="text-m font-semibold text-gray-900">
-                          {drama.rating}
+                          {drama.rating.toFixed(1)}
                         </span>
                       </div>
                     </td>
@@ -214,7 +207,11 @@ const DramasContent = ({ setAddType, setShowAddModal, setEditDrama }) => {
                         <ActionButton
                           icon={Edit}
                           color="text-gray-600"
-                          onClick={() => handleEdit(drama)}
+                          onClick={() => {
+                            setEditData(drama);
+                            setAddType("drama");
+                            setShowAddModal(true);
+                          }}
                           tooltip="Edit drama"
                         />
                         <ActionButton

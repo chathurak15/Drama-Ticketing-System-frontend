@@ -1,12 +1,19 @@
-import React, { useState, forwardRef, useImperativeHandle } from "react";
+import React, { useState,useEffect, forwardRef, useImperativeHandle } from "react";
 import { User, Upload, Calendar, User as UserIcon } from "lucide-react";
 import { uploadFile } from "../../../services/FileService.Js";
 
 const ActorForm = forwardRef(({ formData, setFormData }, ref) => {
-  const [imagePreview, setImagePreview] = useState(
-      formData.image ? `http://localhost:8080/uploads/actors/${formData.image}` : null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+      if (formData.photo) {
+        setImagePreview(`http://localhost:8080/uploads/actors/${formData.photo}`);
+      } else {
+        setImagePreview(null);
+      }
+  }, [formData.photo]);
 
   const validateForm = () => {
     const newErrors = {};

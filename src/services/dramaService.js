@@ -50,3 +50,10 @@ export const deleteDrama = async (id) => {
     }
   }
 };
+
+
+export const updateDrama = (drama) => {
+  return axios.put(`/drama/update`, drama,{
+    withCredentials:true
+  });
+};

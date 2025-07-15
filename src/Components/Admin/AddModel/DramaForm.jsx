@@ -9,9 +9,7 @@ import { getActors } from "../../../services/ActorService";
 import { uploadFile } from "../../../services/FileService";
 
 const DramaForm = forwardRef(({ formData, setFormData }, ref) => {
-  const [imagePreview, setImagePreview] = useState(
-    formData.image ? `http://localhost:8080/uploads/${formData.image}` : null
-  );
+  const [imagePreview, setImagePreview] = useState(null);
   const [availableActors, setAvailableActors] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -23,6 +21,14 @@ const DramaForm = forwardRef(({ formData, setFormData }, ref) => {
   useEffect(() => {
     loadActors(0, true);
   }, []);
+
+  useEffect(() => {
+    if (formData.image) {
+      setImagePreview(`http://localhost:8080/uploads/dramas/${formData.image}`);
+    } else {
+      setImagePreview(null);
+    }
+  }, [formData.image]);
 
   const validateForm = () => {
     const newErrors = {};

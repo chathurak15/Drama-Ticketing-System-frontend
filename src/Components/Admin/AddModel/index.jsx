@@ -6,6 +6,7 @@ import ActorForm from "../Actors/ActorForm";
 import { addDrama } from "../../../services/dramaService";
 import { addActor } from "../../../services/ActorService";
 import { addShow, updateShow } from "../../../services/ShowService";
+import { updateDrama } from "../../../services/dramaService";
 
 const AddModal = ({ show, onClose, type, editData }) => {
   const [formData, setFormData] = useState({});
@@ -44,8 +45,13 @@ const AddModal = ({ show, onClose, type, editData }) => {
 
     try {
       if (type === "drama") {
-        const response = await addDrama(formData);
-        alert(response.data);
+        let response;
+        if (formData.id) {
+          response = await updateDrama(formData);
+        } else {
+          response = await addDrama(formData);
+        }
+        alert(response.data || "Drama saved successfully");
       } else if (type === "actor") {
         const response = await addActor(formData);
         alert(response.data);
@@ -55,7 +61,7 @@ const AddModal = ({ show, onClose, type, editData }) => {
           city: undefined,
           drama: undefined,
           user: undefined,
-          status:undefined,
+          status: undefined,
         };
 
         let response;
@@ -64,8 +70,7 @@ const AddModal = ({ show, onClose, type, editData }) => {
         } else {
           response = await addShow(sanitizedData);
         }
-        alert(response.data || "Show saved successfully")
-        ;
+        alert(response.data || "Show saved successfully");
       }
 
       onClose();
@@ -140,7 +145,7 @@ const AddModal = ({ show, onClose, type, editData }) => {
               type="submit"
               className="px-6 py-2 bg-[#661F19] text-white rounded-lg hover:bg-[#4e1612]"
             >
-              {formData.showId ? "Update" : "Add"}{" "}
+              {formData.showId || formData.id ? "Update" : "Add"}{" "}
               {type?.charAt(0).toUpperCase() + type?.slice(1)}
             </button>
           </div>

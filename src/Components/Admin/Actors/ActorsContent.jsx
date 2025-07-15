@@ -5,7 +5,7 @@ import TableRow from "../TableRow";
 import { deleteActor, getActors } from "../../../services/ActorService";
 import { toast } from "react-toastify";
 
-const ActorsContent = ({ setAddType, setShowAddModal}) => {
+const ActorsContent = ({ setAddType, setShowAddModal,setEditData}) => {
   const [actors, setActors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -204,7 +204,14 @@ const ActorsContent = ({ setAddType, setShowAddModal}) => {
                     <td className="px-6 py-4 text-sm font-medium">
                       <div className="flex space-x-2">
                         {/* <ActionButton icon={Eye} color="text-blue-600" /> */}
-                        <ActionButton icon={Edit} color="text-gray-600" />
+                        <ActionButton icon={Edit} 
+                        color="text-gray-600"
+                        onClick={() => {
+                            setEditData(actor);
+                            setAddType("actor");
+                            setShowAddModal(true);
+                          }} 
+                        />
                         <ActionButton
                           icon={Trash2}
                           color="text-red-600"

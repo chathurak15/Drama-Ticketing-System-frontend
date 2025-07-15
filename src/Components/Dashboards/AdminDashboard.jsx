@@ -17,13 +17,14 @@ const AdminDashboard = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const navigate = useNavigate();
   const [addType, setAddType] = useState('');
+  const [editData, setEditData] = useState(null);
 
   const renderContent = () => {
     switch(activeTab) {
       case 'dashboard': return <DashboardContent setAddType={setAddType} setShowAddModal={setShowAddModal} />;
       case 'shows': return <ShowsContent setAddType={setAddType} setShowAddModal={setShowAddModal} />;
-      case 'dramas': return <DramasContent setAddType={setAddType} setShowAddModal={setShowAddModal} />;
-      case 'actors': return <ActorsContent setAddType={setAddType} setShowAddModal={setShowAddModal} />;
+      case 'dramas': return <DramasContent setAddType={setAddType} setShowAddModal={setShowAddModal} setEditData={setEditData} />;
+      case 'actors': return <ActorsContent setAddType={setAddType} setShowAddModal={setShowAddModal} setEditData={setEditData} />;
       case 'users': return <UsersContent />;
       case 'analytics': return <AnalyticsContent />;
       // case 'payments': return (
@@ -58,6 +59,7 @@ const AdminDashboard = () => {
         show={showAddModal} 
         onClose={() => setShowAddModal(false)} 
         type={addType}
+        editData={editData}
       />
     </div>
   );
