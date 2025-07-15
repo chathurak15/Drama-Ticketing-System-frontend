@@ -20,11 +20,11 @@ const DashboardContent = () => {
   const user = useAuth().user;
 
   const stats = {
-    totalUsers: 1250,
-    activeEvents: 15,
-    pendingApprovals: 8,
-    totalRevenue: 45000,
-    monthlyGrowth: 12.5,
+    totalUsers: 8,
+    activeEvents: 5,
+    pendingApprovals: 1,
+    totalRevenue: 7000,
+    monthlyGrowth: 8.5,
   };
 
   useEffect(() => {

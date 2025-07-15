@@ -134,7 +134,7 @@ const DramaDetails = () => {
             <h1 className="drama-title">{drama.title} - Stage Drama</h1>
             <div className="drama-info">
               <span className="rating">
-                Rating: {drama.rating}{" "}
+                Rating: {drama.rating.toFixed(1)}{" "}
                 <i
                   className="fa-solid fa-star"
                   style={{ color: "#ffae00" }}

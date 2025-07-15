@@ -3,22 +3,18 @@ import {Plus,Theater,UserCheck,BarChart3,Users,Calendar,Clock,DollarSign,
 } from "lucide-react";
 import { getShowsAdmin } from "../../services/ShowService";
 import StatCard from "./StatCard";
+import { getAdminDashboardStats } from "../../services/DashboardService";
 
 const DashboardContent = ({ setAddType, setShowAddModal }) => {
   const [shows, setShows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [stats, setStats] = useState(null);
 
-  const stats = {
-    totalUsers: 1250,
-    activeEvents: 15,
-    pendingApprovals: 8,
-    totalRevenue: 45000,
-    monthlyGrowth: 12.5,
-  };
 
   useEffect(() => {
     fetchShows();
+    fetchStats();
   }, []);
 
   const fetchShows = async () => {
@@ -40,6 +36,15 @@ const DashboardContent = ({ setAddType, setShowAddModal }) => {
       setLoading(false);
     }
   };
+
+  const fetchStats = async () => {
+  try {
+    const response = await getAdminDashboardStats();
+    setStats(response.data);
+  } catch (err) {
+    console.error("Failed to fetch stats", err);
+  }
+};
 
   if (loading) {
     return (
@@ -71,31 +76,35 @@ const DashboardContent = ({ setAddType, setShowAddModal }) => {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard
-          title="Total Customers"
-          value={stats.totalUsers.toLocaleString()}
-          icon={Users}
-          trend={stats.monthlyGrowth}
-        />
-        <StatCard
-          title="Active Shows"
-          value={stats.activeEvents}
-          icon={Calendar}
-          color="text-blue-600"
-        />
-        <StatCard
-          title="Pending Approvals"
-          value={stats.pendingApprovals}
-          icon={Clock}
-          color="text-orange-600"
-        />
-        <StatCard
-          title="Total Revenue"
-          value={`LKR ${stats.totalRevenue.toLocaleString()}`}
-          icon={DollarSign}
-          color="text-green-600"
-          trend={15.2}
-        />
+        {stats && (
+          <>
+            <StatCard
+              title="Total Customers"
+              value={stats.totalUsers.toLocaleString()}
+              icon={Users}
+              trend={stats.monthlyGrowth}
+            />
+            <StatCard
+              title="Active Shows"
+              value={stats.activeEvents}
+              icon={Calendar}
+              color="text-blue-600"
+            />
+            <StatCard
+              title="Pending Approvals"
+              value={stats.pendingApprovals}
+              icon={Clock}
+              color="text-orange-600"
+            />
+            <StatCard
+              title="Total Revenue"
+              value={`LKR ${stats.totalRevenue.toLocaleString()}`}
+              icon={DollarSign}
+              color="text-green-600"
+              trend={stats.monthlyGrowth}
+            />
+          </>
+        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

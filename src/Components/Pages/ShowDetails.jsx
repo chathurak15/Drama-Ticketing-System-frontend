@@ -227,7 +227,7 @@ const ShowDetails = () => {
                       {show.status}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center">
+                  {/* <div className="flex justify-between items-center">
                     <span className="font-medium">VIP:</span>
                     <span
                       className={`font-bold capitalize ${
@@ -238,7 +238,7 @@ const ShowDetails = () => {
                     >
                       {show.status}
                     </span>
-                  </div>
+                  </div> */}
                 </div>
                 <button
                   onClick={() => setIsPopupOpen(true)}

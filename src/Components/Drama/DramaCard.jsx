@@ -24,7 +24,7 @@ const DramaCard = ({ drama }) => {
           style={{ height: '250px', maxHeight: '40vw', minHeight: '200px' }}
         />
         <h3 className="text-base sm:text-lg font-semibold text-center mb-1 line-clamp-2">{drama.title}</h3>
-        <p className="text-sm text-gray-600 mb-2">{drama.rating}★</p>
+        <p className="text-sm text-gray-600 mb-2">{drama.rating.toFixed(1)}★</p>
       </a>
       <button className="view-button bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-700 w-full sm:w-auto text-base transition" onClick={handleViewDetails}>
         View Details

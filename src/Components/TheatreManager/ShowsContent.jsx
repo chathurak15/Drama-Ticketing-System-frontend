@@ -58,16 +58,17 @@ const ShowsContent = ({ setAddType, setShowAddModal, setEditData }) => {
     } catch (err) {
       if (err.response) {
         const status = err.response.status;
-        const message = err.response.data?.message || "Failed to fetch shows";
 
         if (status === 401) {
           setError("Invalid email or password");
         } else if (status === 404) {
-          setError("No shows found");
+          // API returned "Shows not found" — treat it as no data
+          setShows([]);
+          setTotalPages(1);
         } else if (status === 500) {
           setError("Server error. Please try again later");
         } else {
-          setError(message);
+          setError("Failed to fetch shows");
         }
       } else {
         setError("An unexpected error occurred");
@@ -182,7 +183,7 @@ const ShowsContent = ({ setAddType, setShowAddModal, setEditData }) => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
+                <th className="px-2 py-3"></th>
                 <th className="px-0 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Show
                 </th>
@@ -208,28 +209,22 @@ const ShowsContent = ({ setAddType, setShowAddModal, setEditData }) => {
                 filteredShows.map((show) => (
                   <TableRow key={show.showId}>
                     <td className="px-2 py-4">
-                      <div className="flex items-center">
-                        <img
-                          src={
-                            show.image
-                              ? `${BACKEND_IMAGE_URL}${show.image}`
-                              : "/images/default.png"
-                          }
-                          alt={show.title}
-                          className="w-30 h-25 object-cover rounded mr-3"
-                        />
-                      </div>
+                      <img
+                        src={
+                          show.image
+                            ? `${BACKEND_IMAGE_URL}${show.image}`
+                            : "/images/default.png"
+                        }
+                        alt={show.title}
+                        className="w-30 h-25 object-cover rounded mr-3"
+                      />
                     </td>
                     <td className="px-0 py-4">
-                      <div className="flex items-center">
-                        <div>
-                          <div className="text-sm font-medium text-gray-900">
-                            {show.title}
-                          </div>
-                        </div>
+                      <div className="text-sm font-medium text-gray-900">
+                        {show.title}
                       </div>
                     </td>
-                    <td className="px-4 py-4 whitespace-nowrap">
+                    <td className="px-4 py-4">
                       <div className="flex items-center">
                         <Calendar className="w-4 h-4 text-gray-400 mr-1" />
                         <span className="text-sm text-gray-900">
@@ -245,7 +240,7 @@ const ShowsContent = ({ setAddType, setShowAddModal, setEditData }) => {
                     </td>
                     <td className="px-5 py-4">
                       <div className="flex items-center">
-                        <MapPin className="w-4 h-4 text-gray-400 mr-1 flex-shrink-0" />
+                        <MapPin className="w-4 h-4 text-gray-400 mr-1" />
                         <div>
                           <div className="text-sm text-gray-900">
                             {show.location}
@@ -261,7 +256,7 @@ const ShowsContent = ({ setAddType, setShowAddModal, setEditData }) => {
                         {show.drama?.title}
                       </div>
                     </td>
-                    <td className="px-4 py-4 whitespace-nowrap">
+                    <td className="px-4 py-4">
                       <span
                         className={`px-2 py-1 text-xs font-semibold rounded-full ${
                           show.status === "approved"
@@ -274,7 +269,7 @@ const ShowsContent = ({ setAddType, setShowAddModal, setEditData }) => {
                         {show.status}
                       </span>
                     </td>
-                    <td className="px-4 py-4 whitespace-nowrap text-sm font-medium">
+                    <td className="px-4 py-4">
                       <div className="flex space-x-2">
                         <ActionButton
                           icon={Eye}
@@ -283,17 +278,17 @@ const ShowsContent = ({ setAddType, setShowAddModal, setEditData }) => {
                         />
                         <ActionButton
                           icon={Edit}
-                          color="text-gray-600"
                           onClick={() => {
-                            setEditData(show); 
-                            setAddType("show"); 
+                            setEditData(show);
+                            setAddType("show");
                             setShowAddModal(true);
                           }}
+                          color="text-gray-600"
                         />
                         <ActionButton
                           icon={Trash2}
-                          color="text-red-600"
                           onClick={() => handleDelete(show.showId)}
+                          color="text-red-600"
                         />
                       </div>
                     </td>
@@ -305,7 +300,7 @@ const ShowsContent = ({ setAddType, setShowAddModal, setEditData }) => {
                     colSpan="7"
                     className="px-6 py-4 text-center text-sm text-gray-500"
                   >
-                    No shows found matching your criteria
+                    No shows found.
                   </td>
                 </TableRow>
               )}
@@ -317,8 +312,7 @@ const ShowsContent = ({ setAddType, setShowAddModal, setEditData }) => {
         {totalPages > 1 && (
           <div className="px-6 py-4 border-t flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="text-sm text-gray-700">
-              Showing page {currentPage + 1} of {totalPages} • {shows.length}{" "}
-              shows
+              Showing page {currentPage + 1} of {totalPages} • {shows.length} shows
             </div>
             <div className="flex space-x-2">
               <button

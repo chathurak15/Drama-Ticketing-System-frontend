@@ -113,7 +113,7 @@ const CardSlider = () => {
               />
               <div style={{ padding: '10px' }}>
                 <h3 style={{ margin: '10px 0 5px', fontSize: window.innerWidth < 640 ? '16px' : '18px', color: 'white' }}>{drama.title}</h3>
-                <p style={{ margin: 0, fontSize: window.innerWidth < 640 ? '15px' : '17px', color: 'white' }}>{drama.rating} ⭐</p>
+                <p style={{ margin: 0, fontSize: window.innerWidth < 640 ? '15px' : '17px', color: 'white' }}>{drama.rating.toFixed(1)} ⭐</p>
               </div>
             </a>
           </div>

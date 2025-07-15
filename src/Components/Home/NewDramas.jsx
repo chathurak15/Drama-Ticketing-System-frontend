@@ -10,7 +10,7 @@ const NewDramas = () => {
   useEffect(() => {
     const fetchDramas = async () => {
       try {
-        const response = await getDramas({ page: 0, size: 16, sortByRating: 'ASC' });
+        const response = await getDramas({ page: 0, size: 16, sortByRating: 'DESC' });
         setDramas(response.data.content || response.data);
       } catch (error) {
         console.error('Error fetching dramas:', error);

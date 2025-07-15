@@ -198,7 +198,7 @@ const SeatPopup = ({ isOpen, onClose, showId }) => {
 
       for (let i = 0; i < totalSeats; i++) {
         const rowIndex = Math.floor(i / seatsPerRow);
-        const row = String.fromCharCode(65 + rowIndex + categoryIndex * 4);
+        const row = String.fromCharCode(65 + rowIndex + categoryIndex * 5);
         const seatNumber = (i % seatsPerRow) + 1;
         const seatIdentifier = `${category}-${row}${seatNumber}`;
 

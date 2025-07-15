@@ -79,30 +79,30 @@ const TheaterManagerDashboard = () => {
     }
   };
 
-  return (
-    <div
-      className="min-h-screen bg-gray-100"
-      style={{ fontFamily: "Poppins, sans-serif" }}
-    >
-      <TheatreManagerSideBar
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-      />
+ return (
+  <div
+    className="min-h-screen bg-gray-100"
+    style={{ fontFamily: "Poppins, sans-serif" }}
+  >
+    <TheatreManagerSideBar
+      activeTab={activeTab}
+      setActiveTab={setActiveTab}
+    />
 
-      <div className="ml-64 min-h-screen">
-        <TheatreManagerHeader />
-
-        <main className="p-6">{renderContent()}</main>
-      </div>
-
-      <AddModal
-        show={showAddModal}
-        onClose={() => setShowAddModal(false)}
-        type={addType}
-        editData={editData}
-      />
+    <div className="transition-all duration-300 md:ml-64">
+      <TheatreManagerHeader />
+      <main className="p-6">{renderContent()}</main>
     </div>
-  );
+
+    <AddModal
+      show={showAddModal}
+      onClose={() => setShowAddModal(false)}
+      type={addType}
+      editData={editData}
+    />
+  </div>
+);
+
 };
 
 export default TheaterManagerDashboard;

@@ -25,7 +25,10 @@ function Links() {
   };
 
   return (
-    <div className="flex items-center space-x-8 text-white relative" ref={dropdownRef}>
+    <div
+      className="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-8 text-white relative"
+      ref={dropdownRef}
+    >
       <MenuItem linktext={translatedTexts?.nav?.home || "Home"} linkurl="/" />
       <MenuItem linktext={translatedTexts?.nav?.shows || "Shows"} linkurl="/shows" />
       <MenuItem linktext={translatedTexts?.nav?.dramas || "Dramas"} linkurl="/dramas" />
@@ -42,6 +45,7 @@ function Links() {
         isButton={true}
       />
 
+      {/* Language Selector */}
       <button
         id="languagebtn"
         className="cursor-pointer"
