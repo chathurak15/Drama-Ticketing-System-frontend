@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { getDramas } from '../../services/dramaService';
 import useTranslation from '../../hooks/useTranslation'; 
+import { Link } from "react-router-dom"
 
 const NewDramas = () => {
   const [dramas, setDramas] = useState([]);
@@ -62,16 +63,19 @@ const NewDramas = () => {
   }, [dramas]);
 
   return (
-    <div className="new-dramas-slider-container" style={{ position: 'relative', width: '100%', padding: '40px 0' }}>
+    <div
+      className="new-dramas-slider-container"
+      style={{ position: "relative", width: "100%", padding: "40px 0" }}
+    >
       <h2 className="home-title">
         {translatedTexts?.home?.newDramasTitle || "New Dramas"}
       </h2>
 
       {/* Hide scroll buttons on mobile */}
       <button
-        onClick={() => scroll('left')}
+        onClick={() => scroll("left")}
         className="c1 new-dramas-slider-btn"
-        style={{ display: window.innerWidth < 640 ? 'none' : 'inline-block' }}
+        style={{ display: window.innerWidth < 640 ? "none" : "inline-block" }}
       >
         ◀
       </button>
@@ -80,11 +84,11 @@ const NewDramas = () => {
         ref={scrollRef}
         className="c2 new-dramas-slider-scroll"
         style={{
-          display: 'flex',
-          overflowX: 'auto',
-          gap: '16px',
-          scrollBehavior: 'smooth',
-          padding: '10px 0',
+          display: "flex",
+          overflowX: "auto",
+          gap: "16px",
+          scrollBehavior: "smooth",
+          padding: "10px 0",
         }}
       >
         {dramas.map((drama, index) => (
@@ -92,16 +96,18 @@ const NewDramas = () => {
             key={index}
             className="c3 new-dramas-slider-card"
             style={{
-              minWidth: window.innerWidth < 640 ? '90vw' : '280px',
-              maxWidth: window.innerWidth < 640 ? '90vw' : '280px',
-              background: '#661F19',
-              borderRadius: '12px',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-              overflow: 'hidden',
-              flex: '0 0 auto',
+              minWidth: window.innerWidth < 640 ? "90vw" : "280px",
+              maxWidth: window.innerWidth < 640 ? "90vw" : "280px",
+              background: "#661F19",
+              borderRadius: "12px",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+              overflow: "hidden",
+              flex: "0 0 auto",
             }}
           >
-            <a href={`/drama/${drama.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Link to={`/drama/${drama.id}`}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
               <img
                 src={
                   drama.image
@@ -109,22 +115,32 @@ const NewDramas = () => {
                     : "/images/default.png"
                 }
                 alt={drama.title}
-                style={{ width: '100%', height: window.innerWidth < 640 ? '140px' : '200px', objectFit: 'cover' }}
+                style={{
+                  width: "100%",
+                  height: window.innerWidth < 640 ? "140px" : "200px",
+                  objectFit: "cover",
+                }}
               />
-              <div style={{ padding: '10px' }}>
-                <h3 style={{ margin: '10px 0 5px', fontSize: window.innerWidth < 640 ? '15px' : '16px', color: 'white' }}>
+              <div style={{ padding: "10px" }}>
+                <h3
+                  style={{
+                    margin: "10px 0 5px",
+                    fontSize: window.innerWidth < 640 ? "15px" : "16px",
+                    color: "white",
+                  }}
+                >
                   {drama.title}
                 </h3>
               </div>
-            </a>
+            </Link>
           </div>
         ))}
       </div>
 
       <button
-        onClick={() => scroll('right')}
+        onClick={() => scroll("right")}
         className="c4 new-dramas-slider-btn"
-        style={{ display: window.innerWidth < 640 ? 'none' : 'inline-block' }}
+        style={{ display: window.innerWidth < 640 ? "none" : "inline-block" }}
       >
         ▶
       </button>

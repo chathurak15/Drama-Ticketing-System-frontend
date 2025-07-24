@@ -5,7 +5,7 @@ import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import { getShowById } from "../../services/ShowService.js";
 import SeatSelectionPopup from "./SeatPopup.jsx";
-// import { getShowsById } from "./SampleShows.js";
+import { Link } from "react-router-dom";
 
 const ShowDetails = () => {
   const { id } = useParams();
@@ -183,13 +183,14 @@ const ShowDetails = () => {
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-left gap-10">
                   <div className="flex items-center space-x-2">
                     <span className="text-gray-600">Drama:</span>
-                    <a
-                      href={`/drama/${show.drama?.id}`}
+                    <Link
+                      to={`/drama/${show.drama?.id}`}
                       className="text-amber-900 font-semibold hover:underline"
                     >
                       {show.drama?.title}
-                    </a>
+                    </Link>
                   </div>
+
                   <button
                     onClick={() => setIsPopupOpen(true)}
                     className="booking-btn text-white px-8 py-3 rounded-lg font-semibold hover:bg-amber-800 transition-colors"

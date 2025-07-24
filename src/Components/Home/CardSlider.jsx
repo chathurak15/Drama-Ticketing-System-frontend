@@ -1,19 +1,24 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { getDramas } from '../../services/dramaService';
-import useTranslation from '../../hooks/useTranslation'; // ✅ import hook
+import React, { useRef, useEffect, useState } from "react";
+import { getDramas } from "../../services/dramaService";
+import useTranslation from "../../hooks/useTranslation";
+import { Link } from "react-router-dom";
 
 const CardSlider = () => {
   const [dramas, setDramas] = useState([]);
-  const { translatedTexts } = useTranslation(); 
+  const { translatedTexts } = useTranslation();
   const BACKEND_IMAGE_URL = "http://localhost:8080/uploads/dramas/";
 
   useEffect(() => {
     const fetchDramas = async () => {
       try {
-        const response = await getDramas({ page: 0, size: 16, sortByRating: 'desc' });
+        const response = await getDramas({
+          page: 0,
+          size: 16,
+          sortByRating: "desc",
+        });
         setDramas(response.data.content || response.data);
       } catch (error) {
-        console.error('Error fetching dramas:', error);
+        console.error("Error fetching dramas:", error);
       }
     };
 
@@ -31,8 +36,8 @@ const CardSlider = () => {
     if (scrollRef.current) {
       const cardWidth = getCardWidth();
       scrollRef.current.scrollBy({
-        left: direction === 'left' ? -cardWidth * 2 : cardWidth * 2,
-        behavior: 'smooth',
+        left: direction === "left" ? -cardWidth * 2 : cardWidth * 2,
+        behavior: "smooth",
       });
     }
   };
@@ -53,25 +58,28 @@ const CardSlider = () => {
         container.scrollLeft = scrollLeft + dx;
       }
     };
-    container.addEventListener('touchstart', onTouchStart);
-    container.addEventListener('touchmove', onTouchMove);
+    container.addEventListener("touchstart", onTouchStart);
+    container.addEventListener("touchmove", onTouchMove);
     return () => {
-      container.removeEventListener('touchstart', onTouchStart);
-      container.removeEventListener('touchmove', onTouchMove);
+      container.removeEventListener("touchstart", onTouchStart);
+      container.removeEventListener("touchmove", onTouchMove);
     };
   }, [dramas]);
 
   return (
-    <div className="card-slider-container" style={{ position: 'relative', padding: '25px 0' }}>
-      <h2 className='home-title'>
+    <div
+      className="card-slider-container"
+      style={{ position: "relative", padding: "25px 0" }}
+    >
+      <h2 className="home-title">
         {translatedTexts?.home?.topRatedDramasTitle || "Top Rated Dramas"}
       </h2>
 
       {/* Hide scroll buttons on mobile */}
       <button
-        onClick={() => scroll('left')}
+        onClick={() => scroll("left")}
         className="c1 card-slider-btn"
-        style={{ display: window.innerWidth < 640 ? 'none' : 'inline-block' }}
+        style={{ display: window.innerWidth < 640 ? "none" : "inline-block" }}
       >
         ◀
       </button>
@@ -80,11 +88,11 @@ const CardSlider = () => {
         ref={scrollRef}
         className="c2 card-slider-scroll"
         style={{
-          display: 'flex',
-          overflowX: 'auto',
-          gap: '16px',
-          scrollBehavior: 'smooth',
-          padding: '10px 0',
+          display: "flex",
+          overflowX: "auto",
+          gap: "16px",
+          scrollBehavior: "smooth",
+          padding: "10px 0",
         }}
       >
         {dramas.map((drama, index) => (
@@ -92,16 +100,19 @@ const CardSlider = () => {
             key={index}
             className="c3 card-slider-card"
             style={{
-              minWidth: window.innerWidth < 640 ? '90vw' : '280px',
-              maxWidth: window.innerWidth < 640 ? '90vw' : '280px',
-              background: '#661F19',
-              borderRadius: '12px',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-              overflow: 'hidden',
-              flex: '0 0 auto',
+              minWidth: window.innerWidth < 640 ? "90vw" : "280px",
+              maxWidth: window.innerWidth < 640 ? "90vw" : "280px",
+              background: "#661F19",
+              borderRadius: "12px",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+              overflow: "hidden",
+              flex: "0 0 auto",
             }}
           >
-            <a href={`/drama/${drama.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Link
+              to={`/drama/${drama.id}`}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
               <img
                 src={
                   drama.image
@@ -109,21 +120,41 @@ const CardSlider = () => {
                     : "/images/default.png"
                 }
                 alt={drama.title}
-                style={{ width: '100%', height: window.innerWidth < 640 ? '160px' : '220px', objectFit: 'cover' }}
+                style={{
+                  width: "100%",
+                  height: window.innerWidth < 640 ? "160px" : "220px",
+                  objectFit: "cover",
+                }}
               />
-              <div style={{ padding: '10px' }}>
-                <h3 style={{ margin: '10px 0 5px', fontSize: window.innerWidth < 640 ? '16px' : '18px', color: 'white' }}>{drama.title}</h3>
-                <p style={{ margin: 0, fontSize: window.innerWidth < 640 ? '15px' : '17px', color: 'white' }}>{drama.rating.toFixed(1)} ⭐</p>
+              <div style={{ padding: "10px" }}>
+                <h3
+                  style={{
+                    margin: "10px 0 5px",
+                    fontSize: window.innerWidth < 640 ? "16px" : "18px",
+                    color: "white",
+                  }}
+                >
+                  {drama.title}
+                </h3>
+                <p
+                  style={{
+                    margin: 0,
+                    fontSize: window.innerWidth < 640 ? "15px" : "17px",
+                    color: "white",
+                  }}
+                >
+                  {drama.rating.toFixed(1)} ⭐
+                </p>
               </div>
-            </a>
+            </Link>
           </div>
         ))}
       </div>
 
       <button
-        onClick={() => scroll('right')}
+        onClick={() => scroll("right")}
         className="c4 card-slider-btn"
-        style={{ display: window.innerWidth < 640 ? 'none' : 'inline-block' }}
+        style={{ display: window.innerWidth < 640 ? "none" : "inline-block" }}
       >
         ▶
       </button>
