@@ -1,11 +1,11 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import "../../assets/css/ShowCard.css";
 import { Link } from "react-router-dom";
 
 
 const ShowCard = ({ show }) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const BACKEND_IMAGE_URL = "http://localhost:8080/uploads/shows/";
 
 return (
@@ -41,6 +41,7 @@ return (
       </div>
     </Link>
   </div>
-);
+  );
+};
 
 export default ShowCard;

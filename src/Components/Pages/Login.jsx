@@ -6,6 +6,7 @@ import "../../assets/css/Login.css";
 import Footer from "../Footer/Footer";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../utils/AuthContext";
+import GoogleLoginButton from "../GoogleLoginButton";
 
 const Login = ({ onLoginSuccess }) => {
   const navigate = useNavigate();
@@ -198,7 +199,7 @@ const Login = ({ onLoginSuccess }) => {
             </button>
 
             {/* Forgot Password */}
-            <div className="text-center">
+            <div className="mb-5 text-center">
               <a
                 href="#"
                 className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
@@ -208,7 +209,9 @@ const Login = ({ onLoginSuccess }) => {
             </div>
           </div>
 
-          <div className="mt-8 pt-6 border-t border-gray-200">
+          <GoogleLoginButton />
+
+          <div className="mt-3 pt-6 border-t border-gray-200">
             <p className="text-center text-gray-600">
               Don't have an account?{" "}
               <button

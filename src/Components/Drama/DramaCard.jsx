@@ -18,7 +18,7 @@ const DramaCard = ({ drama }) => {
         src={
           drama.image
             ? `${BACKEND_IMAGE_URL}${drama.image}`
-            : "/images/default.png`
+            : "/images/default.png"
         }
         alt={drama.title}
         className="w-full object-cover rounded-lg mb-2"
