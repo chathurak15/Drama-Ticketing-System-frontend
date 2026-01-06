@@ -6,7 +6,7 @@ import React, {
 } from "react";
 import { Theater, Clock, Upload } from "lucide-react";
 import { getActors } from "../../../services/ActorService";
-import { uploadFile } from "../../../services/FileService";
+import { uploadFile } from "../../../services/FileService.Js";
 
 const DramaForm = forwardRef(({ formData, setFormData }, ref) => {
   const [imagePreview, setImagePreview] = useState(null);
