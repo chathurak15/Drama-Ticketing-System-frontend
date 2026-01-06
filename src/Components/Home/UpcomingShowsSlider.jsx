@@ -6,7 +6,7 @@ const UpcomingShowsSlider = ({ upcomingShows }) => {
   const sliderRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
-  const BACKEND_IMAGE_URL = "http://localhost:8080/uploads/shows/";
+  const BACKEND_IMAGE_URL = "https://d3ay14vkclriu.cloudfront.net/uploads/shows/";
 
   const { translatedTexts } = useTranslation(); 
   useEffect(() => {

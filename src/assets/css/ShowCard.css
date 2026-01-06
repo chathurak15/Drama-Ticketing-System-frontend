@@ -9,6 +9,9 @@
   padding: 0px !important;
   background: #fff;
   position: relative;
+
+  display: flex;
+  flex-direction: column;
 }
 
 .show-card:hover {
@@ -63,21 +66,11 @@
   color: #6b7280;
 }
 
-.show-card button {
-  background-color: var(--primary-color);
-  width: calc(100% - 20px);
-  color: white;
-  border: none;
-  padding: 12px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  margin: 10px 10px 15px 10px;
-  transition: background-color 0.3s ease;
-  font-size: 14px;
+.booking-btn {
+  margin-top: auto;
 }
 
-.show-card button:hover {
+.booking-btn:hover {
   background-color: var(--btn-color);
   color: #000;
 }

@@ -24,7 +24,7 @@ const DramaForm = forwardRef(({ formData, setFormData }, ref) => {
 
   useEffect(() => {
     if (formData.image) {
-      setImagePreview(`http://localhost:8080/uploads/dramas/${formData.image}`);
+      setImagePreview(`https://d3ay14vkclriu.cloudfront.net/uploads/dramas/${formData.image}`);
     } else {
       setImagePreview(null);
     }
@@ -107,7 +107,7 @@ const DramaForm = forwardRef(({ formData, setFormData }, ref) => {
       const uploadRes = await uploadFile(file, category, title);
       const uploadedFileName = uploadRes.fileName;
 
-      setImagePreview(`http://localhost:8080/uploads/dramas/${uploadedFileName}`);
+      setImagePreview(`https://d3ay14vkclriu.cloudfront.net/uploads/dramas/${uploadedFileName}`);
       setFormData((prev) => ({ ...prev, image: uploadedFileName }));
     } catch (err) {
       alert("Image upload failed");

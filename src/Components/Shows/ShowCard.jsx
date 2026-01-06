@@ -5,8 +5,7 @@ import { Link } from "react-router-dom";
 
 
 const ShowCard = ({ show }) => {
-  // const navigate = useNavigate();
-  const BACKEND_IMAGE_URL = "http://localhost:8080/uploads/shows/";
+  const BACKEND_IMAGE_URL = "https://d3ay14vkclriu.cloudfront.net/uploads/shows/";
 
 return (
   <div className="show-card">
@@ -36,7 +35,7 @@ return (
         {show.city?.cityName} - {show.location}
       </p>
 
-      <div className="mt-3 bg-amber-600 text-white px-4 py-2 rounded text-center">
+      <div className="mt-3 booking-btn text-white px-4 py-2 rounded text-center">
         Booking
       </div>
     </Link>

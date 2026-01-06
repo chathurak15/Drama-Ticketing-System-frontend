@@ -13,7 +13,7 @@ const ShowDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const BACKEND_IMAGE_URL = "http://localhost:8080/uploads/shows/";
+  const BACKEND_IMAGE_URL = "https://d3ay14vkclriu.cloudfront.net/uploads/shows/";
 
   // Helper function to format date
   const formatDate = (dateString) => {

@@ -25,7 +25,7 @@ const ShowsContent = ({ setAddType, setShowAddModal }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 15;
-  const BACKEND_IMAGE_URL = "http://localhost:8080/uploads/shows/";
+  const BACKEND_IMAGE_URL = "https://d3ay14vkclriu.cloudfront.net/uploads/shows/";
 
   useEffect(() => {
     fetchShows();

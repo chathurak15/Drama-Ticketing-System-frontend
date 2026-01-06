@@ -14,7 +14,7 @@ const DramasContent = ({ setAddType, setShowAddModal, setEditData }) => {
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 15;
   
-  const BACKEND_IMAGE_URL = "http://localhost:8080/uploads/dramas/";
+  const BACKEND_IMAGE_URL = "https://d3ay14vkclriu.cloudfront.net/uploads/dramas/";
 
   useEffect(() => {
     fetchDramas();

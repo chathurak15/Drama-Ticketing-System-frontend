@@ -34,7 +34,7 @@ const ShowForm = forwardRef(({ formData, setFormData }, ref) => {
 
   useEffect(() => {
   if (formData.image) {
-    setImagePreview(`http://localhost:8080/uploads/shows/${formData.image}`);
+    setImagePreview(`https://d3ay14vkclriu.cloudfront.net/uploads/shows/${formData.image}`);
   } else {
     setImagePreview(null);
   }
@@ -205,7 +205,7 @@ const ShowForm = forwardRef(({ formData, setFormData }, ref) => {
     const uploadRes = await uploadFile(file, category, title);
     const uploadedFileName = uploadRes.fileName;
 
-    const imageUrl = `http://localhost:8080/uploads/shows/${uploadedFileName}`;
+    const imageUrl = `https://d3ay14vkclriu.cloudfront.net/uploads/shows/${uploadedFileName}`;
     setImagePreview(imageUrl);
     setFormData((prev) => ({ ...prev, image: uploadedFileName }));
   } catch (err) {

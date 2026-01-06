@@ -6,7 +6,7 @@ import { Link } from "react-router-dom"
 const NewDramas = () => {
   const [dramas, setDramas] = useState([]);
   const { translatedTexts } = useTranslation();
-  const BACKEND_IMAGE_URL = "http://localhost:8080/uploads/dramas/"; 
+  const BACKEND_IMAGE_URL = "https://d3ay14vkclriu.cloudfront.net/uploads/dramas/"; 
 
   useEffect(() => {
     const fetchDramas = async () => {

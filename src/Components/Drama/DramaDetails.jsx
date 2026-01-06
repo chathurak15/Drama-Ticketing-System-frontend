@@ -19,8 +19,8 @@ const DramaDetails = () => {
   const [upcomingShows, setUpcomingShows] = useState([]);
   // const [startIndex, setStartIndex] = useState(0);
 
-  const BACKEND_IMAGE_URL = "http://localhost:8080/uploads/dramas/";
-  const BACKEND_Actor_IMAGE_URL = "http://localhost:8080/uploads/actors/";
+  const BACKEND_IMAGE_URL = "https://d3ay14vkclriu.cloudfront.net/uploads/dramas/";
+  const BACKEND_Actor_IMAGE_URL = "https://d3ay14vkclriu.cloudfront.net/uploads/actors/";
 
   // Fetch drama details and reviews on component mount
   useEffect(() => {

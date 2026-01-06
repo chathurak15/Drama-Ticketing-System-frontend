@@ -14,7 +14,7 @@ const ActorsContent = ({ setAddType, setShowAddModal,setEditData}) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 25;
-  const BACKEND_IMAGE_URL = "http://localhost:8080/uploads/actors/";
+  const BACKEND_IMAGE_URL = "https://d3ay14vkclriu.cloudfront.net/uploads/actors/";
 
   useEffect(() => {
     fetchActors();
