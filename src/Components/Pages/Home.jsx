@@ -16,44 +16,58 @@ import useTranslation from "../../hooks/useTranslation";
 function Home() {
   const navigate = useNavigate();
   const [upcomingShows, setUpcomingShows] = useState([]);
-  const { translatedTexts, loading } = useTranslation();
+  const [dataLoading, setDataLoading] = useState(true);
+  
+  // Get translation loading status
+  const { translatedTexts, loading: translationLoading } = useTranslation();
 
   useEffect(() => {
-    const fetchUpcomingShows = async () => {
+    const fetchHomeData = async () => {
       try {
-        const response = await getShows({ page: 0, size: 16 });
-        setUpcomingShows(response.data.content);
+        setDataLoading(true);
+        const [showsResponse] = await Promise.all([
+          getShows({ page: 0, size: 16 }),
+          // Optional: Add a small delay so the spinner doesn't flash too quickly
+          new Promise(resolve => setTimeout(resolve, 800)) 
+        ]);
+        setUpcomingShows(showsResponse.data.content);
       } catch (error) {
-        console.error("Error fetching upcoming shows:", error);
+        console.error("Error fetching home data:", error);
+      } finally {
+        setDataLoading(false);
       }
     };
 
-    fetchUpcomingShows();
+    fetchHomeData();
   }, []);
 
   const handleBookClick = () => {
     navigate("/shows");
   };
 
-  if (loading) {
-    return (
-      <>
-        <Header />
-        <main className="min-h-screen flex items-center justify-center">
-          <div className="container mx-auto px-4 py-8">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-amber-600 mx-auto mb-4"></div>
-              <p className="text-gray-600">Loading...</p>
-            </div>
-          </div>
-        </main>
-        <Footer />
-      </>
-    );
-  }
+  // Determine if we should show the overlay
+  const isPageLoading = translationLoading || dataLoading;
 
   return (
     <>
+      {/* --- LOADING OVERLAY --- */}
+      {isPageLoading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/80 backdrop-blur-sm">
+          {/* bg-white/80 : White background with 80% opacity (transparency)
+             backdrop-blur-sm : Blurs the content behind the overlay slightly
+             z-50 : Ensures it sits on top of everything
+          */}
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-amber-600 mx-auto mb-4"></div>
+            <h2 className="text-xl font-bold text-gray-800">Nataka.lk</h2>
+            <p className="text-gray-600 text-sm font-medium animate-pulse">
+              Setting up the stage...
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* --- MAIN CONTENT (Always rendered, but covered by overlay when loading) --- */}
       <div id="wrapper">
         <Header />
         <Body>
@@ -61,7 +75,6 @@ function Home() {
             className="bg-cover bg-center relative"
             style={{ backgroundImage: `url(${headerImage})` }}
           >
-            {/* Overlay content */}
             <div className="overlay-content container mx-auto px-4 py-8">
               <h1>
                 Book Your <br /> Seats Now
@@ -70,17 +83,20 @@ function Home() {
               <button onClick={handleBookClick}>Book Tickets</button>
             </div>
           </div>
-          <div >
+          
+          <div>
             <SearchShows />
           </div>
           <br />
+          
           <div className="container mx-auto px-4">
             <div>
               <CardSlider />
             </div>
             <br />
+            {/* Pass empty array safely while loading */}
             <div>
-              <UpcomingShowsSlider upcomingShows={upcomingShows} />
+              <UpcomingShowsSlider upcomingShows={upcomingShows || []} />
             </div>
             <br />
             <div>
@@ -92,6 +108,7 @@ function Home() {
             </div>
             <br />
           </div>
+          
           <div>
             <Footer />
           </div>

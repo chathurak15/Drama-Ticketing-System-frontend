@@ -11,58 +11,53 @@ const Footer = () => {
                     <div className="logo-title">
                         <img src={logo} alt="Nataka.LK" className="logo" />
                     </div>
-                    {/* <div className="social-icons">
-                        <a href="#"><img src="/images/instagram.avif" alt="Instagram" /></a>
-                        <a href="#"><img src="/images/youtube.svg" alt="YouTube" /></a>
-                        <a href="#"><img src="/images/linkedin.svg" alt="LinkedIn" /></a>
-                    </div> */}
-                    
+                    <p className="text-sm text-gray-400 mt-2 mb-4">
+                        The ultimate platform for booking stage drama tickets in Sri Lanka.
+                    </p>
+                    <div className="social-icons flex gap-4">
+                        {/* Ensure you have these images or replace with icons like FontAwesome */}
+                        {/* <a href="https://instagram.com"><img src="/images/instagram.avif" alt="Instagram" /></a> */}
+                        {/* <a href="https://youtube.com"><img src="/images/youtube.svg" alt="YouTube" /></a> */}
+                        {/* <a href="https://linkedin.com"><img src="/images/linkedin.svg" alt="LinkedIn" /></a> */}
+                    </div>
                 </div>
 
-                {/* Use Cases */}
+                {/* Section 1: Discover / Navigation */}
                 <div className="footer-section">
-                    <h3 className="footer-title">Use cases</h3>
+                    <h3 className="footer-title">Discover</h3>
                     <ul>
-                        <li>UI design</li>
-                        <li>UX design</li>
-                        <li>Wireframing</li>
-                        <li>Diagramming</li>
-                        <li>Brainstorming</li>
-                        <li>Online whiteboard</li>
-                        <li>Team collaboration</li>
+                        <li><a href="/dramas">Latest Dramas</a></li>
+                        <li><a href="/schedule">Upcoming Shows</a></li>
+                        <li><a href="/actors">Artists & Actors</a></li>
+                        <li><a href="/venues">Theater Venues</a></li>
                     </ul>
                 </div>
 
-                {/* Explore */}
+                {/* Section 2: Support / Customer Care */}
                 <div className="footer-section">
-                    <h3 className="footer-title">Explore</h3>
+                    <h3 className="footer-title">Support</h3>
                     <ul>
-                        <li>Design</li>
-                        <li>Prototyping</li>
-                        <li>Development features</li>
-                        <li>Design systems</li>
-                        <li>Collaboration features</li>
-                        <li>Design process</li>
-                        <li>FigJam</li>
+                        <li><a href="/contact">Contact Us</a></li>
+                        <li><a href="/faq">Help & FAQ</a></li>
+                        <li><a href="/how-to-book">How to Book</a></li>
+                        <li><a href="/refund-policy">Refund Policy</a></li>
                     </ul>
                 </div>
 
-                {/* Resources */}
+                {/* Section 3: Company / Legal */}
                 <div className="footer-section">
-                    <h3 className="footer-title">Resources</h3>
+                    <h3 className="footer-title">Nataka.lk</h3>
                     <ul>
-                        <li><a href="/dramas">Dramas</a></li>
-                        <li><a href="/shows">Shows</a></li>
-                        <li><a href="/actors">Actors</a></li>
                         <li><a href="/about">About Us</a></li>
-                        <li><a href="/contact">Contact</a></li>
-                        <li><a href="/login">Login/Register</a></li>
+                        <li><a href="/terms">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms & Conditions</a></li>
+                        <li><a href="/login">Login / Register</a></li>
                     </ul>
                 </div>
             </div>
 
             <div className="footer-bottom">
-                ©2025 - All Right Reserved. Designed and Developed by Nataka.lk
+                © {new Date().getFullYear()} Nataka.lk - All Rights Reserved.
             </div>
         </footer>
     );

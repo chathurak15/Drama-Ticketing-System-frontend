@@ -18,6 +18,12 @@ const SeatPopup = ({ isOpen, onClose, showId }) => {
   const user = useAuth().user;
   const navigate = useNavigate();
 
+  // Helper to fix typos from backend
+  const formatCategory = (category) => {
+    if (category === "Nomal") return "Normal";
+    return category;
+  };
+
   const fetchShowData = useCallback(async () => {
     try {
       const response = await getSeatsByShowId(showId);
@@ -48,7 +54,7 @@ const SeatPopup = ({ isOpen, onClose, showId }) => {
 
     const intervalId = setInterval(() => {
       fetchUnavailableSeats();
-    }, 30000); // 30 seconds
+    }, 30000); 
 
     return () => clearInterval(intervalId);
   }, [showId, fetchShowData, fetchUnavailableSeats]);
@@ -84,12 +90,14 @@ const SeatPopup = ({ isOpen, onClose, showId }) => {
 
   const getSeatClassName = (seat) => {
     const status = getSeatStatus(seat);
+    // MOBILE: w-5 h-5 (20px), text-[8px], rounded-sm
+    // DESKTOP (sm): w-8 h-8 (32px), text-xs, rounded-lg
     const baseClass =
-      "w-8 h-8 rounded-lg border-2 cursor-pointer transition-all duration-200 flex items-center justify-center text-xs font-semibold";
+      "w-5 h-5 sm:w-8 sm:h-8 rounded-sm sm:rounded-lg border sm:border-2 cursor-pointer transition-all duration-200 flex items-center justify-center text-[8px] sm:text-xs font-semibold shrink-0";
 
     switch (status) {
       case "selected":
-        return `${baseClass} bg-emerald-500 border-emerald-600 text-white shadow-lg scale-105`;
+        return `${baseClass} bg-emerald-500 border-emerald-600 text-white shadow-lg scale-105 z-10`;
       case "locked":
         return `${baseClass} bg-orange-400 border-orange-500 text-white`;
       case "booked":
@@ -110,6 +118,7 @@ const SeatPopup = ({ isOpen, onClose, showId }) => {
       case "premium":
         return "bg-blue-100 border-blue-300";
       case "standard":
+      case "nomal": 
         return "bg-green-100 border-green-300";
       case "balcony":
         return "bg-yellow-100 border-yellow-300";
@@ -141,9 +150,10 @@ const SeatPopup = ({ isOpen, onClose, showId }) => {
 
     const bookingData = {
       showId,
-      seats: selectedSeats.map((s) =>({ 
+      seats: selectedSeats.map((s) => ({
         seatIdentifier: s.seatIdentifier,
-        price: s.price})),
+        price: s.price,
+      })),
       totalAmount: getTotalAmount(),
       userId: user.id,
     };
@@ -155,8 +165,8 @@ const SeatPopup = ({ isOpen, onClose, showId }) => {
     }
 
     if (response.data !== "Seats locked successfully") {
-        alert(response.data);
-        return;
+      alert(response.data);
+      return;
     }
 
     alert("Please Complete Your Booking in 10 minutes! Your Seats are Locked");
@@ -239,7 +249,7 @@ const SeatPopup = ({ isOpen, onClose, showId }) => {
     const sortedRows = Object.keys(seatsByRow).sort();
 
     return (
-      <div className="space-y-3">
+      <div className="space-y-1 sm:space-y-3 min-w-max">
         {sortedRows.map((rowLetter) => {
           const rowSeats = seatsByRow[rowLetter].sort(
             (a, b) => a.number - b.number
@@ -247,12 +257,12 @@ const SeatPopup = ({ isOpen, onClose, showId }) => {
           return (
             <div
               key={rowLetter}
-              className="flex items-center justify-center gap-2"
+              className="flex items-center justify-center gap-1 sm:gap-2"
             >
-              <div className="w-8 text-center font-semibold text-gray-600 text-sm">
+              <div className="w-4 sm:w-8 text-center font-semibold text-gray-600 text-[10px] sm:text-sm shrink-0">
                 {rowLetter}
               </div>
-              <div className="flex gap-1">
+              <div className="flex gap-0.5 sm:gap-1">
                 {rowSeats.map((seat) => (
                   <button
                     key={seat.id}
@@ -271,57 +281,87 @@ const SeatPopup = ({ isOpen, onClose, showId }) => {
     );
   };
 
+  const Legend = () => (
+    <div className="flex flex-wrap gap-x-4 gap-y-2 text-[10px] sm:text-sm mb-4 justify-center sm:justify-start">
+      <div className="flex items-center gap-1.5">
+        <div className="w-3 h-3 sm:w-4 sm:h-4 bg-gray-100 border sm:border-2 border-gray-300 rounded-sm"></div>
+        <span>Available</span>
+      </div>
+      <div className="flex items-center gap-1.5">
+        <div className="w-3 h-3 sm:w-4 sm:h-4 bg-emerald-500 border sm:border-2 border-emerald-600 rounded-sm"></div>
+        <span>Selected</span>
+      </div>
+      <div className="flex items-center gap-1.5">
+        <div className="w-3 h-3 sm:w-4 sm:h-4 bg-red-500 border sm:border-2 border-red-600 rounded-sm opacity-70"></div>
+        <span>Booked</span>
+      </div>
+      <div className="flex items-center gap-1.5">
+        <div className="w-3 h-3 sm:w-4 sm:h-4 bg-orange-400 border sm:border-2 border-orange-500 rounded-sm"></div>
+        <span>Locked</span>
+      </div>
+    </div>
+  );
+
   if (!isOpen || !showData) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-5xl w-full max-h-[95vh] overflow-hidden">
-        <div className="booking-btn from-slate-800 to-slate-700 text-white p-6">
-          <div className="flex items-start justify-between">
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-2 sm:p-4">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl h-full max-h-[95vh] flex flex-col overflow-hidden">
+        {/* Header */}
+        <div className="booking-btn from-slate-800 to-slate-700 text-white p-4 sm:p-6 shrink-0">
+          <div className="flex items-start justify-between gap-4">
             <div className="space-y-2">
-              <h2 className="text-2xl font-bold">{showData.title}</h2>
-              <div className="flex items-center gap-4 text-slate-200 text-sm">
+              <h2 className="text-lg sm:text-2xl font-bold">{showData.title}</h2>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-slate-200 text-xs sm:text-sm">
                 <div className="flex items-center gap-1">
-                  <Calendar className="w-4 h-4" />
+                  <Calendar className="w-3 h-3 sm:w-4 sm:h-4 shrink-0" />
                   <span>{showData.showDate}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Clock className="w-4 h-4" />
+                  <Clock className="w-3 h-3 sm:w-4 sm:h-4 shrink-0" />
                   <span>{showData.showTime}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <MapPin className="w-4 h-4" />
+                  <MapPin className="w-3 h-3 sm:w-4 sm:h-4 shrink-0" />
                   <span>{showData.location}</span>
                 </div>
               </div>
             </div>
             <button
               onClick={handleClose}
-              className="p-2 hover:bg-white hover:bg-opacity-20 rounded-full transition-colors"
+              className="p-1 sm:p-2 hover:bg-white hover:bg-opacity-20 rounded-full transition-colors shrink-0"
             >
-              <X className="w-6 h-6" />
+              <X className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
           </div>
         </div>
 
-        <div className="flex flex-col lg:flex-row h-full max-h-[calc(95vh-120px)]">
-          <div className="flex-1 p-6 overflow-y-auto">
+        {/* Content Body */}
+        <div className="flex flex-col lg:flex-row flex-1 overflow-hidden">
+          
+          {/* Left Side: Seat Map */}
+          <div className="flex-1 p-2 sm:p-6 overflow-y-auto bg-gray-50">
+            <div className="lg:hidden mb-2">
+              <Legend />
+            </div>
+
             <div className="text-center mb-3">
-              <div className="booking-btn h-4 rounded-full mb-6 relative">
-                <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-s text-gray-900">
+              <div className="booking-btn h-3 sm:h-4 rounded-full mb-4 sm:mb-6 relative w-3/4 mx-auto">
+                <div className="absolute -bottom-5 sm:-bottom-6 left-1/2 transform -translate-x-1/2 text-[10px] sm:text-sm text-gray-900 font-bold tracking-widest">
                   STAGE
                 </div>
               </div>
             </div>
-            <div className="space-y-2">
+            
+            <div className="space-y-2 overflow-x-auto pb-4">
               {Object.entries(groupedSeats).map(([category, categorySeats]) => (
-                <div key={category} className="bg-gray-50 rounded-xl p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-gray-800 capitalize">
-                      {category} Section
+                <div key={category} className="bg-white lg:bg-gray-50 rounded-xl p-2 sm:p-6 min-w-fit mx-auto shadow-sm lg:shadow-none">
+                  <div className="flex items-center justify-between mb-2 sm:mb-4 min-w-[200px] sm:min-w-[250px]">
+                    <h3 className="text-sm sm:text-lg font-semibold text-gray-800 capitalize">
+                      {formatCategory(category)}
                     </h3>
-                    <span className="text-sm text-gray-600">
-                      LKR {categorySeats[0]?.price.toLocaleString()} per seat
+                    <span className="text-xs sm:text-sm text-gray-600 whitespace-nowrap ml-4">
+                      LKR {categorySeats[0]?.price.toLocaleString()}
                     </span>
                   </div>
                   {renderSeatGrid(categorySeats)}
@@ -330,28 +370,15 @@ const SeatPopup = ({ isOpen, onClose, showId }) => {
             </div>
           </div>
 
-          <div className="lg:w-80 border-l border-gray-200 p-6 bg-gray-50">
-            <h4 className="font-semibold text-gray-800 mb-3">Legend</h4>
-            <div className="flex flex-wrap gap-4 text-sm mb-6">
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-gray-100 border-2 border-gray-300 rounded"></div>
-                <span>Available</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-emerald-500 border-2 border-emerald-600 rounded"></div>
-                <span>Selected</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-red-500 border-2 border-red-600 rounded opacity-70"></div>
-                <span>Booked</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-orange-400 border-2 border-orange-500 rounded"></div>
-                <span>Locked</span>
-              </div>
+          {/* Right Side: Summary */}
+          <div className="w-full lg:w-80 border-t lg:border-t-0 lg:border-l border-gray-200 bg-white overflow-y-auto shrink-0 max-h-[35vh] lg:max-h-full pb-20 lg:pb-6 p-4 sm:p-6 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] z-10 relative">
+            
+            <div className="hidden lg:block">
+              <h4 className="font-semibold text-gray-800 mb-3">Legend</h4>
+              <Legend />
             </div>
 
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4 sticky top-0 bg-white z-10 py-2">
               Booking Summary
             </h3>
 
@@ -369,40 +396,40 @@ const SeatPopup = ({ isOpen, onClose, showId }) => {
 
             {selectedSeats.length > 0 ? (
               <div className="space-y-4">
-                <div className="bg-white rounded-lg p-4 shadow-sm">
-                  <h4 className="font-medium text-gray-800 mb-3">
+                <div className="bg-gray-50 rounded-lg p-3 sm:p-4 border border-gray-100">
+                  <h4 className="font-medium text-gray-800 mb-2 sm:mb-3 text-sm">
                     Selected Seats
                   </h4>
-                  <div className="space-y-2">
+                  <div className="space-y-1.5 max-h-24 sm:max-h-32 overflow-y-auto pr-1 custom-scrollbar">
                     {selectedSeats.map((seat) => (
                       <div
                         key={seat.id}
-                        className="flex justify-between items-center text-sm"
+                        className="flex justify-between items-center text-xs sm:text-sm"
                       >
                         <span>
                           {seat.row}
-                          {seat.number} ({seat.category})
+                          {seat.number} ({formatCategory(seat.category)})
                         </span>
-                        <span className="font-semibold">
+                        <span className="font-semibold whitespace-nowrap ml-2">
                           LKR {seat.price.toLocaleString()}
                         </span>
                       </div>
                     ))}
                   </div>
-                  <div className="border-t mt-3 pt-3 flex justify-between items-center font-semibold">
+                  <div className="border-t border-gray-200 mt-2 pt-2 flex justify-between items-center font-bold text-base sm:text-lg">
                     <span>Total</span>
                     <span>LKR {getTotalAmount().toLocaleString()}</span>
                   </div>
                 </div>
                 <button
                   onClick={handleBooking}
-                  className="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 text-white py-3 rounded-lg font-semibold hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 shadow-lg"
+                  className="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 text-white py-2.5 sm:py-3 rounded-lg font-semibold hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 shadow-lg text-sm sm:text-base"
                 >
                   Confirm Booking
                 </button>
               </div>
             ) : (
-              <div className="text-center py-8 text-gray-500 text-sm">
+              <div className="text-center py-4 sm:py-8 text-gray-500 text-xs sm:text-sm">
                 Select seats to see booking summary
               </div>
             )}

@@ -1,419 +1,300 @@
 /* Base Styles */
+.drama-page {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
 .top-section {
-  width: 95%;
-  margin-top: 30px;
+  width: 100%;
   display: flex;
-  height: 250px;
   align-items: flex-start;
-  gap: 20px;
+  gap: 30px;
   border-radius: 20px;
-  margin-bottom: 30px;
-  background-color: #cdc7c7;
-  justify-self: center;
+  margin-bottom: 40px;
+  background-color: #f3f4f6; /* Lighter gray looks cleaner */
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 }
 
 .drama-poster {
-  border-radius: 8px;
-  width: 400px;
-  height: 250px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  width: 400px; /* Base width for desktop */
+  height: 300px;
+  object-fit: cover;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
 }
 
 .drama-details {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  padding-top: 10px;
 }
 
 .drama-title {
-  font-family: var(--primary-font);
-  font-size: 33px;
-  font-weight: 700;
-  text-align: center;
-  margin: 50px 0 10px;
+  font-family: var(--primary-font, 'sans-serif');
+  font-size: 36px;
+  font-weight: 800;
+  color: #1f2937;
+  margin-bottom: 20px;
+  line-height: 1.2;
 }
 
 .drama-info {
-  font-family: var(--primary-font);
-  display: flex;
-  gap: 50px;
-  font-size: 28px;
-  justify-content: center;
-  color: #0b0303;
-  font-weight: 600;
-}
-
-.rating {
-  color: #0b0303;
-}
-
-.description-section {
-  justify-self: center;
-  width: 90%;
   display: flex;
   gap: 30px;
-  padding: 10px;
-  height: 300px;
+  font-size: 20px;
+  color: #4b5563;
+  font-weight: 600;
+  margin-bottom: 20px;
   align-items: center;
+}
+
+/* Description Section */
+.description-section {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 60px;
+  align-items: flex-start;
 }
 
 .description-text {
   flex: 1;
-  text-align: center;
 }
 
 .description-text h2 {
   font-size: 28px;
-  margin-bottom: 10px;
-  font-weight: bolder;
-  font-family: 'Poppins', sans-serif;
+  margin-bottom: 15px;
+  font-weight: 700;
+  color: #111;
+  border-bottom: 2px solid #f59e0b; /* Amber accent */
+  display: inline-block;
+  padding-bottom: 5px;
 }
 
 .description-text p {
-  font-size: 19px;
-  margin-top: 28px;
+  font-size: 16px;
   line-height: 1.8;
-  color: #333;
-  font-weight: 600;
-  font-family: var(--primary-font);
+  color: #374151;
+}
+
+.video-section {
+  flex: 1;
+  max-width: 500px;
 }
 
 .video-section iframe {
-  flex: 1;
-  border-radius: 20px;
-  width: 600px;
-  height: 310px;
+  width: 100%;
+  height: 280px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  border: none;
 }
 
+/* Cast Section */
 .cast-section {
-  margin-top: 20px;
-  padding: 30px;
+  margin-bottom: 60px;
 }
 
 .cast-section h2 {
-  font-size: 32px;
-  font-weight: bold;
+  font-size: 28px;
+  font-weight: 700;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .cast-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px 15px;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 20px;
 }
 
 .cast-card {
+  background-color: #f9fafb;
+  border-radius: 12px;
+  padding: 15px;
   text-align: center;
-  background-color: #c2bfbf;
-  border-radius: 10px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
-  display: flex;
-  padding: 10px;
+  transition: all 0.3s ease;
+  border: 1px solid #e5e7eb;
 }
 
 .cast-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+  border-color: #f59e0b;
 }
 
 .cast-photo {
   width: 80px;
   height: 80px;
-  object-fit: cover;
-  transition: transform 0.3s ease;
   border-radius: 50%;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
-  margin-top: 20px;
-  margin-left: 20px;
+  object-fit: cover;
+  margin: 0 auto 10px;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .cast-name {
-  font-size: 16px;
-  font-weight: bold;
-  color: black;
-  margin-top: 42px;
-  margin-left: 20px;
-}
-
-.upcoming-section {
-  margin-top: 50px;
-  height: 500px;
-}
-
-.upcoming-section h2 {
-  font-size: 28px;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.slide-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.arrow-btn {
-  font-size: 24px;
-  padding: 10px 15px;
-  background-color: #eee;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.arrow-btn:hover {
-  background-color: #ccc;
-}
-
-.card-slider {
-  display: flex;
-  gap: 20px;
-  overflow: hidden;
-  width: 100%;
-}
-
-.show-card {
-  width: 265px;
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  padding: 15px;
-  text-align: center;
-  flex-shrink: 0;
-  transition: transform 0.3s;
-}
-
-.image-container {
-  position: relative;
-  width: 250px;
-  height: 275px;
-  overflow: hidden;
-  border-radius: 10px;
-}
-
-.image-container img {
-  width: 250px;
-  height: 275px;
-}
-
-.city-overlay {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  background-color: #FED800;
-  color: #fff;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 12px;
-}
-
-.show-card h3 {
-  font-size: 16px;
-  margin-top: 12px;
   font-weight: 600;
-}
-
-.show-card p {
-  margin: 4px 0;
+  color: #1f2937;
   font-size: 14px;
 }
 
-.location {
-  color: #555;
-}
-
-.book-btn {
-  margin-top: 10px;
-  width: 100%;
-  background-color: var(--primary-color);
-  color: #fff;
-  padding: 6px 12px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.book-btn:hover {
-  background-color: var(--primary-color);
-}
-
+/* Reviews Section */
 .audience-reviews-section {
-  text-align: center;
+  margin-bottom: 60px;
 }
 
 .audience-reviews-section h2 {
-  font-size: 32px;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
-.review-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.arrow-btn {
-  font-size: 24px;
-  background-color: #ffffff;
-  cursor: pointer;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin: 0 10px;
-  transition: background-color 0.3s ease;
-}
-
-.arrow-btn:hover {
-  background-color: #f0f0f0;
+  font-size: 28px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 30px;
 }
 
 .reviews-container {
   display: flex;
   overflow-x: auto;
-  gap: 16px;
-  padding: 10px;
+  gap: 20px;
+  padding: 10px 5px;
   scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch; /* Smooth scroll on iOS */
+  scrollbar-width: none; /* Hide scrollbar Firefox */
 }
 
 .reviews-container::-webkit-scrollbar {
-  display: none;
+  display: none; /* Hide scrollbar Chrome/Safari */
 }
 
 .review-card {
-  max-height: 200px;
+  min-width: 300px;
+  max-width: 300px;
   background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
   padding: 20px;
-  /* width: 24%; */
-  flex: 0 0 auto;
-  text-align: left;
-}
-
-.stars {
-  color: #ffa500;
-  font-size: 18px;
-  margin-bottom: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border: 1px solid #f3f4f6;
+  flex-shrink: 0;
 }
 
 .review-meta {
   display: flex;
   justify-content: space-between;
+  font-size: 12px;
+  color: #6b7280;
   margin-bottom: 10px;
-  font-size: 15px;
-  color: #333;
 }
 
 .review-text {
-  font-size: 16px;
-  color: #444;
+  font-size: 14px;
+  color: #374151;
+  line-height: 1.5;
+}
+
+.review-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 /* -------------------- RESPONSIVE STYLES -------------------- */
+
+/* Tablet & Smaller Desktop */
 @media (max-width: 1024px) {
   .top-section {
-    flex-direction: column;
-    align-items: center;
-    height: auto;
-    padding: 20px;
-  }
-
-  .drama-poster {
-    width: 90%;
-    height: auto;
-  }
-
-  .drama-info {
-    flex-direction: column;
-    gap: 10px;
-    font-size: 22px;
-  }
-
-  .description-section {
-    flex-direction: column;
-    height: auto;
-    padding: 0;
-  }
-
-  .video-section iframe {
-    width: 100%;
-    height: 250px;
-  }
-
-  .cast-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-  }
-
-  .cast-card {
     flex-direction: column;
     align-items: center;
     text-align: center;
   }
 
-  .cast-photo {
-    margin: 10px auto 0;
+  .drama-poster {
+    width: 100%;
+    max-width: 350px;
+    height: auto;
+    aspect-ratio: 16/9;
   }
 
-  .cast-name {
-    margin: 10px auto 0;
+  .drama-details {
+    width: 100%;
+    align-items: center;
+  }
+  
+  .drama-info {
+    justify-content: center;
   }
 
-  .review-card {
-    width: 90%;
+  .description-section {
+    flex-direction: column;
+  }
+  
+  .video-section {
+    max-width: 100%;
+    width: 100%;
   }
 }
 
-@media (max-width: 600px) {
+/* Mobile Phones */
+@media (max-width: 640px) {
+  .drama-page {
+    padding: 10px;
+  }
+
+  .top-section {
+    padding: 15px;
+    margin-bottom: 30px;
+  }
+
   .drama-title {
     font-size: 24px;
-    margin-top: 20px;
+    margin-top: 15px;
   }
 
   .drama-info {
-    font-size: 18px;
+    font-size: 16px;
+    gap: 15px;
+    flex-direction: row; /* Keep rating/duration side-by-side if they fit */
   }
 
-  .description-text h2,
-  .cast-section h2,
-  .audience-reviews-section h2,
-  .upcoming-section h2 {
+  .description-text h2 {
     font-size: 22px;
+    width: 100%;
+    text-align: center;
+    border-bottom: none;
   }
 
   .description-text p {
-    font-size: 16px;
+    font-size: 14px;
+    text-align: justify;
   }
 
-  .cast-grid {
-    grid-template-columns: 1fr;
+  .video-section iframe {
+    height: 200px;
   }
 
-  .reviews-container {
+  /* Make reviews stack vertically on mobile for easier reading */
+  .review-controls {
     flex-direction: column;
-    align-items: center;
+  }
+  
+  .reviews-container {
+    flex-direction: column; /* Stack reviews */
+    width: 100%;
   }
 
   .review-card {
-    width: 100%;
-    margin-bottom: 20px;
+    min-width: 100%;
+    max-width: 100%;
+    margin-bottom: 10px;
   }
 
-  .show-card {
-    width: 90%;
+  .arrow-btn {
+    display: none; /* Hide arrows on mobile since we stack */
   }
-
-  .image-container,
-  .image-container img {
-    width: 100%;
-    height: auto;
+  
+  .cast-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns for cast on mobile */
   }
 }
