@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { X, Calendar, MapPin, Clock } from "lucide-react";
+import { X, Calendar, MapPin, Clock, Loader2 } from "lucide-react"; // Added Loader2 icon
 import { useNavigate } from "react-router-dom";
 import {
   getSeatsByShowId,
@@ -14,6 +14,9 @@ const SeatPopup = ({ isOpen, onClose, showId }) => {
   const [backendLockedSeats, setBackendLockedSeats] = useState([]);
   const [showData, setShowData] = useState();
   const [showLoginWarning, setShowLoginWarning] = useState(false);
+  
+  // NEW: State to track if a booking request is in progress
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const user = useAuth().user;
   const navigate = useNavigate();
@@ -90,8 +93,6 @@ const SeatPopup = ({ isOpen, onClose, showId }) => {
 
   const getSeatClassName = (seat) => {
     const status = getSeatStatus(seat);
-    // MOBILE: w-5 h-5 (20px), text-[8px], rounded-sm
-    // DESKTOP (sm): w-8 h-8 (32px), text-xs, rounded-lg
     const baseClass =
       "w-5 h-5 sm:w-8 sm:h-8 rounded-sm sm:rounded-lg border sm:border-2 cursor-pointer transition-all duration-200 flex items-center justify-center text-[8px] sm:text-xs font-semibold shrink-0";
 
@@ -132,15 +133,21 @@ const SeatPopup = ({ isOpen, onClose, showId }) => {
   };
 
   const handleBooking = async () => {
+    // Check if already processing to prevent double clicks
+    if (isProcessing) return;
+
     if (selectedSeats.length === 0) {
       alert("Please select at least one seat");
       return;
     }
 
-    if (!user || user.role !== "Customer") {
+    if (!user || user.role !== "Customer" ||user.role !== "TheaterManager") {
       setShowLoginWarning(true);
       return;
     }
+
+    // Set processing state to true immediately
+    setIsProcessing(true);
 
     const lockSeatData = {
       showId,
@@ -158,26 +165,36 @@ const SeatPopup = ({ isOpen, onClose, showId }) => {
       userId: user.id,
     };
 
-    const response = await lockSeats(lockSeatData);
-    if (response.status !== 200) {
-      alert(response.data || "Failed to lock seats");
-      return;
+    try {
+        const response = await lockSeats(lockSeatData);
+        
+        if (response.status !== 200) {
+            alert(response.data || "Failed to lock seats");
+            return;
+        }
+
+        if (response.data !== "Seats locked successfully") {
+            alert(response.data);
+            return;
+        }
+
+        alert("Please Complete Your Booking in 10 minutes! Your Seats are Locked");
+
+        navigate("/booking", {
+            state: { bookingData },
+        });
+
+        setSelectedSeats([]);
+        setShowLoginWarning(false);
+        handleClose();
+
+    } catch (error) {
+        console.error("Booking error:", error);
+        alert("An error occurred while locking seats. Please try again.");
+    } finally {
+        // Always reset processing state, whether successful or failed
+        setIsProcessing(false);
     }
-
-    if (response.data !== "Seats locked successfully") {
-      alert(response.data);
-      return;
-    }
-
-    alert("Please Complete Your Booking in 10 minutes! Your Seats are Locked");
-
-    navigate("/booking", {
-      state: { bookingData },
-    });
-
-    setSelectedSeats([]);
-    setShowLoginWarning(false);
-    handleClose();
   };
 
   const handleLoginRedirect = () => {
@@ -191,6 +208,7 @@ const SeatPopup = ({ isOpen, onClose, showId }) => {
   };
 
   const handleClose = () => {
+    if (isProcessing) return; // Prevent closing while processing
     setSelectedSeats([]);
     setBackendLockedSeats([]);
     setShowLoginWarning(false);
@@ -269,6 +287,7 @@ const SeatPopup = ({ isOpen, onClose, showId }) => {
                     onClick={() => handleSeatClick(seat)}
                     className={getSeatClassName(seat)}
                     title={`${seat.row}${seat.number} - LKR ${seat.price.toLocaleString()}`}
+                    disabled={isProcessing} // Disable seat selection while processing
                   >
                     {seat.number}
                   </button>
@@ -329,7 +348,8 @@ const SeatPopup = ({ isOpen, onClose, showId }) => {
             </div>
             <button
               onClick={handleClose}
-              className="p-1 sm:p-2 hover:bg-white hover:bg-opacity-20 rounded-full transition-colors shrink-0"
+              disabled={isProcessing}
+              className="p-1 sm:p-2 hover:bg-white hover:bg-opacity-20 rounded-full transition-colors shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <X className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
@@ -421,12 +441,28 @@ const SeatPopup = ({ isOpen, onClose, showId }) => {
                     <span>LKR {getTotalAmount().toLocaleString()}</span>
                   </div>
                 </div>
+                
+                {/* MODIFIED BUTTON START */}
                 <button
                   onClick={handleBooking}
-                  className="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 text-white py-2.5 sm:py-3 rounded-lg font-semibold hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 shadow-lg text-sm sm:text-base"
+                  disabled={isProcessing}
+                  className={`w-full text-white py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-200 shadow-lg text-sm sm:text-base flex items-center justify-center gap-2
+                    ${isProcessing 
+                        ? "bg-slate-400 cursor-not-allowed" 
+                        : "bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800"
+                    }`}
                 >
-                  Confirm Booking
+                  {isProcessing ? (
+                    <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Processing...
+                    </>
+                  ) : (
+                    "Confirm Booking"
+                  )}
                 </button>
+                {/* MODIFIED BUTTON END */}
+                
               </div>
             ) : (
               <div className="text-center py-4 sm:py-8 text-gray-500 text-xs sm:text-sm">
