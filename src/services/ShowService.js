@@ -31,7 +31,7 @@ export const getShowsByDramaId = ({ page = 0, size = 12, dramaId}) => {
 };
 
 export const getShowsAdmin = async ({ page = 0, size = 10, status = "all" }) => { 
-  return axios.get("show/admin/all", {
+  return axios.get("show/all/manage", {
     params: {
       page,
       size,
