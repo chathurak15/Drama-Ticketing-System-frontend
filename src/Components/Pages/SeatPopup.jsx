@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { X, Calendar, MapPin, Clock, Loader2 } from "lucide-react"; // Added Loader2 icon
+import { X, Calendar, MapPin, Clock, Loader2 } from "lucide-react"; 
 import { useNavigate } from "react-router-dom";
 import {
   getSeatsByShowId,
@@ -15,7 +15,7 @@ const SeatPopup = ({ isOpen, onClose, showId }) => {
   const [showData, setShowData] = useState();
   const [showLoginWarning, setShowLoginWarning] = useState(false);
   
-  // NEW: State to track if a booking request is in progress
+  // State to track if a booking request is in progress
   const [isProcessing, setIsProcessing] = useState(false);
 
   const user = useAuth().user;
@@ -141,7 +141,7 @@ const SeatPopup = ({ isOpen, onClose, showId }) => {
       return;
     }
 
-    if (!user || user.role !== "Customer" ||user.role !== "TheaterManager") {
+    if (!user || user.role !== "Customer" && user.role !== "TheaterManager") {
       setShowLoginWarning(true);
       return;
     }
