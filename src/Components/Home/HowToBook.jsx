@@ -42,7 +42,7 @@ const steps = Array.isArray(stepsRaw) ? stepsRaw : fallbackSteps;
       {/* Right: Video */}
       <div style={{ flex: "1 1 500px", minWidth: "300px" }}>
         <iframe
-          src="https://www.youtube.com/watch?v=IJQm3H3ZFc0"
+          src="https://www.youtube.com/embed/IJQm3H3ZFc0"
           style={{
             width: "100%",
             height: "315px",
