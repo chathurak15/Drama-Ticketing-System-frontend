@@ -30,7 +30,7 @@ export const cancelBooking = (bookingId,userId) => {
         bookingId: bookingId,
         customerId: userId
       },
-      withCredentials: true // if using Spring Security session cookies
+      withCredentials: true
     }
   );
 };
