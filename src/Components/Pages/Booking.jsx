@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import {Calendar,Clock,MapPin,Users,CreditCard,Phone,CheckCircle,ArrowLeft,QrCode,Download} from "lucide-react";
+import {
+  Calendar,
+  Clock,
+  MapPin,
+  Users,
+  CreditCard,
+  ArrowLeft,
+} from "lucide-react";
 import { useAuth } from "../../utils/AuthContext";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getShowById } from "../../services/ShowService.js";
@@ -14,6 +21,7 @@ const BookingPage = () => {
   const [showData, setShowData] = useState();
   const [bookingData, setBookingData] = useState();
   const [timeLeft, setTimeLeft] = useState(590); // 10 minutes in seconds
+  const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
     if (loading || !passedBookingData) return;
@@ -45,60 +53,76 @@ const BookingPage = () => {
       setShowData(response.data);
     }
   };
-  const [paymentMethod, setPaymentMethod] = useState("card");
-  const [paymentDetails, setPaymentDetails] = useState({
-    cardNumber: "",
-    expiryDate: "",
-    cvv: "",
-    cardholderName: "",
-  });
 
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [bookingSuccess, setBookingSuccess] = useState(false);
-  const [bookingId, setBookingId] = useState(null);
-
-  const handleInputChange = (section, field, value) => {
-    if (section === "payment") {
-      setPaymentDetails((prev) => ({ ...prev, [field]: value }));
-    }
-  };
-
-  const validateForm = () => {
-    if (paymentMethod === "card") {
-      const { cardNumber, expiryDate, cvv, cardholderName } = paymentDetails;
-      if (!cardNumber || !expiryDate || !cvv || !cardholderName) {
-        alert("Please fill in all card details");
-        return false;
-      }
-    }
-    return true;
-  };
-
-  const handleBooking = async () => {
-    if (!validateForm()) return;
+  // --- PayHere Integration Logic ---
+  const handlePayHerePayment = async () => {
     setIsProcessing(true);
-    try {
-      const response = await addBooking(bookingData);
-    if (response.status !== 200) {
-      alert("Booking failed. Please try again.");
-      return;
-    }
 
-      const newBookingId = response.data;
-      setBookingId(newBookingId);
-      setBookingSuccess(true);
-    } catch (error) {
-      if (error.response?.status === 404) {
-      alert( "Seats not available. Please select different seats.");
+    try {
+      //Create initial booking record in backend (status: PENDING)
+      const response = await addBooking(bookingData);
+
+      if (response.status !== 200) {
+        alert("Booking initiation failed. Please try again.");
+        setIsProcessing(false);
+        return;
       }
-    } finally {
+
+      // Extract Payment Data & Hash from Backend Response
+      // Backend MUST return: bookingId, merchantId, hash, amount, currency
+      const { bookingId, hash, merchantId } = response.data;
+
+      const payment = {
+        sandbox: true,
+        merchant_id: merchantId, 
+        return_url: "https://nataka.chathurakavindu.me/booking/success",
+        cancel_url: "https://nataka.chathurakavindu.me/booking/cancel",  
+        notify_url: "https://server-nataka.chathurakavindu.me/api/v1/payment/notify", 
+        order_id: bookingId,
+        items: `Ticket for ${showData.drama.title}`,
+        amount: bookingData.totalAmount.toFixed(2),
+        currency: "LKR",
+        hash: hash,
+        first_name: user.firstName,
+        last_name: user.lastName,
+        email: user.email,
+        phone: user.phone || "0777123456",
+        address: "No.1, Colombo",
+        city: "Colombo",
+        country: "Sri Lanka",
+      };
+
+      // Define PayHere Event Handlers
+      window.payhere.onCompleted = function onCompleted(orderId) {
+        console.log("Payment completed. OrderID:" + orderId);
+        setIsProcessing(false);
+        navigate("/booking/ticket/" + orderId);
+      };
+
+      window.payhere.onDismissed = function onDismissed() {
+        console.log("Payment dismissed");
+        setIsProcessing(false);
+      };
+
+      window.payhere.onError = function onError(error) {
+        console.log("Error:" + error);
+        setIsProcessing(false);
+        alert("Payment Error: " + error);
+      };
+
+      // Open PayHere Popup
+      window.payhere.startPayment(payment);
+
+    } catch (error) {
+      console.error("Payment Error:", error);
+      if (error.response?.status === 404) {
+        alert("Seats not available. Please select different seats.");
+      } else {
+        alert("Something went wrong. Please try again.");
+      }
       setIsProcessing(false);
     }
   };
-
-  // const handleDownloadTicket = () => {
-  //   alert("Ticket download functionality would be implemented here");
-  // };
 
   if (!bookingData || !showData) {
     return (
@@ -106,11 +130,6 @@ const BookingPage = () => {
         <p className="text-gray-600 text-lg">Loading booking details...</p>
       </div>
     );
-  };
-  
-
-   if (bookingSuccess) {
-    navigate("/booking/ticket/" + bookingId)
   }
 
   return (
@@ -129,19 +148,21 @@ const BookingPage = () => {
             </div>
             <div className="flex justify-between items-center mb-4">
               <div>
-                <h1 className="text-3xl font-bold mb-2">Complete Your Booking</h1>
+                <h1 className="text-3xl font-bold mb-2">
+                  Complete Your Booking
+                </h1>
                 <p className="text-black-100">
-              Please review your selection and provide payment details
-            </p>
+                  Please review your selection and proceed to payment
+                </p>
               </div>
-                <TimeCounter timeLeft={timeLeft} totalTime={590} />
+              <TimeCounter timeLeft={timeLeft} totalTime={590} />
             </div>
           </div>
         </div>
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Show Information */}
+            {/* Show Information (Unchanged) */}
             <div className="bg-white rounded-xl shadow-lg p-6">
               <h2 className="text-xl font-bold text-gray-800 mb-4">
                 Show Information
@@ -186,136 +207,49 @@ const BookingPage = () => {
               </div>
             </div>
 
-            {/* Payment Options */}
+            {/* Payment Options (UPDATED SECTION) */}
             <div className="bg-white rounded-xl shadow-lg p-6">
               <h2 className="text-xl font-bold text-gray-800 mb-4">
                 Payment Method
               </h2>
 
               <div className="space-y-4">
-                <div className="flex gap-4">
-                  <button
-                    onClick={() => setPaymentMethod("card")}
-                    className={`flex-1 p-4 rounded-lg border-2 transition-all ${
-                      paymentMethod === "card"
-                        ? "border-emerald-500 bg-emerald-50 text-emerald-700"
-                        : "border-gray-200 hover:border-gray-300"
-                    }`}
-                  >
-                    <CreditCard className="w-6 h-6 mx-auto mb-2" />
-                    <p className="font-semibold">Credit/Debit Card</p>
-                  </button>
-                  <button
-                    onClick={() => setPaymentMethod("mobile")}
-                    className={`flex-1 p-4 rounded-lg border-2 transition-all ${
-                      paymentMethod === "mobile"
-                        ? "border-emerald-500 bg-emerald-50 text-emerald-700"
-                        : "border-gray-200 hover:border-gray-300"
-                    }`}
-                  >
-                    <Phone className="w-6 h-6 mx-auto mb-2" />
-                    <p className="font-semibold">Mobile Payment</p>
-                  </button>
+                {/* Single PayHere Option */}
+                <div className="p-4 border-2 border-emerald-500 bg-emerald-50 rounded-lg flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <CreditCard className="w-8 h-8 text-emerald-600" />
+                    <div>
+                      <p className="font-bold text-emerald-800">
+                        Online Payment Gateway
+                      </p>
+                      <p className="text-sm text-emerald-600">
+                        Pay securely via PayHere
+                      </p>
+                    </div>
+                  </div>
+                  {/* Payment Method Icons */}
+                  <div className="flex gap-2 opacity-70">
+                    <img
+                      src="https://www.payhere.lk/downloads/images/payhere_square_banner.png"
+                      alt="PayHere"
+                      className="h-8"
+                    />
+                  </div>
                 </div>
 
-                {paymentMethod === "card" && (
-                  <div className="space-y-4 pt-4 border-t">
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div className="md:col-span-2">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Cardholder Name *
-                        </label>
-                        <input
-                          type="text"
-                          value={paymentDetails.cardholderName}
-                          onChange={(e) =>
-                            handleInputChange(
-                              "payment",
-                              "cardholderName",
-                              e.target.value
-                            )
-                          }
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                          placeholder="Name on card"
-                        />
-                      </div>
-                      <div className="md:col-span-2">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Card Number *
-                        </label>
-                        <input
-                          type="text"
-                          value={paymentDetails.cardNumber}
-                          onChange={(e) =>
-                            handleInputChange(
-                              "payment",
-                              "cardNumber",
-                              e.target.value
-                            )
-                          }
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                          placeholder="1234 5678 9012 3456"
-                          maxLength="19"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Expiry Date *
-                        </label>
-                        <input
-                          type="text"
-                          value={paymentDetails.expiryDate}
-                          onChange={(e) =>
-                            handleInputChange(
-                              "payment",
-                              "expiryDate",
-                              e.target.value
-                            )
-                          }
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                          placeholder="MM/YY"
-                          maxLength="5"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          CVV *
-                        </label>
-                        <input
-                          type="text"
-                          value={paymentDetails.cvv}
-                          onChange={(e) =>
-                            handleInputChange("payment", "cvv", e.target.value)
-                          }
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                          placeholder="123"
-                          maxLength="3"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {paymentMethod === "mobile" && (
-                  <div className="pt-4 border-t">
-                    <div className="bg-blue-50 p-4 rounded-lg">
-                      <p className="text-blue-800 font-semibold mb-2">
-                        Mobile Payment Options:
-                      </p>
-                      <div className="space-y-2 text-sm text-blue-700">
-                        <p>• Dialog eZ Cash</p>
-                        <p>• Mobitel mCash</p>
-                        <p>• Hutch PayMe</p>
-                        <p>• Airtel Money</p>
-                      </div>
-                    </div>
-                  </div>
-                )}
+                <div className="bg-blue-50 p-4 rounded-lg mt-4">
+                  <p className="text-blue-800 text-sm font-semibold mb-1">
+                    Accepted Payment Methods:
+                  </p>
+                  <p className="text-blue-700 text-sm">
+                    VISA, MasterCard, Amex, eZ Cash, mCash, Genie, Vishwa & more.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Booking Summary */}
+          {/* Booking Summary (Sidebar) */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-xl shadow-lg p-6 sticky top-6">
               <h2 className="text-xl font-bold text-gray-800 mb-4">
@@ -339,7 +273,9 @@ const BookingPage = () => {
                       className="flex justify-between items-center p-3 bg-gray-50 rounded-lg"
                     >
                       <div>
-                        <p className="text-sm text-gray-600">{seat.seatIdentifier}</p>
+                        <p className="text-sm text-gray-600">
+                          {seat.seatIdentifier}
+                        </p>
                       </div>
                       <p className="font-semibold">
                         LKR {seat.price ? seat.price.toLocaleString() : "0.00"}
@@ -359,9 +295,9 @@ const BookingPage = () => {
                 </div>
               </div>
 
-              {/* Booking Button */}
+              {/* Pay Button (Updated to trigger PayHere) */}
               <button
-                onClick={handleBooking}
+                onClick={handlePayHerePayment}
                 disabled={isProcessing}
                 className={`w-full py-3 rounded-lg font-semibold transition-all duration-200 ${
                   isProcessing
@@ -375,12 +311,12 @@ const BookingPage = () => {
                     Processing...
                   </div>
                 ) : (
-                  "Confirm Booking"
+                  "Pay LKR " + bookingData.totalAmount.toLocaleString()
                 )}
               </button>
 
               <p className="text-xs text-gray-500 mt-3 text-center">
-                By confirming, you agree to our terms and conditions
+                By confirming, you agree to our terms and conditions. Payment is processed securely by PayHere.
               </p>
             </div>
           </div>
