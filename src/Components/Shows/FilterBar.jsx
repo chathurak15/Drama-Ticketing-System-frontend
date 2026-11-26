@@ -1,7 +1,8 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import "../../assets/css/FilterBar.css";
 import { getCity, getLocationByCity } from "../../services/ShowService";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "../../utils/useNavigateCompat";
 
 const FilterBar = ({ filters, onFilterChange }) => {
   const [localFilters, setLocalFilters] = useState(filters);

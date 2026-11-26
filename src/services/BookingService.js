@@ -6,8 +6,23 @@ export const addBooking = (bookingData) => {
   });
 };
 
+export const initiatePayHerePayment = (payload) => {
+  return axios.post("payment/payhere/initiate", payload, {
+    withCredentials: true,
+  });
+};
+
 export const getBooking = (ticketId) => {
   return axios.get("booking", {
+    params: {
+      ticketId: ticketId,
+    },
+    withCredentials: true,
+  });
+};
+
+export const getPartnerBooking = (ticketId) => {
+  return axios.get("booking/partner", {
     params: {
       ticketId: ticketId,
     },

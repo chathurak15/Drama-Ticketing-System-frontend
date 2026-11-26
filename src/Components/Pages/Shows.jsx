@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import FilterBar from "../Shows/FilterBar";
 import ShowCard from "../Shows/ShowCard";
@@ -6,14 +7,14 @@ import Header from "../Header/Header.jsx";
 import Footer from "../Footer/Footer.jsx";
 import { getShows } from "../../services/ShowService.js";
 import Pagination from "../Drama/Pagination";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useSearchParams } from "next/navigation";
 
 const ITEMS_PER_PAGE = 12;
 
 const Shows = () => {
   
-  const location = useLocation();
-  const query = new URLSearchParams(location.search);
+  const searchParams = useSearchParams();
+  const query = searchParams || new URLSearchParams();
 
   const [filters, setFilters] = useState({
     title: query.get("title") || "",
@@ -51,7 +52,10 @@ const Shows = () => {
   ])
     .then(([res]) => {
       const data = res.data;
-      setShows(data.content || []);
+      const approvedOnly = (data?.content || []).filter(
+        (s) => s.status && (s.status.toLowerCase() === "approved" || s.status.toLowerCase() === "active")
+      );
+      setShows(approvedOnly);
       setTotalPages(data.totalPages || 1);
     })
     .catch((err) => {

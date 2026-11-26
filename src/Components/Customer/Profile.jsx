@@ -1,8 +1,12 @@
+"use client";
+
 // src/components/dashboard/Profile.jsx
 import React, { useState,useEffect } from 'react';
 import { User, Mail, Phone, Edit2, Save, X } from 'lucide-react';
 import { useAuth } from '../../utils/AuthContext';
-import{ updateUser} from '../../services/UserService';
+import { updateUser } from '../../services/UserService';
+import notify from '../../utils/notify';
+import SecuritySettingsCard from '../common/SecuritySettingsCard';
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -21,14 +25,18 @@ const Profile = () => {
 
   const handleSave = async () => {
     if (!editedUser) return;
-    const response = await updateUser(editedUser);
-    if (response.error) {
-        alert('Error updating profile: ' + response.error);
+    try {
+      const response = await updateUser(editedUser);
+      if (response.error) {
+        notify.error('Error updating profile: ' + response.error);
         return;
+      }
+      notify.success('Profile updated successfully!');
+      setUser(editedUser);
+      setIsEditing(false);
+    } catch (err) {
+      notify.apiError(err, 'Failed to update profile. Please try again.');
     }
-    alert('Profile updated successfully!');
-    setUser(editedUser);
-    setIsEditing(false);
   };
 
   const handleCancel = () => {
@@ -174,6 +182,10 @@ const Profile = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="mt-8 border-t border-gray-200 pt-6">
+        <SecuritySettingsCard />
       </div>
     </div>
   );

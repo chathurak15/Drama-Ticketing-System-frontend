@@ -1,11 +1,17 @@
+"use client";
 import React, { useEffect, useState,useRef } from "react";
 import {QrCode, Calendar, Clock, MapPin, Download, Theater, Smartphone } from "lucide-react";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
-import { useParams } from "react-router-dom";
+
+import { useParams } from "next/navigation";
 import { getBooking } from "../../services/BookingService";
 import { getShowById } from "../../services/ShowService";
-import { QRCodeSVG } from "qrcode.react";
+import { QRCodeCanvas, QRCodeSVG } from "qrcode.react";
+import notify from "../../utils/notify";
+import {
+  generateTicketPdf,
+  loadLocalImageAsDataUrl,
+  extractQrDataUrl,
+} from "../../utils/ticketPdfGenerator";
 
 const TicketView = () => {
   const { id } = useParams();
@@ -50,33 +56,25 @@ const TicketView = () => {
   }
 
   const handleDownloadTicket = async () => {
-  const ticketElement = ticketRef.current;
-  if (!ticketElement) return;
-  try {
-    const canvas = await html2canvas(ticketElement, {
-      scale: 1.5,
-      useCORS: true,
-    });
-    const imgData = canvas.toDataURL("image/jpeg", 1); 
-    const pdf = new jsPDF({
-      orientation: "portrait",
-      unit: "px",
-      format: "a4",
-    });
-    pdf.addImage(
-      imgData,
-      "JPEG",
-      0,
-      0,
-      pdf.internal.pageSize.getWidth(),
-      pdf.internal.pageSize.getHeight()
-    );
-    pdf.save(`ticket_${bookingData.ticketId}.pdf`);
-  } catch (err) {
-    alert("Failed to generate PDF. See console for details.");
-    console.error(err);
-  }
-};
+    try {
+      const qrCanvas = document.getElementById("ticket-qr-canvas") || ticketRef.current?.querySelector("canvas");
+      const qrDataUrl = extractQrDataUrl(qrCanvas);
+      const logoDataUrl = await loadLocalImageAsDataUrl("/logo-nataka-white.png");
+
+      const pdf = await generateTicketPdf({
+        bookingData,
+        showData,
+        qrDataUrl,
+        logoDataUrl,
+      });
+
+      pdf.save(`ticket_${bookingData.ticketId || id}.pdf`);
+      notify.success("e-Ticket PDF downloaded successfully!");
+    } catch (err) {
+      notify.error("Failed to generate PDF. Please try again.");
+      console.error(err);
+    }
+  };
 
  
 
@@ -126,7 +124,7 @@ const TicketView = () => {
                     <span style={{ fontWeight: 600, color: "#1f2937" }}>Scan to Enter</span>
                   </div>
                   <div style={{ background: "#fff", borderRadius: "0.75rem", padding: "1rem", boxShadow: "0 1px 4px rgba(0,0,0,0.04)", display: "flex", justifyContent: "center" }}>
-                    <QRCodeSVG value={`${bookingData.ticketId}`} size={192} />
+                    <QRCodeCanvas id="ticket-qr-canvas" value={`${bookingData.ticketId}`} size={192} />
                   </div>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", marginTop: "1rem", fontSize: "0.9rem", color: "#4b5563" }}>
                     <Smartphone style={{ width: "16px", height: "16px" }} />
@@ -230,6 +228,7 @@ const TicketView = () => {
                     <li>• Please arrive 30 minutes before the show time</li>
                     <li>• Keep your QR code ready for scanning</li>
                     <li>• Screenshots or printed copies are accepted</li>
+                    <li>• All ticket sales are final and non-refundable unless the show is cancelled or postponed by the organizer. You may freely share your QR e-ticket with a friend or family member if you cannot attend.</li>
                     <li>• Contact support if you face any issues</li>
                   </ul>
                 </div>

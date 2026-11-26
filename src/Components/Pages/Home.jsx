@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import Header from "../Header/Header";
 import Body from "../Body/Body";
@@ -8,7 +9,7 @@ import HowToBook from "../Home/HowToBook";
 import Footer from "../Footer/Footer";
 import CardSlider from "../Home/CardSlider";
 import SearchShows from "../Home/SearchShows";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "../../utils/useNavigateCompat";
 import "../../assets/css/Home.css";
 import { getShows } from "../../services/ShowService";
 import useTranslation from "../../hooks/useTranslation";
@@ -30,7 +31,11 @@ function Home() {
           // Optional: Add a small delay so the spinner doesn't flash too quickly
           new Promise(resolve => setTimeout(resolve, 800)) 
         ]);
-        setUpcomingShows(showsResponse.data.content);
+        const rawShows = showsResponse?.data?.content || [];
+        const approvedOnly = rawShows.filter(
+          (s) => s.status && (s.status.toLowerCase() === "approved" || s.status.toLowerCase() === "active")
+        );
+        setUpcomingShows(approvedOnly);
       } catch (error) {
         console.error("Error fetching home data:", error);
       } finally {

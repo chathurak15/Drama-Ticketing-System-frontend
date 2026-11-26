@@ -1,13 +1,15 @@
+"use client";
 import React, { useState } from "react";
 import Links from "../Links/Links";
 import logo from "../../assets/logo nataka white.png";
 import "../../assets/css/Header.css";
-import { useLocation } from "react-router-dom";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
+import ThemeToggle from "../common/ThemeToggle";
 
 function Header() {
-  const location = useLocation();
-  const isHome = location.pathname === "/";
+  const pathname = usePathname();
+  const isHome = pathname === "/";
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -19,13 +21,14 @@ function Header() {
           </div>
 
           {/* Desktop Links */}
-          <div className="hidden md:flex">
+          <div className="hidden md:flex items-center gap-4">
             <Links />
+            <ThemeToggle variant="icon" />
           </div>
 
           {/* Mobile Hamburger Icon */}
           <button
-            className="md:hidden text-white z-50"
+            className="md:hidden text-white z-50 cursor-pointer"
             onClick={() => setMenuOpen(!menuOpen)}
           >
             {menuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
@@ -33,8 +36,12 @@ function Header() {
 
           {/* Mobile Dropdown */}
           {menuOpen && (
-            <div className="absolute top-full left-0 w-full bg-black text-white p-4 shadow-lg z-40 md:hidden">
+            <div className="absolute top-full left-0 w-full bg-black text-white p-4 shadow-lg z-40 md:hidden space-y-3">
               <Links />
+              <div className="pt-2 border-t border-white/20 flex justify-between items-center">
+                <span className="text-xs">Theme</span>
+                <ThemeToggle variant="pill" />
+              </div>
             </div>
           )}
         </div>

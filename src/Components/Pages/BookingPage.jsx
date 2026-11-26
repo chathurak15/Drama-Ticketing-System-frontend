@@ -1,5 +1,6 @@
+"use client";
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from "next/navigation";
 import showsData from '../Shows/showsData';
 import './BookingPage.css';
 

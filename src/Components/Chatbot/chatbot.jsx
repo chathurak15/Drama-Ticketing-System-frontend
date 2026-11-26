@@ -1,242 +1,275 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { MessageCircle, Send, X, User, LogIn } from 'lucide-react';
-import { useAuth } from '../../utils/AuthContext';
-import { getChatBot } from '../../services/ChatBotService';
-import { useNavigate } from 'react-router-dom';
+"use client";
+
+import React, { useState, useRef, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { MessageCircle, Send, X, User, Sparkles, Compass, Ticket, LogIn } from "lucide-react";
+import { useAuth } from "../../utils/AuthContext";
+import { getChatBot } from "../../services/ChatBotService";
+import { useNavigate } from "../../utils/useNavigateCompat";
 
 const Chatbot = () => {
+  const pathname = usePathname();
+  if (pathname?.includes("/seats") || pathname?.startsWith("/booking")) {
+    return null;
+  }
+
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState([]);
-  const [inputValue, setInputValue] = useState('');
+  const [messages, setMessages] = useState([
+    {
+      id: 1,
+      text: "Ayubowan! 🙏 Welcome to Nataka.lk – Sri Lanka's Official Stage Drama & Theatre Platform.\n\nI can recommend top-rated stage plays, check show schedules, find venues in Colombo or across Sri Lanka, and guide you through ticket bookings. How can I assist you?",
+      sender: "bot",
+      timestamp: new Date(),
+    },
+  ]);
+  const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
-  const { user } = useAuth(); 
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    if (isOpen) {
+      scrollToBottom();
+    }
+  }, [messages, isOpen]);
 
   const sendMessageToAPI = async (message) => {
     try {
       const response = await getChatBot(message);
-      return { reply: response.data.reply };
+      return { reply: response?.data?.reply || "I am glad to help with your stage drama queries!" };
     } catch (error) {
-      console.log(error);
-      return { reply: "Sorry, I'm having trouble connecting right now. Please try again!" };
+      return {
+        reply:
+          "🎭 Welcome to Nataka.lk! You can explore our iconic Sri Lankan stage dramas at /dramas or browse live shows at /shows. Let me know if you'd like recommendations on Kelani Palama, Sinhabahu, or comedy plays!",
+      };
     }
   };
 
-  const handleSendMessage = async (e) => {
-    if (e) e.preventDefault();
-    if (!inputValue.trim()) return;
+  const handleSendMessage = async (textToSend) => {
+    const query = typeof textToSend === "string" ? textToSend : inputValue;
+    if (!query || !query.trim()) return;
 
     const userMessage = {
-      id: messages.length + 1,
-      text: inputValue,
-      sender: 'user',
-      timestamp: new Date()
+      id: Date.now(),
+      text: query.trim(),
+      sender: "user",
+      timestamp: new Date(),
     };
 
     setMessages((prev) => [...prev, userMessage]);
-    setInputValue('');
+    setInputValue("");
     setIsTyping(true);
 
-    setTimeout(async () => {
-      const apiResponse = await sendMessageToAPI(inputValue);
+    try {
+      const apiResponse = await sendMessageToAPI(query.trim());
       const botMessage = {
-        id: messages.length + 2,
+        id: Date.now() + 1,
         text: apiResponse.reply,
-        sender: 'bot',
-        timestamp: new Date()
+        sender: "bot",
+        timestamp: new Date(),
       };
       setMessages((prev) => [...prev, botMessage]);
+    } catch (err) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now() + 1,
+          text: "I couldn't process that right now. Please explore our /dramas or /shows pages for the latest live theatre!",
+          sender: "bot",
+          timestamp: new Date(),
+        },
+      ]);
+    } finally {
       setIsTyping(false);
-    }, 1500);
+    }
   };
 
-  const handleLoginRedirect = () => {
-    setIsOpen(false);
-    navigate('/login'); 
+  // Helper to render text with clickable internal links
+  const renderMessageContent = (text) => {
+    if (!text) return "";
+    const parts = text.split(/(\/(?:drama|show|dramas|shows)(?:\/[\w-]+)?)/g);
+
+    return parts.map((part, i) => {
+      if (part.startsWith("/") && (part.startsWith("/drama") || part.startsWith("/show"))) {
+        return (
+          <Link
+            key={i}
+            href={part}
+            onClick={() => setIsOpen(false)}
+            className="inline-flex items-center gap-1 font-bold text-amber-600 dark:text-amber-400 underline hover:text-amber-700 mx-1 bg-amber-500/10 px-1.5 py-0.5 rounded"
+          >
+            {part}
+          </Link>
+        );
+      }
+      return <span key={i}>{part}</span>;
+    });
   };
+
+  const quickPrompts = [
+    { label: "🎭 Suggest Dramas", query: "Suggest top Sri Lankan stage dramas" },
+    { label: "📅 Upcoming Shows", query: "What upcoming shows are scheduled?" },
+    { label: "📍 Shows in Colombo", query: "Upcoming stage shows in Colombo" },
+    { label: "🎟️ How to Book", query: "How do I book tickets on Nataka.lk?" },
+  ];
 
   return (
-    <div className="fixed bottom-4 right-4 z-50" style={{ fontFamily: 'Poppins, sans-serif' }}>
+    <div className="fixed bottom-5 right-5 z-50 font-['Plus_Jakarta_Sans',sans-serif]">
       {isOpen && (
-        <div className="absolute bottom-0 right-0 w-100 h-[600px] bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden animate-in slide-in-from-bottom-5 duration-300">
+        <div className="absolute bottom-16 right-0 w-[92vw] sm:w-[380px] h-[550px] max-h-[82vh] bg-white dark:bg-[#12121a] rounded-3xl shadow-2xl border border-slate-200 dark:border-white/10 overflow-hidden flex flex-col animate-in slide-in-from-bottom-5 duration-300">
           {/* Header */}
-          <div className="booking-btn p-2 text-white bg-gradient-to-r from-red-800 to-red-600">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-                  <img src="/public/images/logo nataka.png" className="w-8" alt="Logo" />
-                </div>
-                <div>
-                  <h3 className="font-semibold">Nataka Assistant</h3>
-                  <p className="text-xs text-red-100">Your drama booking helper</p>
-                </div>
+          <div className="p-3.5 bg-gradient-to-r from-[#661F19] to-[#8a2b23] text-white flex items-center justify-between shrink-0 shadow-md">
+            <div className="flex items-center space-x-3">
+              <div className="w-9 h-9 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center border border-white/20">
+                <Sparkles className="w-5 h-5 text-amber-300" />
               </div>
-              <button onClick={() => setIsOpen(false)} className="p-1 hover:bg-white/20 rounded-full">
-                <X size={20} />
-              </button>
+              <div>
+                <h3 className="font-bold text-sm tracking-wide">Nataka AI Assistant</h3>
+                <p className="text-[11px] text-amber-200/80">Sri Lanka Drama &amp; Ticketing Guide</p>
+              </div>
             </div>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="p-1.5 hover:bg-white/20 rounded-full transition-colors text-white"
+              aria-label="Close chat"
+            >
+              <X size={18} />
+            </button>
           </div>
 
-          {/* Body */}
-          {!user ? (
-            <div className="flex flex-col items-center justify-center h-full text-center p-8">
-              <p className="text-lg font-semibold text-gray-800 mb-4">
-                Please sign in to use Nataka Assistant
-              </p>
-              <button
-                onClick={handleLoginRedirect}
-                className="px-6 py-3 bg-gradient-to-r from-red-700 to-red-500 text-white rounded-full shadow hover:from-red-800 hover:to-red-600 transition-all duration-300"
+          {/* Messages Body */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-3.5 bg-slate-50 dark:bg-[#0e0e16]">
+            {messages.map((message) => (
+              <div
+                key={message.id}
+                className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
               >
-                <LogIn className="inline-block mr-2" size={18} />
-                Go to Login
-              </button>
-            </div>
-          ) : (
-            <>
-              {/* Chat Messages */}
-              <div className="flex-1 h-96 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-red-50 to-white">
-                {messages.map((message) => (
+                <div
+                  className={`flex items-start space-x-2 max-w-[85%] ${
+                    message.sender === "user" ? "flex-row-reverse space-x-reverse" : ""
+                  }`}
+                >
                   <div
-                    key={message.id}
-                    className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                    className={`w-7 h-7 rounded-full shrink-0 flex items-center justify-center text-xs font-bold ${
+                      message.sender === "user"
+                        ? "bg-amber-600 text-white"
+                        : "bg-[#661F19] text-amber-300 border border-amber-500/30"
+                    }`}
                   >
-                    <div
-                      className={`flex items-start space-x-2 max-w-xs ${
-                        message.sender === 'user' ? 'flex-row-reverse space-x-reverse' : ''
+                    {message.sender === "user" ? <User size={14} /> : "🎭"}
+                  </div>
+
+                  <div
+                    className={`px-3.5 py-2.5 rounded-2xl text-xs sm:text-[13px] leading-relaxed ${
+                      message.sender === "user"
+                        ? "bg-amber-600 text-white rounded-br-sm shadow-sm"
+                        : "bg-white dark:bg-[#181824] border border-slate-200 dark:border-white/10 text-slate-800 dark:text-slate-200 rounded-bl-sm shadow-sm"
+                    }`}
+                  >
+                    <p className="whitespace-pre-line">{renderMessageContent(message.text)}</p>
+                    <p
+                      className={`text-[9px] mt-1 text-right ${
+                        message.sender === "user" ? "text-amber-100" : "text-slate-400 dark:text-slate-500"
                       }`}
                     >
-                      <div
-                        className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                          message.sender === 'user'
-                            ? 'bg-red-600 text-white'
-                            : 'bg-blue-100 text-white w-15 h-12 rounded-full flex items-center justify-center p-2'
-                        }`}
-                      >
-                        {message.sender === 'user' ? (
-                          <User size={16} />
-                        ) : (
-                          <img src="/public/images/logo nataka.png" alt="Bot" />
-                        )}
-                      </div>
-                      <div
-                        className={`px-4 py-2 rounded-2xl ${
-                          message.sender === 'user'
-                            ? 'bg-red-600 text-white rounded-br-md'
-                            : 'bg-white border border-gray-200 text-gray-800 rounded-bl-md shadow-sm'
-                        }`}
-                      >
-                        <p className="text-sm whitespace-pre-line">{message.text}</p>
-                        <p
-                          className={`text-xs mt-1 ${
-                            message.sender === 'user' ? 'text-red-100' : 'text-gray-500'
-                          }`}
-                        >
-                          {message.timestamp.toLocaleTimeString([], {
-                            hour: '2-digit',
-                            minute: '2-digit'
-                          })}
-                        </p>
-                      </div>
-                    </div>
+                      {new Date(message.timestamp).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </p>
                   </div>
-                ))}
-
-                {/* Typing indicator */}
-                {isTyping && (
-                  <div className="flex justify-start">
-                    <div className="flex items-start space-x-2">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-400 to-red-500" />
-                      <div className="bg-white border border-gray-200 rounded-2xl rounded-bl-md px-4 py-2 shadow-sm">
-                        <div className="flex space-x-1">
-                          <div className="w-2 h-2 bg-red-400 rounded-full animate-bounce" />
-                          <div
-                            className="w-2 h-2 bg-red-400 rounded-full animate-bounce"
-                            style={{ animationDelay: '0.1s' }}
-                          />
-                          <div
-                            className="w-2 h-2 bg-red-400 rounded-full animate-bounce"
-                            style={{ animationDelay: '0.2s' }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                <div ref={messagesEndRef} />
-              </div>
-
-              {/* Chat Input */}
-              <div className="p-4 border-t border-gray-200 bg-white">
-                <div className="flex space-x-2">
-                  <input
-                    type="text"
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && handleSendMessage(e)}
-                    placeholder="Ask about shows, tickets, or venues..."
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-red-500 focus:border-transparent text-sm"
-                  />
-                  <button
-                    onClick={handleSendMessage}
-                    className="w-10 h-10 bg-gradient-to-r from-red-800 to-red-600 text-white rounded-full hover:from-red-900 hover:to-red-700 transition-all duration-200 flex items-center justify-center"
-                  >
-                    <Send size={16} />
-                  </button>
-                </div>
-
-                {/* Quick Actions */}
-                <div className="flex flex-wrap gap-2 mt-3">
-                  {['upcoming shows', 'book ticket', 'payment', 'location'].map((action) => (
-                    <button
-                      key={action}
-                      onClick={() => setInputValue(action)}
-                      className="px-3 py-1 text-xs bg-red-50 text-red-600 rounded-full hover:bg-red-100 transition-colors duration-200 border border-red-200"
-                    >
-                      {action}
-                    </button>
-                  ))}
                 </div>
               </div>
-            </>
-          )}
-        </div>
-      )}
+            ))}
 
-      {/* Chat Toggle Button */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-16 h-16 bg-gradient-to-r from-red-800 to-red-600 text-white rounded-full shadow-2xl hover:from-red-900 hover:to-red-700 transition-all duration-300 flex items-center justify-center group hover:scale-110"
-      >
-        {isOpen ? (
-          <X size={24} className="group-hover:rotate-90 transition-transform duration-300" />
-        ) : (
-          <div className="flex items-center justify-center">
-            <MessageCircle size={24} className="group-hover:scale-110 transition-transform duration-300" />
-            {!user && (
-              <div className="absolute -top-1 -right-1 w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center">
-                <LogIn size={12} className="text-white" />
+            {isTyping && (
+              <div className="flex justify-start">
+                <div className="flex items-center space-x-2 bg-white dark:bg-[#181824] border border-slate-200 dark:border-white/10 rounded-2xl rounded-bl-sm px-3.5 py-2.5 shadow-sm">
+                  <div className="flex space-x-1">
+                    <div className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-bounce" />
+                    <div
+                      className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-bounce"
+                      style={{ animationDelay: "0.15s" }}
+                    />
+                    <div
+                      className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-bounce"
+                      style={{ animationDelay: "0.3s" }}
+                    />
+                  </div>
+                  <span className="text-[11px] text-slate-400">Nataka Assistant is typing...</span>
+                </div>
               </div>
             )}
-          </div>
-        )}
-      </button>
 
-      {/* Notification Badge */}
-      {!isOpen && !user && (
-        <div className="absolute -top-2 -right-2 w-6 h-6 bg-orange-500 text-white rounded-full flex items-center justify-center text-xs font-bold animate-pulse">
-          !
+            <div ref={messagesEndRef} />
+          </div>
+
+          {/* Quick Prompts */}
+          <div className="px-3 py-2 bg-white dark:bg-[#12121a] border-t border-slate-100 dark:border-white/5 flex gap-1.5 overflow-x-auto scrollbar-none">
+            {quickPrompts.map((qp, idx) => (
+              <button
+                key={idx}
+                onClick={() => handleSendMessage(qp.query)}
+                className="px-2.5 py-1 text-[11px] font-semibold rounded-full bg-slate-100 dark:bg-white/5 hover:bg-amber-500/10 hover:text-amber-600 dark:hover:text-amber-400 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/10 shrink-0 transition-colors"
+              >
+                {qp.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Input Footer */}
+          <div className="p-3 border-t border-slate-200 dark:border-white/10 bg-white dark:bg-[#141420]">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSendMessage();
+              }}
+              className="flex items-center gap-2"
+            >
+              <input
+                type="text"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                placeholder="Ask about stage dramas, shows, tickets..."
+                className="flex-1 px-3.5 py-2 text-xs bg-slate-50 dark:bg-[#1a1a28] border border-slate-200 dark:border-white/10 rounded-full text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-amber-500"
+              />
+              <button
+                type="submit"
+                disabled={!inputValue.trim()}
+                className="w-8 h-8 rounded-full bg-gradient-to-r from-[#661F19] to-amber-600 text-white flex items-center justify-center shrink-0 disabled:opacity-40 transition-all hover:scale-105 active:scale-95 shadow-md"
+                aria-label="Send message"
+              >
+                <Send size={14} />
+              </button>
+            </form>
+          </div>
         </div>
       )}
+
+      {/* Floating Toggle Button */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-14 h-14 bg-gradient-to-tr from-[#661F19] to-amber-600 text-white rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all duration-300 flex items-center justify-center border-2 border-amber-400/40 relative group"
+        aria-label="Toggle Nataka Assistant"
+      >
+        {isOpen ? (
+          <X size={22} className="group-hover:rotate-90 transition-transform duration-300" />
+        ) : (
+          <>
+            <MessageCircle size={24} className="group-hover:scale-110 transition-transform duration-300" />
+            <span className="absolute -top-1 -right-1 flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+            </span>
+          </>
+        )}
+      </button>
     </div>
   );
 };

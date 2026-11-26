@@ -1,0 +1,868 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant light (&:where(.light, .light *));
+
+@layer base {
+  :root {
+    --primary-color: #661F19;
+    --primary-hover: #85261F;
+    --primary-dark: #4A1410;
+    --accent-gold: #D97706;
+    --accent-yellow: #FED800;
+    --secondary-color: #373333;
+    --bg-dark: #0A0A0F;
+    --bg-card: #14141B;
+    --text-light: #F8FAFC;
+    --text-muted: #94A3B8;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  body {
+    overflow-x: hidden;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  html.dark body {
+    background-color: #0d0d12;
+    color: #e2e8f0;
+  }
+
+  html.light body {
+    background-color: #f8fafc;
+    color: #0f172a;
+  }
+}
+
+/* ========================================================
+   RESPONSIVE PERCENTAGE DESKTOP CONTAINER SYSTEM
+   Removes excessive desktop margins on wide/large displays
+   ======================================================== */
+.desktop-container,
+.site-container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .desktop-container,
+  .site-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .desktop-container,
+  .site-container {
+    width: 95% !important;
+    max-width: 95% !important;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .desktop-container,
+  .site-container {
+    width: 93% !important;
+    max-width: 93% !important;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+
+@media (min-width: 1536px) {
+  .desktop-container,
+  .site-container {
+    width: 92% !important;
+    max-width: 1720px !important;
+  }
+}
+
+@media (min-width: 1920px) {
+  .desktop-container,
+  .site-container {
+    width: 90% !important;
+    max-width: 1880px !important;
+  }
+}
+
+/* ========================================================
+   THEATRICAL BUTTONS & ACTION ELEMENTS
+   ======================================================== */
+
+/* Nataka #661F19 Primary Theatrical Maroon Buttons */
+.booking-btn,
+.btn-theatre-maroon {
+  background: linear-gradient(135deg, #661F19 0%, #85261F 100%) !important;
+  color: #ffffff !important;
+  font-weight: 600;
+  transition: all 0.25s ease-in-out;
+  box-shadow: 0 4px 14px rgba(102, 31, 25, 0.35);
+}
+
+.booking-btn *,
+.btn-theatre-maroon * {
+  color: #ffffff !important;
+}
+
+.booking-btn:hover,
+.btn-theatre-maroon:hover {
+  background: linear-gradient(135deg, #85261F 0%, #A3332A 100%) !important;
+  color: #ffffff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 31, 25, 0.55);
+}
+
+/* Eventure.lk inspired gradient gold button with #FED800 & #D97706 */
+.btn-theatre-gold {
+  background: linear-gradient(135deg, #FED800 0%, #D97706 100%) !important;
+  color: #0f172a !important;
+  font-weight: 700;
+  transition: all 0.25s ease-in-out;
+  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.35);
+}
+
+.btn-theatre-gold * {
+  color: #0f172a !important;
+}
+
+.btn-theatre-gold:hover {
+  background: linear-gradient(135deg, #FFE033 0%, #F59E0B 100%) !important;
+  color: #0f172a !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(217, 119, 6, 0.55);
+}
+
+/* ========================================================
+   GLASSMORPHISM & THEATRICAL TICKETS
+   ======================================================== */
+
+/* Glassmorphism Card Style */
+.glass-card {
+  backdrop-filter: blur(12px);
+  border-radius: 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html.dark .glass-card {
+  background: rgba(20, 20, 27, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+html.light .glass-card {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+}
+
+.glass-card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html.dark .glass-card-hover:hover {
+  transform: translateY(-4px);
+  border-color: rgba(102, 31, 25, 0.6);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45), 0 0 20px rgba(102, 31, 25, 0.25);
+}
+
+html.light .glass-card-hover:hover {
+  transform: translateY(-4px);
+  border-color: rgba(217, 119, 6, 0.5);
+  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.08), 0 0 20px rgba(217, 119, 6, 0.1);
+}
+
+/* Authentic Sri Lankan Theatrical Ticket Perforation & Notches */
+.ticket-card {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  transition: all 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+html.dark .ticket-card {
+  background: #13131c;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+html.dark .ticket-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(212, 175, 55, 0.4);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55), 0 0 24px rgba(102, 31, 25, 0.2);
+}
+
+html.light .ticket-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+}
+
+html.light .ticket-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(217, 119, 6, 0.5);
+  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.08), 0 0 20px rgba(217, 119, 6, 0.1);
+}
+
+.ticket-divider {
+  position: relative;
+  margin: 12px 0;
+}
+
+html.dark .ticket-divider {
+  border-top: 1px dashed rgba(255, 255, 255, 0.12);
+}
+
+html.light .ticket-divider {
+  border-top: 1px dashed #cbd5e1;
+}
+
+.ticket-notch-left,
+.ticket-notch-right {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+}
+
+html.dark .ticket-notch-left,
+html.dark .ticket-notch-right {
+  background-color: #0d0d12;
+}
+
+html.dark .ticket-notch-left {
+  left: -7px;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+html.dark .ticket-notch-right {
+  right: -7px;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+html.light .ticket-notch-left,
+html.light .ticket-notch-right {
+  background-color: #f8fafc;
+}
+
+html.light .ticket-notch-left {
+  left: -7px;
+  border-right: 1px solid #cbd5e1;
+}
+
+html.light .ticket-notch-right {
+  right: -7px;
+  border-left: 1px solid #cbd5e1;
+}
+
+/* Sri Lankan Badge styling */
+.badge-colombo {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60A5FA;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.badge-selling-fast {
+  background: rgba(239, 68, 68, 0.15);
+  color: #F87171;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  animation: pulse 2s infinite;
+}
+
+.badge-gold {
+  background: rgba(217, 119, 6, 0.15);
+  color: #FBBF24;
+  border: 1px solid rgba(217, 119, 6, 0.35);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+html.dark ::-webkit-scrollbar-track {
+  background: #0d0d12;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  background: #2a2a38;
+  border-radius: 4px;
+}
+
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: #661F19;
+}
+
+html.light ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+html.light ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+html.light ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Subtle Theatrical Stage Glow */
+.theatre-spotlight {
+  background: radial-gradient(circle at 50% 0%, rgba(102, 31, 25, 0.35) 0%, rgba(10, 10, 15, 0) 70%);
+}
+
+/* Custom React Toastify Container & Notification Styling */
+.Toastify__toast-container {
+  z-index: 999999 !important;
+  width: 400px !important;
+  max-width: calc(100vw - 32px) !important;
+  box-sizing: border-box !important;
+  padding: 0 !important;
+}
+
+.Toastify__toast-container--top-right {
+  top: 1.5rem !important;
+  right: 1.5rem !important;
+}
+
+.Toastify__toast {
+  margin-bottom: 0.75rem !important;
+  border-radius: 14px !important;
+  padding: 14px 18px !important;
+  font-family: inherit !important;
+  font-size: 0.875rem !important;
+}
+
+.Toastify__toast-theme--dark {
+  background: rgba(20, 20, 30, 0.98) !important;
+  backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: #f8fafc !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+}
+
+.Toastify__toast-theme--light {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.1) !important;
+}
+
+.Toastify__toast--success {
+  border-left: 4px solid #10b981 !important;
+}
+
+.Toastify__toast--error {
+  border-left: 4px solid #ef4444 !important;
+}
+
+.Toastify__toast--warning {
+  border-left: 4px solid #f59e0b !important;
+}
+
+.Toastify__toast--info {
+  border-left: 4px solid #3b82f6 !important;
+}
+
+/* ========================================================
+   LIGHT THEME DESIGN SYSTEM (SRI LANKAN STAGE DRAMA SPEC)
+   Activates whenever <html class="light"> or data-theme="light"
+   Clean, cultured, proscenium ivory, theatre maroon & gold
+   ======================================================== */
+
+html.light {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+/* Page, Body & Container Backgrounds in Light Mode */
+html.light .bg-\[\#0a0a0f\],
+html.light .bg-\[\#0a0a10\],
+html.light .bg-\[\#0d0d12\],
+html.light .bg-\[\#0d0d14\],
+html.light .bg-\[\#0b0b10\],
+html.light .bg-\[\#09090e\],
+html.light .bg-\[\#08080c\],
+html.light .bg-\[\#0f0f16\],
+html.light .bg-\[\#0f0f17\],
+html.light .bg-\[\#0e0e16\] {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+/* Card Surfaces & Floating Elements */
+html.light .bg-\[\#14141e\],
+html.light .bg-\[\#14141b\],
+html.light .bg-\[\#13131c\],
+html.light .bg-\[\#13131e\],
+html.light .bg-\[\#12121a\],
+html.light .bg-\[\#12121b\],
+html.light .bg-\[\#151520\],
+html.light .bg-\[\#161622\],
+html.light .bg-\[\#171724\],
+html.light .bg-\[\#101018\],
+html.light .bg-\[\#12121c\],
+html.light .bg-\[\#181826\],
+html.light .bg-\[\#252538\],
+html.light .bg-\[\#0e0e18\],
+html.light .bg-\[\#09090f\],
+html.light .bg-\[\#0f0f17\],
+html.light .bg-\[\#171b26\] {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+}
+
+/* Gradients that should not render dark in Light Mode */
+html.light [class*="from-[#171b26]"],
+html.light [class*="from-[#141420]"],
+html.light [class*="from-[#14141e]"],
+html.light [class*="from-[#161622]"] {
+  background-image: none !important;
+  background-color: #ffffff !important;
+}
+
+/* High Contrast Alert & Safeguard Banner Typography in Light Mode */
+html.light .text-blue-200,
+html.light .text-blue-300 {
+  color: #1e40af !important;
+}
+html.light .text-emerald-200,
+html.light .text-emerald-300 {
+  color: #065f46 !important;
+}
+html.light .text-amber-200,
+html.light .text-amber-300 {
+  color: #92400e !important;
+}
+html.light .text-rose-200,
+html.light .text-rose-300 {
+  color: #9f1239 !important;
+}
+
+/* Modal Headers & Footers in Light Mode */
+html.light .bg-\[\#161624\] {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+html.light .bg-\[\#0e0e16\] {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+/* Sub-panels, Inputs, Select Boxes, Inner Drawers in Light Mode */
+html.light .bg-\[\#1b1b28\],
+html.light .bg-\[\#1c1c28\],
+html.light .bg-\[\#181824\],
+html.light .bg-\[\#171722\],
+html.light .bg-\[\#1c1c2b\],
+html.light .bg-\[\#1a1a28\],
+html.light .bg-\[\#1f1f2e\],
+html.light .bg-\[\#1e1e2d\] {
+  background-color: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+/* Input Fields & Select Controls in Light Mode */
+html.light input:not([type="checkbox"]):not([type="radio"]),
+html.light select,
+html.light textarea {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+html.light input::placeholder,
+html.light textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* Light Theme Typography & Contrast Protection Rules */
+html.light .text-white:not(.btn-theatre-maroon):not(.btn-theatre-maroon *):not(.booking-btn):not(.booking-btn *):not(.badge-selling-fast):not(.badge-selling-fast *):not([class*="from-[#661F19]"]):not([class*="from-[#661F19]"] *):not([class*="bg-[#661F19]"]):not([class*="bg-[#661F19]"] *):not(.bg-emerald-500):not(.bg-emerald-600):not(.bg-emerald-500 *):not(.bg-emerald-600 *):not(.bg-rose-500):not(.bg-rose-600):not(.bg-rose-500 *):not(.bg-rose-600 *):not(.bg-red-500):not(.bg-red-600):not(.bg-red-500 *):not(.bg-red-600 *):not(.bg-blue-600):not(.bg-blue-600 *):not(.bg-indigo-600):not(.bg-indigo-600 *):not([class*="bg-black/"]):not([class*="bg-black/"] *):not(.banner-proscenium):not(.banner-proscenium *):not(.keep-white) {
+  color: #0f172a !important;
+}
+
+html.light .text-slate-100:not([class*="bg-[#661F19]"] *):not([class*="from-[#661F19]"] *):not(.btn-theatre-maroon *):not(.booking-btn *),
+html.light .text-slate-200:not([class*="bg-[#661F19]"] *):not([class*="from-[#661F19]"] *):not(.btn-theatre-maroon *):not(.booking-btn *) {
+  color: #1e293b !important;
+}
+
+html.light .text-slate-300:not([class*="bg-[#661F19]"] *):not([class*="from-[#661F19]"] *):not(.btn-theatre-maroon *):not(.booking-btn *) {
+  color: #334155 !important;
+}
+
+html.light .text-slate-400:not([class*="bg-[#661F19]"] *):not([class*="from-[#661F19]"] *):not(.btn-theatre-maroon *):not(.booking-btn *) {
+  color: #64748b !important;
+}
+
+/* Light Theme Tables */
+html.light table {
+  color: #0f172a !important;
+}
+
+html.light th {
+  color: #475569 !important;
+  background-color: #f8fafc !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+html.light td {
+  border-bottom: 1px solid #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+html.light tbody tr {
+  background-color: #ffffff;
+  transition: background-color 0.15s ease;
+}
+
+html.light tbody tr:hover {
+  background-color: #f8fafc !important;
+}
+
+/* Borders & Dividers in Light Mode */
+html.light .border-white\/5,
+html.light .border-white\/10,
+html.light .border-white\/15,
+html.light .border-white\/20,
+html.light .border-white\/30,
+html.light .border-white\/\[0\.06\],
+html.light .border-white\/\[0\.08\] {
+  border-color: #e2e8f0 !important;
+}
+
+html.light .divide-white\/5,
+html.light .divide-white\/10 {
+  border-color: #e2e8f0 !important;
+}
+
+/* Dark Gradients mapped to Light Theatrical Warm Proscenium Atmosphere */
+html.light .bg-gradient-to-b.from-\[\#240b0b\] {
+  background: linear-gradient(to bottom, #fff5f2 0%, #faf5f0 60%, #f8fafc 100%) !important;
+}
+
+html.light .bg-gradient-to-b.from-\[\#111119\] {
+  background: linear-gradient(to bottom, #ffffff 0%, #f8fafc 100%) !important;
+}
+
+/* Semi-transparent Dark Overlays mapped cleanly in Light Mode */
+html.light .bg-white\/5 {
+  background-color: rgba(15, 23, 42, 0.04) !important;
+}
+
+html.light .bg-white\/10 {
+  background-color: rgba(15, 23, 42, 0.07) !important;
+}
+
+html.light .bg-white\/15 {
+  background-color: rgba(15, 23, 42, 0.1) !important;
+}
+
+html.light .hover\:bg-white\/10:hover {
+  background-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+html.light .hover\:bg-white\/5:hover {
+  background-color: rgba(15, 23, 42, 0.05) !important;
+}
+
+html.light .bg-black\/20,
+html.light .bg-black\/40,
+html.light .bg-black\/50,
+html.light .bg-black\/60 {
+  background-color: rgba(241, 245, 249, 0.9) !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+/* Navigation Headers & Sidebars in Light Mode */
+html.light header,
+html.light nav,
+html.light .nav-bar {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+html.light .bg-\[\#101018\]\/90,
+html.light .bg-\[\#0d0d14\]\/95,
+html.light .bg-\[\#0d0d14\]\/85 {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* Sidebars in Dashboards */
+html.light aside,
+html.light .admin-sidebar {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.03) !important;
+}
+
+/* Footers */
+html.light footer {
+  background-color: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
+  color: #475569 !important;
+}
+
+/* Tables in Light Mode */
+html.light thead {
+  background-color: #f8fafc !important;
+  color: #475569 !important;
+  border-color: #e2e8f0 !important;
+}
+
+html.light tbody tr:hover {
+  background-color: #f8fafc !important;
+}
+
+/* ========================================================
+   CRITICAL CONTRAST PROTECTION RULES
+   Never invert white text inside buttons, badges on dark images, 
+   or proscenium banners that stay dark/maroon in light mode!
+   ======================================================== */
+
+.btn-theatre-maroon,
+.booking-btn,
+.badge-selling-fast,
+.banner-proscenium,
+.bg-gradient-to-r.from-\[\#661F19\],
+.bg-gradient-to-r.from-\[\#380e0a\] {
+  color: #ffffff !important;
+}
+
+.btn-theatre-maroon *,
+.booking-btn * {
+  color: #ffffff !important;
+}
+
+.btn-theatre-gold,
+.btn-theatre-gold * {
+  color: #0f172a !important;
+}
+
+/* ========================================================
+   STAGE DRAMA THEATRICAL BUTTON ANIMATIONS & KEYFRAMES
+   ======================================================== */
+
+@keyframes theatreSpotlight {
+  0% {
+    transform: translateX(-150%) skewX(-25deg);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  80% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateX(250%) skewX(-25deg);
+    opacity: 0;
+  }
+}
+
+@keyframes theatreMaskBob {
+  0%, 100% {
+    transform: translateY(0) rotate(-6deg) scale(1);
+    filter: drop-shadow(0 0 6px rgba(254, 216, 0, 0.4));
+  }
+  50% {
+    transform: translateY(-2.5px) rotate(6deg) scale(1.12);
+    filter: drop-shadow(0 0 12px rgba(254, 216, 0, 0.85));
+  }
+}
+
+@keyframes curtainLeftSlide {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-100%);
+    opacity: 0.2;
+  }
+}
+
+@keyframes curtainRightSlide {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0.2;
+  }
+}
+
+@keyframes footlightMarquee {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.25);
+    box-shadow: 0 0 6px #FED800, 0 0 12px rgba(254, 216, 0, 0.6);
+  }
+}
+
+.group:hover .group-hover\:animate-spotlight-sweep {
+  animation: theatreSpotlight 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.animate-drama-mask {
+  animation: theatreMaskBob 1.6s ease-in-out infinite;
+}
+
+.animate-curtain-left {
+  animation: curtainLeftSlide 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-curtain-right {
+  animation: curtainRightSlide 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ========================================================
+   ACCESSIBILITY TOOLS (WCAG 2.1 AAA COMPLIANT A11Y STYLES)
+   ======================================================== */
+
+:root {
+  --a11y-font-size: 16px;
+}
+
+/* Grayscale mode */
+html.a11y-grayscale {
+  filter: grayscale(100%) !important;
+}
+
+/* High Contrast mode */
+html.a11y-high-contrast {
+  filter: contrast(135%) brightness(105%) !important;
+}
+html.a11y-high-contrast body {
+  background-color: #050505 !important;
+  color: #ffffff !important;
+}
+html.a11y-high-contrast h1,
+html.a11y-high-contrast h2,
+html.a11y-high-contrast h3,
+html.a11y-high-contrast h4,
+html.a11y-high-contrast a,
+html.a11y-high-contrast button {
+  color: #ffff00 !important;
+}
+html.a11y-high-contrast p,
+html.a11y-high-contrast span,
+html.a11y-high-contrast li {
+  color: #ffffff !important;
+}
+html.a11y-high-contrast input,
+html.a11y-high-contrast select,
+html.a11y-high-contrast textarea {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border-color: #ffff00 !important;
+}
+
+/* Negative Contrast (Invert Colors) */
+html.a11y-negative-contrast {
+  filter: invert(100%) hue-rotate(180deg) !important;
+  background-color: #000000 !important;
+}
+/* Prevent double inversion of media and images */
+html.a11y-negative-contrast img,
+html.a11y-negative-contrast video,
+html.a11y-negative-contrast picture,
+html.a11y-negative-contrast canvas,
+html.a11y-negative-contrast iframe,
+html.a11y-negative-contrast .a11y-preserve-media,
+html.a11y-negative-contrast .a11y-toolbar-root {
+  filter: invert(100%) hue-rotate(180deg) !important;
+}
+
+/* Light Background mode */
+html.a11y-light-bg,
+html.a11y-light-bg body {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+html.a11y-light-bg div:not(.a11y-toolbar-root):not(.a11y-toolbar-root *),
+html.a11y-light-bg section:not(.a11y-toolbar-root):not(.a11y-toolbar-root *),
+html.a11y-light-bg main:not(.a11y-toolbar-root):not(.a11y-toolbar-root *),
+html.a11y-light-bg article:not(.a11y-toolbar-root):not(.a11y-toolbar-root *) {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border-color: #cbd5e1 !important;
+}
+html.a11y-light-bg h1,
+html.a11y-light-bg h2,
+html.a11y-light-bg h3,
+html.a11y-light-bg h4,
+html.a11y-light-bg h5,
+html.a11y-light-bg h6,
+html.a11y-light-bg p,
+html.a11y-light-bg span,
+html.a11y-light-bg li,
+html.a11y-light-bg label {
+  color: #000000 !important;
+}
+
+/* Links Underline mode */
+html.a11y-links-underline a {
+  text-decoration: underline !important;
+  text-decoration-thickness: 2.5px !important;
+  text-underline-offset: 4px !important;
+  font-weight: 700 !important;
+}
+
+/* Readable Font mode (Dyslexia / Low Vision Friendly) */
+html.a11y-readable-font,
+html.a11y-readable-font body,
+html.a11y-readable-font *:not(i):not([class*="fa-"]):not([class*="lucide"]):not(.a11y-toolbar-root *) {
+  font-family: Arial, "Segoe UI", "Helvetica Neue", Roboto, sans-serif !important;
+  letter-spacing: 0.04em !important;
+  word-spacing: 0.08em !important;
+  line-height: 1.8 !important;
+}
+
+/* Ensure the floating accessibility widget remains crisp and unaffected */
+.a11y-toolbar-root {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  letter-spacing: normal !important;
+  word-spacing: normal !important;
+  line-height: normal !important;
+}
+

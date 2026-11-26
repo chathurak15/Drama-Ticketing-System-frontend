@@ -1,12 +1,14 @@
+"use client";
 import React, { useRef, useEffect, useState } from "react";
 import { getDramas } from "../../services/dramaService";
+import { getCdnUrl } from "../../utils/cdn";
 import useTranslation from "../../hooks/useTranslation";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 const CardSlider = () => {
   const [dramas, setDramas] = useState([]);
   const { translatedTexts } = useTranslation();
-  const BACKEND_IMAGE_URL = "https://d3ay14vkclriu.cloudfront.net/uploads/dramas/";
+  const BACKEND_IMAGE_URL = `${import.meta.env.VITE_CDN_URL}/dramas/`;
 
   useEffect(() => {
     const fetchDramas = async () => {
@@ -109,17 +111,20 @@ const CardSlider = () => {
               flex: "0 0 auto",
             }}
           >
-            <Link
-              to={`/drama/${drama.id}`}
+            <Link href={`/drama/${drama.id}`}
               style={{ textDecoration: "none", color: "inherit" }}
             >
               <img
                 src={
                   drama.image
-                    ? `${BACKEND_IMAGE_URL}${drama.image}`
-                    : "/images/default.png"
+                    ? getCdnUrl(drama.image, "dramas")
+                    : "/assets/hero.png"
                 }
                 alt={drama.title}
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = "/assets/hero.png";
+                }}
                 style={{
                   width: "100%",
                   height: window.innerWidth < 640 ? "160px" : "220px",

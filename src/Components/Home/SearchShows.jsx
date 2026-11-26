@@ -1,5 +1,6 @@
+"use client";
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "../../utils/useNavigateCompat";
 import { getCity } from "../../services/ShowService";
 
 const SearchShows = () => {
@@ -66,7 +67,7 @@ const SearchShows = () => {
             placeholder="Search by title..."
             value={title}
             onChange={e => setTitle(e.target.value)}
-            onKeyPress={e => e.key === "Enter" && handleSearch()}
+            onKeyDown={e => e.key === "Enter" && handleSearch()}
           />
 
           <button

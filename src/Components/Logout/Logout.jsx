@@ -1,37 +1,53 @@
-import React, { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+"use client";
+
+import React, { useState } from "react";
+import { useNavigate } from "../../utils/useNavigateCompat";
 import { useAuth } from "../../utils/AuthContext";
+import ConfirmModal from "../common/ConfirmModal";
+import notify from "../../utils/notify";
 
 const Logout = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
-  const hasRun = useRef(false); 
+  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  useEffect(() => {
-    if (hasRun.current) return; 
-    hasRun.current = true;
+  const handleConfirmLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await logout();
+      notify.success("Logged out successfully. See you soon!");
+      navigate("/login");
+    } catch (err) {
+      console.error("Logout failed", err);
+      notify.error("Logout failed. Please try again.");
+      setIsLoggingOut(false);
+    }
+  };
 
-    const performLogout = async () => {
-      const confirmed = window.confirm("Are you sure you want to logout?");
-      if (!confirmed) {
-        navigate(-1);
-        return;
-      }
-
-      try {
-        await logout(); // await to ensure it's complete
-        navigate("/login");
-      } catch (err) {
-        console.error("Logout failed", err);
-      }
-    };
-
-    performLogout();
-  }, [logout, navigate]);
+  const handleCancelLogout = () => {
+    setIsModalOpen(false);
+    if (typeof window !== "undefined" && window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate("/");
+    }
+  };
 
   return (
-    <div className="text-center mt-10 text-lg text-gray-600">
-      Logging out...
+    <div className="min-h-[50vh] flex items-center justify-center">
+      <ConfirmModal
+        isOpen={isModalOpen}
+        title="Confirm Logout"
+        message="Are you sure you want to sign out of your Nataka LK account?"
+        confirmText="Yes, Log Out"
+        cancelText="Stay Signed In"
+        confirmVariant="danger"
+        isLoading={isLoggingOut}
+        onConfirm={handleConfirmLogout}
+        onCancel={handleCancelLogout}
+      />
+      <div className="text-slate-400 text-sm">Signing out...</div>
     </div>
   );
 };

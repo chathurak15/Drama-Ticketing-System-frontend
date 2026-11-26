@@ -1,11 +1,13 @@
+"use client";
 import React from "react";
 import "../../assets/css/DramaCard.css";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate } from "../../utils/useNavigateCompat";
+import { getCdnUrl } from "../../utils/cdn";
+import Link from "next/link";
 
 const DramaCard = ({ drama }) => {
   const navigate = useNavigate();
-  const BACKEND_IMAGE_URL = "https://d3ay14vkclriu.cloudfront.net/uploads/dramas/";
+  const BACKEND_IMAGE_URL = `${import.meta.env.VITE_CDN_URL}/dramas/`;
 
   const handleViewDetails = () => {
     navigate(`/drama/${drama.id}`);
@@ -13,14 +15,18 @@ const DramaCard = ({ drama }) => {
 
   return (
   <div className="drama-card w-full rounded-lg overflow-hidden bg-white shadow-sm flex flex-col items-center p-2">
-    <Link to={`/drama/${drama.id}`} className="drama-link w-full flex flex-col items-center">
+    <Link href={`/drama/${drama.id}`} className="drama-link w-full flex flex-col items-center">
       <img
         src={
           drama.image
-            ? `${BACKEND_IMAGE_URL}${drama.image}`
-            : "/images/default.png"
+            ? getCdnUrl(drama.image, "dramas")
+            : "/assets/hero.png"
         }
         alt={drama.title}
+        onError={(e) => {
+          e.currentTarget.onerror = null;
+          e.currentTarget.src = "/assets/hero.png";
+        }}
         className="w-full object-cover rounded-lg mb-2"
         style={{ height: '250px', maxHeight: '40vw', minHeight: '200px' }}
       />

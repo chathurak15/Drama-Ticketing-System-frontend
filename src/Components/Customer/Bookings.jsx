@@ -1,18 +1,33 @@
+"use client";
 import React, { useEffect, useState } from "react";
-import { Calendar, Star, Trash2, Ticket } from "lucide-react";
+import { Calendar, Star, Ticket, RotateCcw, AlertCircle, X } from "lucide-react";
 import {
   getBookingsByUserId,
-  cancelBooking,
 } from "../../services/BookingService";
+import { requestBuyerRefund } from "../../services/RefundService";
 import { useAuth } from "../../utils/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "../../utils/useNavigateCompat";
 import { getShowById } from "../../services/ShowService";
 import { addReview } from "../../services/ReviewService"; 
+import notify from "../../utils/notify";
 
 const Bookings = () => {
   const [bookings, setBookings] = useState([]);
   const [reviewModal, setReviewModal] = useState(null);
   const [reviewData, setReviewData] = useState({ ratingValue: 5, comment: "" });
+  const [refundModal, setRefundModal] = useState({
+    isOpen: false,
+    booking: null,
+    show: null,
+    loading: false,
+  });
+  const [refundForm, setRefundForm] = useState({
+    bankName: "",
+    bankBranch: "",
+    accountName: "",
+    accountNumber: "",
+    reason: "",
+  });
   const { user } = useAuth();
   const navigate = useNavigate();
   const [showDetails, setShowDetails] = useState({});
@@ -57,27 +72,55 @@ const Bookings = () => {
     });
   }, [bookings]);
 
-  const handleCancel = async (id) => {
+  const handleOpenRefundModal = (booking, show) => {
+    setRefundModal({
+      isOpen: true,
+      booking,
+      show,
+      loading: false,
+    });
+    setRefundForm({
+      bankName: "",
+      bankBranch: "",
+      accountName: ((user?.firstName || user?.fname || "") + " " + (user?.lastName || user?.lname || "")).trim(),
+      accountNumber: "",
+      reason: show?.cancellationReason || "Show cancelled or postponed",
+    });
+  };
+
+  const handleConfirmRefund = async (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    if (!refundForm.bankName || !refundForm.accountNumber || !refundForm.accountName) {
+      notify.warning("Please enter complete bank details (Bank name, account name, and account number).");
+      return;
+    }
+    const bookingId = refundModal.booking?.id;
+    if (!bookingId) return;
+
+    setRefundModal((prev) => ({ ...prev, loading: true }));
     try {
-      if (!window.confirm("Are you sure you want to cancel this booking?")) {
-        return;
-      }
-      const response = await cancelBooking(id, user.id);
-      if (response.status === 200) {
-        alert(response.data);
-        setBookings((prev) =>
-          prev.map((b) => (b.id === id ? { ...b, status: "Cancelled" } : b))
-        );
-      }
+      await requestBuyerRefund(bookingId, {
+        bankName: refundForm.bankName.trim(),
+        bankBranch: refundForm.bankBranch.trim(),
+        accountName: refundForm.accountName.trim(),
+        accountNumber: refundForm.accountNumber.trim(),
+        reason: refundForm.reason.trim(),
+      });
+      notify.success("Refund request submitted successfully! Our finance team will process your LankaPay CEFT/SLIPS transfer.");
+      setBookings((prev) =>
+        prev.map((b) => (b.id === bookingId ? { ...b, status: "REFUND_REQUESTED" } : b))
+      );
+      setRefundModal({ isOpen: false, booking: null, show: null, loading: false });
     } catch (error) {
-      console.error("Failed to cancel booking:", error);
-      alert("Failed to cancel booking. Please try again later.");
+      const msg = error.response?.data?.message || error.response?.data || "Failed to submit refund request.";
+      notify.error(typeof msg === "string" ? msg : "Failed to submit refund request.");
+      setRefundModal((prev) => ({ ...prev, loading: false }));
     }
   };
 
  const handleReviewSubmit = async (bookingId) => {
-  if (!reviewData.ratingValue || !reviewData.comment) {
-    alert("Please provide a rating and comment for your review.");
+  if (!reviewData.ratingValue || !reviewData.comment?.trim()) {
+    notify.warn("Please provide a rating and comment for your review.");
     return;
   }
 
@@ -86,7 +129,7 @@ const Bookings = () => {
     const drama = showDetails[booking.showId]?.drama;
 
     if (!drama || !drama.id) {
-      alert("Drama information is not available for this booking.");
+      notify.error("Drama information is not available for this booking.");
       return;
     }
 
@@ -99,22 +142,13 @@ const Bookings = () => {
 
     const response = await addReview(reviewPayload);
     if (response.status === 200 || response.status === 201) {
-      alert(response.data || "Review submitted successfully!");
-
-      // setBookings((prev) =>
-      //   prev.map((b) =>
-      //     b.id === bookingId
-      //       ? { ...b, hasReview: true, review: reviewData }
-      //       : b
-      //   )
-      // );
-
+      notify.success(response.data || "Review submitted successfully!");
       setReviewModal(null);
       setReviewData({ ratingValue: 5, comment: "" });
     }
   } catch (error) {
     console.error("Failed to submit review:", error);
-    alert("Something went wrong while submitting your review.");
+    notify.apiError(error, "Something went wrong while submitting your review.");
   }
 };
 
@@ -136,7 +170,7 @@ const Bookings = () => {
 
   const isFutureShow = (showDate) => {
     if (!showDate) return false;
-    console.log("Show Date:", showDate);
+
     return new Date(showDate) > new Date();
   };
 
@@ -236,29 +270,56 @@ const Bookings = () => {
                     </button>
                   )}
 
-                {["pending", "confirmed"].includes(
-                  booking.status.toLowerCase()
-                ) &&
-                  isFutureShow(showDetails[booking.showId]?.showDate) && (
-                    <button
-                      onClick={() => handleCancel(booking.id)}
-                      className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                      Cancel Booking
-                    </button>
-                  )}
+                {(() => {
+                  const currentShow = showDetails[booking.showId];
+                  const showStatus = (currentShow?.status || "").toLowerCase();
+                  const isCancelledOrPostponed = showStatus.includes("cancel") || showStatus.includes("postpone");
+                  const bStatus = (booking.status || "").toLowerCase();
+                  const isRefunded = bStatus === "refunded";
+                  const isRefundRequested = bStatus === "refund_requested";
+
+                  if (isCancelledOrPostponed && !isRefunded && !isRefundRequested) {
+                    return (
+                      <button
+                        onClick={() => handleOpenRefundModal(booking, currentShow)}
+                        className="flex items-center gap-2 px-4 py-2 bg-amber-500 text-slate-950 font-bold rounded-lg hover:bg-amber-600 cursor-pointer"
+                      >
+                        <RotateCcw className="w-4 h-4" />
+                        Request Refund
+                      </button>
+                    );
+                  }
+                  if (isRefundRequested) {
+                    return (
+                      <span className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-100 text-purple-700 font-semibold rounded-lg text-xs">
+                        Refund Requested
+                      </span>
+                    );
+                  }
+                  if (isRefunded) {
+                    return (
+                      <span className="flex items-center gap-1.5 px-3 py-1.5 bg-red-100 text-red-700 font-bold rounded-lg text-xs">
+                        Refunded / Voided
+                      </span>
+                    );
+                  }
+                  return null;
+                })()}
 
                 <button
                   onClick={() =>
                     navigate("/booking/ticket/" + booking.ticketId)
                   }
-                  className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                  className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 cursor-pointer"
                 >
                   <Ticket className="w-4 h-4" />
                   Download Ticket
                 </button>
               </div>
+
+              <p className="mt-3 text-xs text-gray-500 border-t pt-2">
+                All ticket sales are final and non-refundable unless the show is cancelled or postponed by the organizer. You may freely share your QR e-ticket with a friend or family member if you cannot attend.
+              </p>
             </div>
           ))}
         </div>
@@ -326,6 +387,119 @@ const Bookings = () => {
                 Cancel
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Refund Request Modal */}
+      {refundModal.isOpen && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-lg shadow-2xl space-y-4">
+            <div className="flex items-start justify-between">
+              <div>
+                <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                  <RotateCcw className="w-5 h-5 text-amber-600" />
+                  Request Ticket Refund
+                </h3>
+                <p className="text-xs text-gray-500 mt-1">
+                  Cancelled / Postponed Show • Direct LankaPay CEFT/SLIPS Bank Transfer
+                </p>
+              </div>
+              <button
+                onClick={() => setRefundModal({ isOpen: false, booking: null, show: null, loading: false })}
+                className="text-gray-400 hover:text-gray-600 p-1"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs space-y-1.5">
+              <div className="flex justify-between">
+                <span className="text-gray-600">Event:</span>
+                <span className="font-bold text-gray-900">{refundModal.show?.title || "Stage Drama Show"}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Ticket ID:</span>
+                <span className="font-mono font-bold text-amber-700">#{refundModal.booking?.ticketId}</span>
+              </div>
+              <div className="border-t border-amber-200 pt-1.5 flex justify-between font-bold text-sm">
+                <span>Refundable Amount (100% Face Value):</span>
+                <span className="text-emerald-600">
+                  LKR {((refundModal.booking?.baseTicketTotal || refundModal.booking?.totalAmount) || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </span>
+              </div>
+              <p className="text-[10px] text-gray-500 italic">
+                * The online convenience fee is non-refundable per platform terms.
+              </p>
+            </div>
+
+            <form onSubmit={handleConfirmRefund} className="space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-gray-700 mb-1">Bank Name *</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Commercial Bank"
+                    value={refundForm.bankName}
+                    onChange={(e) => setRefundForm({ ...refundForm, bankName: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-gray-700 mb-1">Branch *</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Kollupitiya"
+                    value={refundForm.bankBranch}
+                    onChange={(e) => setRefundForm({ ...refundForm, bankBranch: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-gray-700 mb-1">Account Holder Name *</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Exact account name"
+                  value={refundForm.accountName}
+                  onChange={(e) => setRefundForm({ ...refundForm, accountName: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-gray-700 mb-1">Account Number *</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. 100012345678"
+                  value={refundForm.accountNumber}
+                  onChange={(e) => setRefundForm({ ...refundForm, accountNumber: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs font-mono"
+                />
+              </div>
+
+              <div className="flex gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setRefundModal({ isOpen: false, booking: null, show: null, loading: false })}
+                  className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-xs font-semibold hover:bg-gray-200"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={refundModal.loading}
+                  className="flex-1 px-4 py-2 bg-amber-500 text-slate-950 font-bold rounded-lg text-xs hover:bg-amber-600 disabled:opacity-50"
+                >
+                  {refundModal.loading ? "Submitting..." : "Submit Refund Request"}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

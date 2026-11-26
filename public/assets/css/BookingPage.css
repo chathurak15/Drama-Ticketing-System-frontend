@@ -1,0 +1,11 @@
+.booking-page {
+  padding: 20px;
+}
+
+.booking-page img {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  display: block;
+  margin-bottom: 20px;
+}

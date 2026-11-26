@@ -1,0 +1,19 @@
+.loginbtn{
+    background-color: rgba(254, 216, 0, 1);
+    color: #000;
+    cursor: pointer;
+    padding: 5px 15px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.loginbtn:hover{
+   background-color: white;
+}
+
+.link-text:hover{
+    color: var(--btn-color);
+    text-decoration: none;
+    font-size: 19px;
+}

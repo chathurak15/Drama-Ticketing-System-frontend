@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import {
   Calendar,
@@ -6,22 +7,44 @@ import {
   Users,
   CreditCard,
   ArrowLeft,
+  Ticket,
 } from "lucide-react";
 import { useAuth } from "../../utils/AuthContext";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "../../utils/useNavigateCompat";
 import { getShowById } from "../../services/ShowService.js";
 import TimeCounter from "../TimeCounter";
 import { addBooking } from "../../services/BookingService.js";
+import { getActiveCommission } from "../../services/CommissionService.js";
+import notify from "../../utils/notify";
+import StageDramaButton from "../common/StageDramaButton";
 
 const BookingPage = () => {
-  const location = useLocation();
-  const passedBookingData = location.state?.bookingData;
+  // Next.js booking state from sessionStorage
+  let passedBookingData = null;
+  if (typeof window !== "undefined") {
+    try {
+      const stored = sessionStorage.getItem("nataka_booking");
+      if (stored) passedBookingData = JSON.parse(stored);
+    } catch {
+      // ignore parse error
+    }
+  }
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   const [showData, setShowData] = useState();
   const [bookingData, setBookingData] = useState();
+  const [activeCommission, setActiveCommission] = useState(null);
   const [timeLeft, setTimeLeft] = useState(590); // 10 minutes in seconds
   const [isProcessing, setIsProcessing] = useState(false);
+  const [consentAgreed, setConsentAgreed] = useState(false);
+
+  useEffect(() => {
+    getActiveCommission()
+      .then((res) => {
+        if (res?.data) setActiveCommission(res.data);
+      })
+      .catch((err) => console.warn("Could not load commission model", err));
+  }, []);
 
   useEffect(() => {
     if (loading || !passedBookingData) return;
@@ -37,7 +60,7 @@ const BookingPage = () => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          alert("Booking time expired! Please select your seats again.");
+          notify.error("Booking reservation time expired. Please select your seats again.");
           navigate("/");
           return 0;
         }
@@ -56,14 +79,30 @@ const BookingPage = () => {
 
   // --- PayHere Integration Logic ---
   const handlePayHerePayment = async () => {
+    if (!consentAgreed) {
+      notify.warning("Please agree to the Terms & Conditions and Refund Policy to proceed with checkout.");
+      return;
+    }
     setIsProcessing(true);
 
     try {
+      const baseTicketTotal = (bookingData?.seats || []).reduce(
+        (sum, s) => sum + (Number(s.price) || 0),
+        0
+      ) || (bookingData?.totalAmount || 0);
+
+      const buyerFeePercent = activeCommission?.buyerFeePercent != null ? Number(activeCommission.buyerFeePercent) : 6.5;
+      const buyerFeeAmount = buyerFeePercent > 0 ? (baseTicketTotal * buyerFeePercent) / 100 : 0;
+      const totalPayable = baseTicketTotal + buyerFeeAmount;
+
       //Create initial booking record in backend (status: PENDING)
-      const response = await addBooking(bookingData);
+      const response = await addBooking({
+        ...bookingData,
+        totalAmount: totalPayable,
+      });
 
       if (response.status !== 200) {
-        alert("Booking initiation failed. Please try again.");
+        notify.error("Booking initiation failed. Please try again.");
         setIsProcessing(false);
         return;
       }
@@ -73,14 +112,14 @@ const BookingPage = () => {
       const { bookingId, hash, merchantId } = response.data;
 
       const payment = {
-        sandbox: true,
+        sandbox: import.meta.env.VITE_PAYHERE_SANDBOX === "true",
         merchant_id: merchantId, 
-        return_url: "https://nataka.chathurakavindu.me/booking/success",
-        cancel_url: "https://nataka.chathurakavindu.me/booking/cancel",  
-        notify_url: "https://server-nataka.chathurakavindu.me/api/v1/payment/notify", 
+        return_url: `${import.meta.env.VITE_APP_URL}/booking/success`,
+        cancel_url: `${import.meta.env.VITE_APP_URL}/booking/cancel`,  
+        notify_url: `${import.meta.env.VITE_API_BASE_URL}payment/notify`, 
         order_id: bookingId,
         items: `Ticket for ${showData.drama.title}`,
-        amount: bookingData.totalAmount.toFixed(2),
+        amount: totalPayable.toFixed(2),
         currency: "LKR",
         hash: hash,
         first_name: user.firstName,
@@ -94,20 +133,19 @@ const BookingPage = () => {
 
       // Define PayHere Event Handlers
       window.payhere.onCompleted = function onCompleted(orderId) {
-        console.log("Payment completed. OrderID:" + orderId);
         setIsProcessing(false);
+        notify.success("Payment successful! Generating your e-ticket...");
         navigate("/booking/ticket/" + orderId);
       };
 
       window.payhere.onDismissed = function onDismissed() {
-        console.log("Payment dismissed");
         setIsProcessing(false);
+        notify.info("Payment window closed.");
       };
 
       window.payhere.onError = function onError(error) {
-        console.log("Error:" + error);
         setIsProcessing(false);
-        alert("Payment Error: " + error);
+        notify.error("Payment Error: " + (error || "Transaction was not completed."));
       };
 
       // Open PayHere Popup
@@ -116,9 +154,9 @@ const BookingPage = () => {
     } catch (error) {
       console.error("Payment Error:", error);
       if (error.response?.status === 404) {
-        alert("Seats not available. Please select different seats.");
+        notify.error("Selected seats are no longer available. Please select different seats.");
       } else {
-        alert("Something went wrong. Please try again.");
+        notify.apiError(error, "Payment processing failed. Please try again.");
       }
       setIsProcessing(false);
     }
@@ -285,38 +323,76 @@ const BookingPage = () => {
                 </div>
               </div>
 
-              {/* Total */}
-              <div className="border-t pt-4 mb-6">
-                <div className="flex justify-between items-center text-lg font-bold">
-                  <span>Total</span>
-                  <span className="text-emerald-600">
-                    LKR {bookingData.totalAmount.toLocaleString()}
-                  </span>
-                </div>
-              </div>
+              {/* Fee Breakdown & Total */}
+              {(() => {
+                const baseTicketTotal = (bookingData?.seats || []).reduce(
+                  (sum, s) => sum + (Number(s.price) || 0),
+                  0
+                ) || (bookingData?.totalAmount || 0);
 
-              {/* Pay Button (Updated to trigger PayHere) */}
-              <button
-                onClick={handlePayHerePayment}
-                disabled={isProcessing}
-                className={`w-full py-3 rounded-lg font-semibold transition-all duration-200 ${
-                  isProcessing
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-lg"
-                }`}
-              >
-                {isProcessing ? (
-                  <div className="flex items-center justify-center gap-2">
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    Processing...
-                  </div>
-                ) : (
-                  "Pay LKR " + bookingData.totalAmount.toLocaleString()
-                )}
-              </button>
+                const buyerFeePercent = activeCommission?.buyerFeePercent != null ? Number(activeCommission.buyerFeePercent) : 6.5;
+                const buyerFeeAmount = buyerFeePercent > 0 ? (baseTicketTotal * buyerFeePercent) / 100 : 0;
+                const totalPayable = baseTicketTotal + buyerFeeAmount;
+
+                return (
+                  <>
+                    <div className="border-t pt-4 space-y-2 mb-6 text-sm">
+                      <div className="flex justify-between items-center text-gray-600">
+                        <span>Tickets Subtotal</span>
+                        <span className="font-semibold text-gray-800">
+                          LKR {baseTicketTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        </span>
+                      </div>
+
+                      {buyerFeePercent > 0 && (
+                        <div className="flex justify-between items-center text-gray-600">
+                          <span>Convenience Fee ({buyerFeePercent}%)</span>
+                          <span className="font-semibold text-emerald-600">
+                            + LKR {buyerFeeAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          </span>
+                        </div>
+                      )}
+
+                      <div className="border-t pt-2 flex justify-between items-center text-lg font-bold">
+                        <span>Total Payable</span>
+                        <span className="text-emerald-600">
+                          LKR {totalPayable.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Consent Checkbox */}
+                    <label className="flex items-start gap-2.5 p-3 rounded-xl bg-gray-50 border border-gray-200 text-xs text-gray-700 cursor-pointer select-none mb-4">
+                      <input
+                        type="checkbox"
+                        checked={consentAgreed}
+                        onChange={(e) => setConsentAgreed(e.target.checked)}
+                        className="mt-0.5 rounded border-gray-300 text-amber-600 focus:ring-amber-500 w-4 h-4 shrink-0"
+                      />
+                      <span className="leading-snug text-[11px]">
+                        I agree to eNataka.lk's Terms & Conditions and Refund Policy. I understand that all ticket sales are final and non-refundable unless the show is cancelled or postponed by the organizer, and that the online convenience fee is non-refundable.
+                      </span>
+                    </label>
+
+                    {/* Stage Drama Pay Button */}
+                    <StageDramaButton
+                      fullWidth
+                      size="lg"
+                      variant="theatre"
+                      disabled={!consentAgreed || isProcessing}
+                      loading={isProcessing}
+                      loadingText="Securing Your Stage Seats..."
+                      onClick={handlePayHerePayment}
+                      icon={Ticket}
+                    >
+                      Pay LKR {totalPayable.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </StageDramaButton>
+                  </>
+                );
+              })()}
 
               <p className="text-xs text-gray-500 mt-3 text-center">
-                By confirming, you agree to our terms and conditions. Payment is processed securely by PayHere.
+                Your stage drama reservation is protected with end-to-end security. Payment is processed securely by PayHere.
               </p>
             </div>
           </div>

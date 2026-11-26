@@ -1,17 +1,18 @@
-import React from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
-import Chatbot from './chatbot';
+"use client";
 
-const Layout = () => {
-  const location = useLocation();
-  
-  // Pages where you don't want to show the chatbot
-  const hideChatbotPages = ['/login', '/register'];
-  const shouldShowChatbot = !hideChatbotPages.includes(location.pathname);
+import React from "react";
+import { usePathname } from "next/navigation";
+import Chatbot from "./chatbot";
+
+const Layout = ({ children }) => {
+  const pathname = usePathname();
+  const hideChatbotPages = ["/login", "/register"];
+  const isSeatOrBookingPage = pathname?.includes("/seats") || pathname?.startsWith("/booking");
+  const shouldShowChatbot = !hideChatbotPages.includes(pathname) && !isSeatOrBookingPage;
 
   return (
     <div className="app-layout">
-      <Outlet />
+      {children}
       {shouldShowChatbot && <Chatbot />}
     </div>
   );

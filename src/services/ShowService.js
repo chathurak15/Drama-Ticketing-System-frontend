@@ -75,6 +75,17 @@ export const updateShowStatus = async ({ id, status }) => {
   return response.data;
 };
 
+export const updateShowStatusAdmin = async (showId, { status, reason, newDate }) => {
+  const response = await axios.post(`admin/shows/${showId}/status`, {
+    status,
+    reason,
+    newDate,
+  }, {
+    withCredentials: true,
+  });
+  return response.data;
+};
+
 export const getShowsByUser = async ({ page = 0, size = 10, title="", status, userId}) => { 
   return axios.get("show/all/user", {
     params: {

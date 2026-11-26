@@ -1,8 +1,10 @@
+"use client";
 import React, { useState } from "react";
 import "../../assets/css/Register.css";
 import Logo from "../../assets/logo nataka white.png";
 import { register } from "../../services/AuthService";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "../../utils/useNavigateCompat";
+import notify from "../../utils/notify";
 
 function Register() {
   const navigate = useNavigate();
@@ -87,14 +89,6 @@ function Register() {
     }
   };
 
-  const handleRoleToggle = () => {
-    setFormData((prev) => ({
-      ...prev,
-      showRoleSelection: !prev.showRoleSelection,
-      role: prev.showRoleSelection ? "Customer" : "",
-    }));
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -112,12 +106,12 @@ function Register() {
         phoneNumber: formData.mobileNumber.trim(),
         password: formData.password,
         image: "",
-        role: formData.role,
+        role: "Customer",
       };
       const response = await register(apiPayload);
 
       if (response.data == "User registered successfully") {
-        alert("Registration successful! Please login to continue.");
+        notify.success("Registration successful! Welcome to Nataka LK. Please log in.");
         navigate("/login");
 
         // Reset form
@@ -133,20 +127,20 @@ function Register() {
         });
 
       } else {
-        alert(response.data || "Registration failed. Please try again.");
+        notify.error(response.data || "Registration failed. Please try again.");
       }
     } catch (error) {
       console.error("Registration error:", error);
 
       if (error.response) {
-        alert(
-          error.response.data.message ||
-            "Registration failed. Please try again."
+        notify.error(
+          error.response.data?.message ||
+          (typeof error.response.data === "string" ? error.response.data : "Registration failed. Please try again.")
         );
       } else if (error.request) {
-        alert("Network error. Please check your connection and try again.");
+        notify.error("Network error. Please check your connection and try again.");
       } else {
-        alert("Network error. Please check your connection and try again.");
+        notify.error("An unexpected error occurred. Please try again.");
       }
     } finally {
       setIsLoading(false);
@@ -312,47 +306,6 @@ function Register() {
               </div>
             </div>
 
-            {/* Role Selection */}
-            <div className="role-section">
-              <div className="role-checkbox-container">
-                <input
-                  type="checkbox"
-                  id="roleToggle"
-                  checked={formData.showRoleSelection}
-                  onChange={handleRoleToggle}
-                  className="role-checkbox"
-                />
-                <div className="role-checkbox-content">
-                  <label htmlFor="roleToggle" className="role-checkbox-label">
-                    I am a Theatre Manager or Event Organizer
-                  </label>
-                  <p className="role-checkbox-description">
-                    Check this if you manage a theatre or organize drama events
-                  </p>
-                </div>
-              </div>
-
-              {/* Role Selection Dropdown */}
-              {formData.showRoleSelection && (
-                <div className="role-dropdown">
-                  <select
-                    id="role"
-                    name="role"
-                    value={formData.role}
-                    onChange={handleChange}
-                    className={`form-select ${errors.role ? "error" : ""}`}
-                  >
-                    <option value="">Select Your Role</option>
-                    <option value="TheatreManager">Theatre Manager</option>
-                    <option value="Organizer">Event Organizer</option>
-                  </select>
-                  {errors.role && (
-                    <p className="error-message">{errors.role}</p>
-                  )}
-                </div>
-              )}
-            </div>
-
             {/* Submit Button */}
             <button
               onClick={handleSubmit}
@@ -374,6 +327,13 @@ function Register() {
               Already have an account?{" "}
               <button onClick={() => navigate("/login")} className="login-link">
                 Sign In
+              </button>
+            </p>
+
+            <p style={{ textAlign: "center", fontSize: "11px", color: "#94a3b8", marginTop: "12px" }}>
+              Drama producer or venue manager?{" "}
+              <button onClick={() => navigate("/contact")} style={{ color: "#f59e0b", background: "none", border: "none", textDecoration: "underline", cursor: "pointer", padding: 0, font: "inherit" }}>
+                Contact our partner desk
               </button>
             </p>
           </div>

@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useRef, useEffect } from "react";
 import MenuItem from "../MenuItem/MenuItem";
 import languageIcon from "/images/internet.png";

@@ -1,12 +1,15 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import { login } from "../../services/AuthService";
-import { Eye, EyeOff, Mail, Lock, LogIn } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, LogIn, Theater } from "lucide-react";
 import Header from "../Header/Header";
 import "../../assets/css/Login.css";
 import Footer from "../Footer/Footer";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "../../utils/useNavigateCompat";
 import { useAuth } from "../../utils/AuthContext";
 import GoogleLoginButton from "../GoogleLoginButton";
+import notify from "../../utils/notify";
+import StageDramaButton from "../common/StageDramaButton";
 
 const Login = ({ onLoginSuccess }) => {
   const navigate = useNavigate();
@@ -63,7 +66,7 @@ const Login = ({ onLoginSuccess }) => {
 
       const user = response.data;
       if (user) {
-        alert(`Welcome ${user.fname} ${user.lname}`);
+        notify.success(`Welcome back, ${user.fname} ${user.lname}!`);
         setUser(user);
 
         if (onLoginSuccess) onLoginSuccess({ user });
@@ -72,25 +75,28 @@ const Login = ({ onLoginSuccess }) => {
         navigate(dashboardRoute);
       }
     } catch (error) {
+      let errMsg = "Login failed. Please check your credentials.";
       if (error.response) {
         const status = error.response.status;
         const message = error.response.data?.message || "Login failed";
 
         if (status === 401) {
-          setLoginError("Invalid email or password");
+          errMsg = "Invalid email or password";
         } else if (status === 400) {
-          setLoginError("Please check your input");
+          errMsg = "Please check your input";
         } else if (status === 500) {
-          setLoginError("Server error. Please try again later");
+          errMsg = "Server error. Please try again later";
         } else {
-          setLoginError(message);
+          errMsg = message;
         }
       } else if (error.request) {
-        setLoginError("Network error. Please check your connection");
+        errMsg = "Network error. Please check your connection";
       } else {
-        setLoginError("An unexpected error occurred");
+        errMsg = "An unexpected error occurred";
       }
 
+      setLoginError(errMsg);
+      notify.error(errMsg);
       console.error("Login error:", error);
     } finally {
       setIsLoading(false);
@@ -182,21 +188,19 @@ const Login = ({ onLoginSuccess }) => {
               </div>
             )}
 
-            {/* Login Button */}
-            <button
-              onClick={handleSubmit}
+            {/* Theatrical Stage Login Button */}
+            <StageDramaButton
+              fullWidth
+              size="lg"
+              variant="theatre"
+              loading={isLoading}
+              loadingText="Opening Backstage Pass..."
               disabled={isLoading || !loginData.email || !loginData.password}
-              className="w-full booking-btn text-white font-semibold py-3 px-4 rounded-lg hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={handleSubmit}
+              icon={Theater}
             >
-              {isLoading ? (
-                <div className="flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                  Signing In...
-                </div>
-              ) : (
-                "Sign In"
-              )}
-            </button>
+              Sign In
+            </StageDramaButton>
 
             {/* Forgot Password */}
             <div className="mb-5 text-center">

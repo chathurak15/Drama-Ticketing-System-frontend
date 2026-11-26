@@ -1,11 +1,13 @@
+"use client";
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "next/navigation";
 import { Calendar, Clock, MapPin, User } from "lucide-react";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import { getShowById } from "../../services/ShowService.js";
+import { getCdnUrl } from "../../utils/cdn.js";
 import SeatSelectionPopup from "./SeatPopup.jsx";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 const ShowDetails = () => {
   const { id } = useParams();
@@ -13,7 +15,7 @@ const ShowDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const BACKEND_IMAGE_URL = "https://d3ay14vkclriu.cloudfront.net/uploads/shows/";
+  const BACKEND_IMAGE_URL = `${import.meta.env.VITE_CDN_URL}/shows/`;
 
   // Helper function to format date
   const formatDate = (dateString) => {
@@ -117,11 +119,15 @@ const ShowDetails = () => {
                 <img
                   src={
                     show.image
-                      ? `${BACKEND_IMAGE_URL}${show.image}`
+                      ? getCdnUrl(show.image, "shows")
                       : "/images/default.png"
                   }
                   alt={show.title}
                   className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = "/assets/hero.png";
+                  }}
                 />
               </div>
 
@@ -183,8 +189,7 @@ const ShowDetails = () => {
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-left gap-10">
                   <div className="flex items-center space-x-2">
                     <span className="text-gray-600">Drama:</span>
-                    <Link
-                      to={`/drama/${show.drama?.id}`}
+                    <Link href={`/drama/${show.drama?.id}`}
                       className="text-amber-900 font-semibold hover:underline"
                     >
                       {show.drama?.title}
