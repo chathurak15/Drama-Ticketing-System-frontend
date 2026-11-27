@@ -1,15 +1,16 @@
-import { useParams } from "react-router-dom";
+"use client";
+import { useParams, useRouter } from "next/navigation";
 import React, { useState, useRef, useEffect } from "react";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import "../../assets/css/DramaDetails.css";
 import { getDramaById, getRatings } from "../../services/dramaService";
-import { useNavigate } from "react-router-dom";
 import UpcomingShowsSlider from "../Home/UpcomingShowsSlider";
 import { getShowsByDramaId } from "../../services/ShowService";
+import { getCdnUrl } from "../../utils/cdn";
 
 const DramaDetails = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { id } = useParams();
   
   const [drama, setDrama] = useState(null);
@@ -17,8 +18,8 @@ const DramaDetails = () => {
   const [loading, setLoading] = useState(true);
   const [upcomingShows, setUpcomingShows] = useState([]);
 
-  const BACKEND_IMAGE_URL = "https://d3ay14vkclriu.cloudfront.net/uploads/dramas/";
-  const BACKEND_Actor_IMAGE_URL = "https://d3ay14vkclriu.cloudfront.net/uploads/actors/";
+  const BACKEND_IMAGE_URL = `${process.env.NEXT_PUBLIC_CDN_URL || "/uploads"}/dramas/`;
+  const BACKEND_Actor_IMAGE_URL = `${process.env.NEXT_PUBLIC_CDN_URL || "/uploads"}/actors/`;
 
   // Fetch all data
   useEffect(() => {
@@ -98,7 +99,7 @@ const DramaDetails = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/90 backdrop-blur-sm">
           <div className="text-center">
             <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-amber-600 mx-auto mb-4"></div>
-            <h2 className="text-xl font-bold text-gray-800">Nataka.lk</h2>
+            <h2 className="text-xl font-bold text-gray-800">Naataka.lk</h2>
             <p className="text-gray-600 text-sm font-medium animate-pulse">
               Setting the stage...
             </p>
@@ -114,9 +115,13 @@ const DramaDetails = () => {
           <>
             <div className="top-section">
               <img
-                src={drama.image ? `${BACKEND_IMAGE_URL}${drama.image}` : "/images/default.png"}
+                src={drama.image ? getCdnUrl(drama.image, "dramas") : "/images/default.png"}
                 className="drama-poster"
                 alt={drama.title}
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = "/assets/hero.png";
+                }}
               />
               <div className="drama-details">
                 <h1 className="drama-title">{drama.title}</h1>
@@ -130,7 +135,7 @@ const DramaDetails = () => {
                 </div>
                 <div className="flex justify-center mt-3">
                   <button
-                    onClick={() => navigate(`/shows/${id}`)}
+                    onClick={() => router.push(`/shows/${id}`)}
                     className="booking-btn bg-amber-600 hover:bg-amber-700 text-white px-8 py-3 rounded-full font-semibold shadow-md transition duration-300 mt-4"
                   >
                     Book a Show
@@ -160,9 +165,13 @@ const DramaDetails = () => {
                 {drama.actors && drama.actors.map((actor, index) => (
                   <div className="cast-card" key={actor.id || index}>
                     <img
-                      src={actor.photo ? `${BACKEND_Actor_IMAGE_URL}${actor.photo}` : "/images/default.png"}
+                      src={actor.photo ? getCdnUrl(actor.photo, "actors") : "/images/default.png"}
                       className="cast-photo"
                       alt={actor.name}
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = "/assets/hero.png";
+                      }}
                     />
                     <p className="cast-name">{actor.name}</p>
                   </div>

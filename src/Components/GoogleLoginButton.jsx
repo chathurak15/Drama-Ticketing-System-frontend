@@ -1,6 +1,8 @@
 import React from "react";
 
-const GOOGLE_AUTH_URL = "http://server-nataka.chathurakavindu.me/oauth2/authorization/google";
+const GOOGLE_AUTH_URL =
+  process.env.NEXT_PUBLIC_GOOGLE_AUTH_URL ||
+  "https://server-nataka.chathurakavindu.me/oauth2/authorization/google";
 
 export default function GoogleLoginButton() {
   return (

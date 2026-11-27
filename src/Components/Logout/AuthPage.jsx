@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from 'react';
 import SignIn from '../Pages/Login';
 import Register from '../Pages/Register';

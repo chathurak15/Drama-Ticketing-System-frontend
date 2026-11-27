@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+Allow: /dramas
+Allow: /shows
+Allow: /drama/
+Allow: /show/
+Allow: /about
+Allow: /contact
+Allow: /terms
+Disallow: /admin-dashboard
+Disallow: /organizer-dashboard
+Disallow: /theatre-manager-dashboard
+Disallow: /user-dashboard
+Disallow: /booking/success
+Disallow: /api/
+
+Sitemap: https://naataka.lk/sitemap.xml

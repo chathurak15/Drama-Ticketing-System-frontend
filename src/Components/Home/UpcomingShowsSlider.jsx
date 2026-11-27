@@ -1,12 +1,14 @@
+"use client";
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
+import { getCdnUrl } from "../../utils/cdn";
 import useTranslation from "../../hooks/useTranslation"; 
 
 const UpcomingShowsSlider = ({ upcomingShows }) => {
   const sliderRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
-  const navigate = useNavigate();
-  const BACKEND_IMAGE_URL = "https://d3ay14vkclriu.cloudfront.net/uploads/shows/";
+  const router = useRouter();
+  const BACKEND_IMAGE_URL = `${process.env.NEXT_PUBLIC_CDN_URL || "/uploads"}/shows/`;
 
   const { translatedTexts } = useTranslation(); 
   useEffect(() => {
@@ -30,7 +32,7 @@ const UpcomingShowsSlider = ({ upcomingShows }) => {
   };
 
   const handleBooking = (showId) => {
-    navigate(`/show/${showId}`);
+    router.push(`/show/${showId}`);
   };
 
   return (
@@ -60,12 +62,16 @@ const UpcomingShowsSlider = ({ upcomingShows }) => {
             <div key={index} className="u4" style={{ minWidth: "260px" }}>
               <img
                 src={
-              show.image
-                ? `${BACKEND_IMAGE_URL}${show.image}`
-                : "/images/default.png"
-            }
+                  show.image
+                    ? getCdnUrl(show.image, "shows")
+                    : "/assets/hero.png"
+                }
                 alt={show.title}
                 style={{ width: "100%", height: "320px", objectFit: "cover" }}
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = "/assets/hero.png";
+                }}
               />
               <div style={{ padding: "10px", textAlign: "center" }}>
                 <h3

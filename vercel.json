@@ -1,12 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/api/:path*",
-      "destination": "https://server-nataka.chathurakavindu.me/api/:path*"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "source": "/api/v1/:path*",
+      "destination": "https://server-nataka.chathurakavindu.me/api/v1/:path*"
     }
   ]
 }

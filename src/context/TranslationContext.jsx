@@ -1,3 +1,5 @@
+"use client";
+
 import React, { createContext, useState, useEffect } from "react";
 import i18nTexts from "../i18nTexts";
 import axiosInstance from "../api/axiosInstance";

@@ -1,4 +1,3 @@
-import { Theater } from "lucide-react";
 import axios from "../api/axiosInstance";
 
 export const addTheatre = (theatreData, userId) => {

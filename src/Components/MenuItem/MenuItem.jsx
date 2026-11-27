@@ -1,5 +1,6 @@
+"use client";
 import React from 'react'
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import '../../assets/css/MenuItem.css'
 
 function MenuItem(props) {
@@ -7,7 +8,7 @@ function MenuItem(props) {
   const { linkurl,linktext, isButton } = props;
   return (
     <>
-      <Link to={linkurl}>{
+      <Link href={linkurl}>{
         isButton ? (
           <button id="login" className="loginbtn">{linktext}</button>
         ) : (

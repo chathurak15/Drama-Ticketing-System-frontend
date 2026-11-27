@@ -1,12 +1,14 @@
+"use client";
 import React, { useRef, useState, useEffect } from 'react';
 import { getDramas } from '../../services/dramaService';
+import { getCdnUrl } from '../../utils/cdn';
 import useTranslation from '../../hooks/useTranslation'; 
-import { Link } from "react-router-dom"
+import Link from "next/link";
 
 const NewDramas = () => {
   const [dramas, setDramas] = useState([]);
   const { translatedTexts } = useTranslation();
-  const BACKEND_IMAGE_URL = "https://d3ay14vkclriu.cloudfront.net/uploads/dramas/"; 
+  const BACKEND_IMAGE_URL = `${process.env.NEXT_PUBLIC_CDN_URL || "/uploads"}/dramas/`; 
 
   useEffect(() => {
     const fetchDramas = async () => {
@@ -105,16 +107,20 @@ const NewDramas = () => {
               flex: "0 0 auto",
             }}
           >
-            <Link to={`/drama/${drama.id}`}
+            <Link href={`/drama/${drama.id}`}
               style={{ textDecoration: "none", color: "inherit" }}
             >
               <img
                 src={
                   drama.image
-                    ? `${BACKEND_IMAGE_URL}${drama.image}`
-                    : "/images/default.png"
+                    ? getCdnUrl(drama.image, "dramas")
+                    : "/assets/hero.png"
                 }
                 alt={drama.title}
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = "/assets/hero.png";
+                }}
                 style={{
                   width: "100%",
                   height: window.innerWidth < 640 ? "140px" : "200px",

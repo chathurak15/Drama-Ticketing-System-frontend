@@ -1,11 +1,11 @@
-# Nataka.LK – Stage Drama Ticketing System (Frontend)
+# Naataka.LK – Stage Drama Ticketing System (Frontend)
 
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
 
-**Nataka.LK** is a modern, web based **stage drama ticketing platform** designed to digitalize and enhance the Sri Lankan theatre industry.  
+**Naataka.LK** is a modern, web based **stage drama ticketing platform** designed to digitalize and enhance the Sri Lankan theatre industry.  
 This repository contains the **Frontend application**, built using **React.js**, delivering a smooth and user friendly experience for audiences, organizers, and administrators.
 
 🔴 **Live Site:**  
@@ -17,7 +17,7 @@ This repository contains the **Frontend application**, built using **React.js**,
 
 A complete walkthrough of the system including drama browsing, seat selection, booking flow, and admin features:
 
-[![Nataka.LK Demo Video](https://img.youtube.com/vi/IJQm3H3ZFc0/0.jpg)](https://www.youtube.com/watch?v=IJQm3H3ZFc0)
+[![Naataka.LK Demo Video](https://img.youtube.com/vi/IJQm3H3ZFc0/0.jpg)](https://www.youtube.com/watch?v=IJQm3H3ZFc0)
 
 ---
 
@@ -147,7 +147,7 @@ For questions, feedback, or collaboration:
 ## ❤️ Acknowledgment
 
 Made with passion ❤️ to support and uplift the **Sri Lankan theatre industry** 🇱🇰
-**Nataka.LK – Where Drama Meets Technology**
+**Naataka.LK – Where Drama Meets Technology**
 
 ```
 
