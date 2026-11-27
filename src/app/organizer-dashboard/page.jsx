@@ -2,7 +2,7 @@
 
 import React, { Suspense } from "react";
 import OrganizerDashboard from "../../Components/Dashboards/OrganizerDashboard";
-import ProtectedRoute from "../../components/protect/ProtectedRoute";
+import ProtectedRoute from "../../Components/protect/ProtectedRoute";
 
 export default function OrganizerDashboardPage() {
   return (

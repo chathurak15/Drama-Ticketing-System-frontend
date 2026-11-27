@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import { Theater, Clock, Upload, Film, AlertCircle, Loader2, Trash2, CheckCircle2, Sparkles } from "lucide-react";
 import { getActors } from "../../../services/ActorService";
-import { uploadFile } from "../../../services/FileService.Js";
+import { uploadFile } from "../../../services/FileService";
 import { getCdnUrl } from "../../../utils/cdn";
 import notify from "../../../utils/notify";
 

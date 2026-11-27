@@ -36,7 +36,7 @@ import {
 } from "../../../services/TheatreService";
 import { getDramas } from "../../../services/dramaService";
 import { useAuth } from "../../../utils/AuthContext";
-import { uploadFile } from "../../../services/FileService.Js";
+import { uploadFile } from "../../../services/FileService";
 import { getCdnUrl } from "../../../utils/cdn";
 import notify from "../../../utils/notify";
 

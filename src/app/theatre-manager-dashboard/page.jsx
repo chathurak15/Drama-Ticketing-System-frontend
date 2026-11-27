@@ -2,7 +2,7 @@
 
 import React, { Suspense } from "react";
 import TheaterManagerDashboard from "../../Components/Dashboards/TheatreManagerDashboard";
-import ProtectedRoute from "../../components/protect/ProtectedRoute";
+import ProtectedRoute from "../../Components/protect/ProtectedRoute";
 
 export default function TheatreManagerDashboardPage() {
   return (

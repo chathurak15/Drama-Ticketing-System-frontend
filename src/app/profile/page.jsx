@@ -4,7 +4,7 @@ import React from "react";
 import ModernHeader from "../../Components/modern/Header";
 import ModernFooter from "../../Components/modern/Footer";
 import ProfileAndSecurityContent from "../../Components/common/ProfileAndSecurityContent";
-import ProtectedRoute from "../../components/protect/ProtectedRoute";
+import ProtectedRoute from "../../Components/protect/ProtectedRoute";
 
 export default function ProfilePage() {
   return (

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from "react";
 import { User, Upload, Calendar, AlertCircle, Loader2, CheckCircle2 } from "lucide-react";
-import { uploadFile } from "../../../services/FileService.Js";
+import { uploadFile } from "../../../services/FileService";
 import { getCdnUrl } from "../../../utils/cdn";
 import notify from "../../../utils/notify";
 

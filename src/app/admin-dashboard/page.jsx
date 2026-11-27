@@ -2,7 +2,7 @@
 
 import React, { Suspense } from "react";
 import AdminDashboard from "../../Components/Dashboards/AdminDashboard";
-import ProtectedRoute from "../../components/protect/ProtectedRoute";
+import ProtectedRoute from "../../Components/protect/ProtectedRoute";
 
 export default function AdminDashboardPage() {
   return (
