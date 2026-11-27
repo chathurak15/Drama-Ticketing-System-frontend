@@ -27,7 +27,7 @@ import { getShows } from "../services/ShowService";
 import { getDramas } from "../services/dramaService";
 import { getCdnUrl } from "../utils/cdn";
 import usePlatformConfig from "../hooks/usePlatformConfig";
-import { getPreviewShows, isPreviewMode } from "../data/previewCatalog";
+import { getPreviewShows, getPreviewDramas, isPreviewMode } from "../data/previewCatalog";
 
 const SRI_LANKAN_VENUES = [
   {
@@ -88,63 +88,15 @@ const FILTER_PILLS = [
   { id: "negombo", label: "Negombo", city: "Negombo" },
 ];
 
-const FALLBACK_SHOWS = [
-  {
-    showId: 1,
-    title: "Mama Nemai Wena Kenek - Colombo",
-    slug: "mama-nemai-wena-kenek-colombo-1",
-    location: "Nalanda College Auditorium",
-    city: { cityName: "Colombo" },
-    showDate: "2026-11-28",
-    showTime: "06:30 PM",
-    startingPrice: 750,
-    image: "mama_nemai_wena_kenek___colombo_20250710.jpg",
-    status: "approved",
-  },
-  {
-    showId: 2,
-    title: "Suba Saha Yasa - Colombo",
-    slug: "suba-saha-yasa-colombo-2",
-    location: "Elphinstone Theatre",
-    city: { cityName: "Colombo" },
-    showDate: "2026-11-29",
-    showTime: "03:30 PM",
-    startingPrice: 600,
-    image: "suba_saha_yasa___colombo_20250710.jpg",
-    status: "approved",
-  },
-  {
-    showId: 3,
-    title: "Oluhaluwo - Colombo",
-    slug: "oluhaluwo-colombo-3",
-    location: "Lionel Wendt Memorial Theatre",
-    city: { cityName: "Colombo" },
-    showDate: "2026-12-05",
-    showTime: "06:30 PM",
-    startingPrice: 800,
-    image: "show_20250710.jpg",
-    status: "approved",
-  },
-  {
-    showId: 4,
-    title: "Guru Tharu - Colombo",
-    slug: "guru-tharu-colombo-4",
-    location: "Nelum Pokuna Mahinda Rajapaksa Theatre",
-    city: { cityName: "Colombo" },
-    showDate: "2026-12-06",
-    showTime: "06:30 PM",
-    startingPrice: 600,
-    image: "guru_tharu___colombo_20250710.jpg",
-    status: "approved",
-  },
-];
+const FALLBACK_SHOWS = getPreviewShows();
+const FALLBACK_DRAMAS = getPreviewDramas();
 
 export default function HomePage() {
   const router = useRouter();
   const { payhereReviewMode } = usePlatformConfig();
 
   const [shows, setShows] = useState(FALLBACK_SHOWS);
-  const [dramas, setDramas] = useState([]);
+  const [dramas, setDramas] = useState(FALLBACK_DRAMAS);
   const [loading, setLoading] = useState(false);
 
   // Search console state
@@ -181,13 +133,16 @@ export default function HomePage() {
             setShows(FALLBACK_SHOWS);
           }
         }
-        if (dramasRes?.data?.content) {
+        if (dramasRes?.data?.content && dramasRes.data.content.length > 0) {
           setDramas(dramasRes.data.content);
+        } else {
+          setDramas(FALLBACK_DRAMAS);
         }
       } catch (err) {
         console.error("Failed to load home data, using curated repertoire shows", err);
         if (isMounted) {
           setShows(FALLBACK_SHOWS);
+          setDramas(FALLBACK_DRAMAS);
         }
       } finally {
         if (isMounted) setLoading(false);

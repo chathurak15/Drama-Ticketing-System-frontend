@@ -15,9 +15,14 @@ export const PREVIEW_SHOWS = [
     bannerImage: "https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?auto=format&fit=crop&w=800&q=80",
     drama: {
       id: "drama-preview-1",
+      slug: "nari-bena",
       title: "නරි බෑනා (Nari Bena)",
       description: "Dayananda Gunawardena's iconic masterpiece blending traditional theatrical styling with satirical commentary.",
-      category: "Comedy / Musical"
+      category: "Comedy / Musical",
+      image: "https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?auto=format&fit=crop&w=800&q=80",
+      duration: 135,
+      rating: 4.9,
+      director: "Dayananda Gunawardena"
     },
     theatre: {
       id: "theatre-wendt",
@@ -53,9 +58,14 @@ export const PREVIEW_SHOWS = [
     bannerImage: "https://images.unsplash.com/photo-1514306191717-452ec28c7814?auto=format&fit=crop&w=800&q=80",
     drama: {
       id: "drama-preview-2",
+      slug: "gajaman-puwatha",
       title: "ගජමන් පුවත (Gajaman Puwatha)",
       description: "A poignant biographical theatrical production depicting the life of poetess Gajaman Nona.",
-      category: "Drama / Historical"
+      category: "Drama / Historical",
+      image: "https://images.unsplash.com/photo-1514306191717-452ec28c7814?auto=format&fit=crop&w=800&q=80",
+      duration: 150,
+      rating: 4.8,
+      director: "Dayananda Gunawardena"
     },
     theatre: {
       id: "theatre-ymba",
@@ -72,7 +82,97 @@ export const PREVIEW_SHOWS = [
       { name: "Middle Hall", price: 2000, color: "#2563eb", rows: ["C", "D", "E", "F"], seatsPerRow: 24 },
       { name: "Balcony", price: 1000, color: "#6b7280", rows: ["G", "H", "I"], seatsPerRow: 20 }
     ]
+  },
+  {
+    showId: "preview-3",
+    id: "preview-3",
+    title: "කැලණි පාලම (Kelani Palama)",
+    slug: "kelani-palama-elphinstone",
+    location: "Elphinstone Theatre",
+    city: { cityName: "Maradana, Colombo 10" },
+    showDate: "2026-12-22",
+    showTime: "06:30 PM",
+    startingPrice: 1000,
+    status: "approved",
+    description: "R.R. Samarakoon's enduring classic portraying the resilience, humor, and struggles of riverside communities in Colombo.",
+    image: "https://images.unsplash.com/photo-1503095396549-807759245b35?auto=format&fit=crop&w=800&q=80",
+    bannerImage: "https://images.unsplash.com/photo-1503095396549-807759245b35?auto=format&fit=crop&w=800&q=80",
+    drama: {
+      id: "drama-preview-3",
+      slug: "kelani-palama",
+      title: "කැලණි පාලම (Kelani Palama)",
+      description: "R.R. Samarakoon's celebrated social drama capturing everyday life beside the Kelani River.",
+      category: "Social Drama",
+      image: "https://images.unsplash.com/photo-1503095396549-807759245b35?auto=format&fit=crop&w=800&q=80",
+      duration: 140,
+      rating: 4.9,
+      director: "R.R. Samarakoon"
+    },
+    theatre: {
+      id: "theatre-elphinstone",
+      name: "Elphinstone Theatre",
+      areaType: "THEATRE"
+    },
+    ticketPrices: [
+      { category: "VIP", price: 3500, totalSeats: 40, seatsPerRow: 20 },
+      { category: "ODC", price: 2000, totalSeats: 96, seatsPerRow: 24 },
+      { category: "Balcony", price: 1000, totalSeats: 60, seatsPerRow: 20 }
+    ],
+    seatTiers: [
+      { name: "VIP", price: 3500, color: "#D4AF37", rows: ["A", "B"], seatsPerRow: 20 },
+      { name: "ODC", price: 2000, color: "#2563eb", rows: ["C", "D", "E", "F"], seatsPerRow: 24 },
+      { name: "Balcony", price: 1000, color: "#6b7280", rows: ["G", "H", "I"], seatsPerRow: 20 }
+    ]
+  },
+  {
+    showId: "preview-4",
+    id: "preview-4",
+    title: "සිංහබාහු (Sinhabaahu)",
+    slug: "sinhabaahu-nelum-pokuna",
+    location: "Nelum Pokuna Mahinda Rajapaksa Theatre",
+    city: { cityName: "Colombo 07" },
+    showDate: "2026-12-27",
+    showTime: "06:30 PM",
+    startingPrice: 1500,
+    status: "approved",
+    description: "Prof. Ediriweera Sarachchandra's landmark stylized Sinhala drama performed with live traditional orchestra.",
+    image: "https://images.unsplash.com/photo-1469488865564-c2de10f69f96?auto=format&fit=crop&w=800&q=80",
+    bannerImage: "https://images.unsplash.com/photo-1469488865564-c2de10f69f96?auto=format&fit=crop&w=800&q=80",
+    drama: {
+      id: "drama-preview-4",
+      slug: "sinhabaahu",
+      title: "සිංහබාහු (Sinhabaahu)",
+      description: "A towering masterpiece of modern Sri Lankan theatre by Prof. Ediriweera Sarachchandra.",
+      category: "Classical / Stylized",
+      image: "https://images.unsplash.com/photo-1469488865564-c2de10f69f96?auto=format&fit=crop&w=800&q=80",
+      duration: 155,
+      rating: 5.0,
+      director: "Prof. Ediriweera Sarachchandra"
+    },
+    theatre: {
+      id: "theatre-nelum-pokuna",
+      name: "Nelum Pokuna Mahinda Rajapaksa Theatre",
+      areaType: "THEATRE"
+    },
+    ticketPrices: [
+      { category: "VIP", price: 4500, totalSeats: 40, seatsPerRow: 20 },
+      { category: "ODC Front", price: 3000, totalSeats: 75, seatsPerRow: 25 },
+      { category: "Balcony", price: 1500, totalSeats: 60, seatsPerRow: 20 }
+    ],
+    seatTiers: [
+      { name: "VIP", price: 4500, color: "#D4AF37", rows: ["A", "B"], seatsPerRow: 20 },
+      { name: "ODC Front", price: 3000, color: "#2563eb", rows: ["C", "D", "E"], seatsPerRow: 25 },
+      { name: "Balcony", price: 1500, color: "#6b7280", rows: ["F", "G", "H"], seatsPerRow: 20 }
+    ]
   }
+];
+
+export const PREVIEW_CITIES = [
+  { id: "city-colombo", cityName: "Colombo" },
+  { id: "city-kandy", cityName: "Kandy" },
+  { id: "city-galle", cityName: "Galle" },
+  { id: "city-gampaha", cityName: "Gampaha" },
+  { id: "city-negombo", cityName: "Negombo" },
 ];
 
 export const isPreviewMode = () => {
@@ -82,8 +182,83 @@ export const isPreviewMode = () => {
   return false;
 };
 
-export const getPreviewShows = () => {
-  return PREVIEW_SHOWS;
+export const getPreviewShows = (filters = {}) => {
+  const { title, city, date, venue, dramaId } = filters || {};
+  return PREVIEW_SHOWS.filter((s) => {
+    if (title) {
+      const q = String(title).toLowerCase();
+      const matchTitle =
+        (s.title || "").toLowerCase().includes(q) ||
+        (s.drama?.title || "").toLowerCase().includes(q) ||
+        (s.location || "").toLowerCase().includes(q);
+      if (!matchTitle) return false;
+    }
+    if (city && city !== "All Sri Lanka") {
+      const c = String(city).toLowerCase();
+      const showCity = (s.city?.cityName || "").toLowerCase();
+      const showLoc = (s.location || "").toLowerCase();
+      if (!showCity.includes(c) && !showLoc.includes(c)) return false;
+    }
+    if (date && s.showDate !== date) {
+      return false;
+    }
+    if (venue) {
+      const v = String(venue).toLowerCase();
+      if (!(s.location || "").toLowerCase().includes(v)) return false;
+    }
+    if (dramaId) {
+      const dTarget = String(dramaId).toLowerCase();
+      if (
+        String(s.drama?.id || "").toLowerCase() !== dTarget &&
+        String(s.drama?.slug || "").toLowerCase() !== dTarget
+      ) {
+        return false;
+      }
+    }
+    return true;
+  });
+};
+
+export const getPreviewDramas = (search = "") => {
+  const seen = new Set();
+  const dramas = [];
+  PREVIEW_SHOWS.forEach((s) => {
+    if (s.drama && !seen.has(s.drama.id)) {
+      seen.add(s.drama.id);
+      dramas.push(s.drama);
+    }
+  });
+  if (!search) return dramas;
+  const q = String(search).toLowerCase();
+  return dramas.filter(
+    (d) =>
+      (d.title || "").toLowerCase().includes(q) ||
+      (d.category || "").toLowerCase().includes(q) ||
+      (d.description || "").toLowerCase().includes(q)
+  );
+};
+
+export const getPreviewDramaById = (idOrSlug) => {
+  if (!idOrSlug) return null;
+  const target = String(idOrSlug).toLowerCase();
+  const dramas = getPreviewDramas();
+  return (
+    dramas.find(
+      (d) =>
+        String(d.id).toLowerCase() === target ||
+        String(d.slug || "").toLowerCase() === target
+    ) || null
+  );
+};
+
+export const getPreviewShowsByDramaId = (dramaIdOrSlug) => {
+  if (!dramaIdOrSlug) return [];
+  const target = String(dramaIdOrSlug).toLowerCase();
+  return PREVIEW_SHOWS.filter(
+    (s) =>
+      String(s.drama?.id || "").toLowerCase() === target ||
+      String(s.drama?.slug || "").toLowerCase() === target
+  );
 };
 
 export const getPreviewShowById = (idOrSlug) => {

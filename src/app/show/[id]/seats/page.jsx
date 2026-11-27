@@ -238,6 +238,12 @@ export default function DedicatedSeatSelectionPage() {
   const fetchUnavailableSeats = useCallback(async () => {
     const idToUse = show?.showId || (Number.isInteger(Number(showId)) ? Number(showId) : showId);
     if (!idToUse) return;
+    if (String(idToUse).startsWith("preview-") || getPreviewShowById(showId)) {
+      setBookedSeats(["A4", "A5", "C4", "C5"]);
+      setBackendLockedSeats([]);
+      setMyLockedSeats([]);
+      return;
+    }
     try {
       const slot = selectedTimeSlot || timeQuery || show?.showTime;
       const response = await getSeatAvailability(idToUse, slot);
@@ -604,7 +610,9 @@ export default function DedicatedSeatSelectionPage() {
       showTime: activeSlot,
     });
 
-    if (!user) {
+    const isPreviewShow = String(showId).startsWith("preview-") || Boolean(getPreviewShowById(showId));
+
+    if (!user && !isPreviewShow) {
       setShowAuthModal(true);
       return;
     }

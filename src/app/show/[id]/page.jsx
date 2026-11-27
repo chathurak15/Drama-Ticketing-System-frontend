@@ -163,7 +163,9 @@ export default function ShowDetailsPage() {
 
   // Checkout for General Admission shows (No seat map required)
   const handleGeneralAdmissionCheckout = () => {
-    if (!user) {
+    const isPreviewShow = String(show?.showId || "").startsWith("preview-") || Boolean(getPreviewShowById(id));
+
+    if (!user && !isPreviewShow) {
       toast.warn("Please sign in to complete ticket booking");
       router.push("/login");
       return;
@@ -195,18 +197,28 @@ export default function ShowDetailsPage() {
     }
 
     const bookingPayload = {
-      showId: Number(show.showId),
+      showId: isPreviewShow ? show.showId : Number(show.showId),
       seats: seatsList,
       totalAmount: grandTotal,
-      userId: user.id,
+      userId: user?.id || 1,
       selectedTime: selectedTime,
       showTimeSlot: selectedTime,
+      ...(isPreviewShow
+        ? {
+            isPreview: true,
+            showTitle: show?.title,
+            venue: show?.location,
+            city: show?.city?.cityName || "Colombo",
+            showDate: show?.showDate,
+            showTime: selectedTime || show?.showTime,
+          }
+        : {}),
     };
 
     if (typeof window !== "undefined") {
       sessionStorage.setItem("nataka_booking", JSON.stringify(bookingPayload));
     }
-    router.push("/booking");
+    router.push(isPreviewShow ? "/checkout" : "/booking");
   };
 
   if (loading) {

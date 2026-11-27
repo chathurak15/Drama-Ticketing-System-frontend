@@ -60,15 +60,14 @@ export default function BookingCheckoutPage() {
   useEffect(() => {
     if (authLoading) return;
 
-    if (!user) {
-      toast.warn("Please sign in to complete your ticket booking");
-      router.push("/login");
-      return;
-    }
-
     if (typeof window !== "undefined") {
       const stored = sessionStorage.getItem("nataka_booking");
       if (!stored) {
+        if (!user) {
+          toast.warn("Please sign in to complete your ticket booking");
+          router.push("/login");
+          return;
+        }
         toast.warn("No active seat selection found. Please select seats first.");
         router.push("/shows");
         return;
@@ -93,6 +92,12 @@ export default function BookingCheckoutPage() {
             city: { cityName: parsed.city || "Colombo" }
           });
           setPageLoading(false);
+          return;
+        }
+
+        if (!user) {
+          toast.warn("Please sign in to complete your ticket booking");
+          router.push("/login");
           return;
         }
 

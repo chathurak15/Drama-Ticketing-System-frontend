@@ -27,6 +27,11 @@ import { getDramaById, getDramas, getRatings } from "../../../services/dramaServ
 import { getShowsByDramaId } from "../../../services/ShowService";
 import { getCdnUrl } from "../../../utils/cdn";
 import { toast } from "react-toastify";
+import {
+  getPreviewDramaById,
+  getPreviewDramas,
+  getPreviewShowsByDramaId,
+} from "../../../data/previewCatalog";
 
 export default function DramaDetailsPage() {
   const params = useParams();
@@ -49,6 +54,14 @@ export default function DramaDetailsPage() {
     const fetchDramaData = async () => {
       try {
         setLoading(true);
+        const previewDrama = getPreviewDramaById(id);
+        if (previewDrama) {
+          setDrama(previewDrama);
+          setUpcomingShows(getPreviewShowsByDramaId(previewDrama.id));
+          setRecommendedDramas(getPreviewDramas().filter((d) => d.id !== previewDrama.id));
+          return;
+        }
+
         // id can be a slug (e.g. "kelani-palama-a3f8b2") or numeric ID (e.g. "6")
         const dramaRes = await getDramaById(id);
 
@@ -95,11 +108,13 @@ export default function DramaDetailsPage() {
     const loadFallbackDramas = async () => {
       try {
         const res = await getDramas({ page: 0, size: 4, sortByRating: "desc" });
-        if (res?.data?.content) {
+        if (res?.data?.content && res.data.content.length > 0) {
           setRecommendedDramas(res.data.content);
+        } else {
+          setRecommendedDramas(getPreviewDramas());
         }
       } catch (e) {
-        // optional fallback
+        setRecommendedDramas(getPreviewDramas());
       }
     };
 

@@ -16,7 +16,7 @@ import {
   TicketCheck,
 } from "lucide-react";
 import { getShows, getCity } from "../../services/ShowService";
-import { getPreviewShows, isPreviewMode } from "../../data/previewCatalog";
+import { getPreviewShows, PREVIEW_CITIES, isPreviewMode } from "../../data/previewCatalog";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -42,10 +42,19 @@ function ShowsContent() {
     // Fetch cities for dropdown
     const loadCities = async () => {
       try {
+        if (isPreviewMode()) {
+          setCities(PREVIEW_CITIES);
+          return;
+        }
         const res = await getCity();
-        if (Array.isArray(res)) setCities(res);
+        if (Array.isArray(res) && res.length > 0) {
+          setCities(res);
+        } else {
+          setCities(PREVIEW_CITIES);
+        }
       } catch (err) {
-        console.error("Failed to load cities", err);
+        console.warn("Failed to load cities, using sample cities", err);
+        setCities(PREVIEW_CITIES);
       }
     };
     loadCities();
@@ -68,7 +77,7 @@ function ShowsContent() {
         setLoading(true);
 
         if (isPreviewMode()) {
-          const previewList = getPreviewShows();
+          const previewList = getPreviewShows(filters);
           setShows(previewList);
           setTotalPages(1);
           return;
@@ -89,11 +98,21 @@ function ShowsContent() {
           const approvedOnly = raw.filter(
             (s) => s.status && (s.status.toLowerCase() === "approved" || s.status.toLowerCase() === "active")
           );
-          setShows(approvedOnly);
-          setTotalPages(res.data.totalPages || 1);
+          if (approvedOnly.length > 0) {
+            setShows(approvedOnly);
+            setTotalPages(res.data.totalPages || 1);
+          } else {
+            setShows(getPreviewShows(filters));
+            setTotalPages(1);
+          }
+        } else {
+          setShows(getPreviewShows(filters));
+          setTotalPages(1);
         }
       } catch (err) {
-        console.error("Error fetching shows", err);
+        console.warn("Error fetching shows, falling back to sample shows", err);
+        setShows(getPreviewShows(filters));
+        setTotalPages(1);
       } finally {
         setLoading(false);
       }

@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { getDramas } from "../../services/dramaService";
 import { getCdnUrl } from "../../utils/cdn";
+import { getPreviewDramas, isPreviewMode } from "../../data/previewCatalog";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -30,18 +31,28 @@ export default function DramasPage() {
     const fetchDramasData = async () => {
       try {
         setLoading(true);
+        if (isPreviewMode()) {
+          setDramas(getPreviewDramas(search));
+          setTotalPages(1);
+          return;
+        }
         const res = await getDramas({
           page: currentPage,
           size: ITEMS_PER_PAGE,
           title: search,
         });
 
-        if (res?.data) {
-          setDramas(res.data.content || []);
+        if (res?.data && Array.isArray(res.data.content) && res.data.content.length > 0) {
+          setDramas(res.data.content);
           setTotalPages(res.data.totalPages || 1);
+        } else {
+          setDramas(getPreviewDramas(search));
+          setTotalPages(1);
         }
       } catch (err) {
-        console.error("Error fetching dramas", err);
+        console.warn("Error fetching dramas, using sample dramas", err);
+        setDramas(getPreviewDramas(search));
+        setTotalPages(1);
       } finally {
         setLoading(false);
       }
