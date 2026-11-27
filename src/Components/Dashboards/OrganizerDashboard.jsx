@@ -79,7 +79,7 @@ const OrganizerDashboard = () => {
               </div>
               <div>
                 <h1 className="text-lg font-black tracking-tight text-slate-900 dark:text-white flex items-center gap-1.5">
-                  eNataka<span className="text-[#FED800]">.lk</span>
+                  Naataka<span className="text-[#FED800]">.lk</span>
                   <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-400 ml-2 px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10">
                     Organizer Portal
                   </span>

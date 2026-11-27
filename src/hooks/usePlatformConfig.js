@@ -77,7 +77,6 @@ export const PlatformConfigProvider = ({ children }) => {
       setLoading(false);
     }
 
-    // Refresh on tab focus
     const onFocus = () => {
       fetchAndSyncConfig();
     };
@@ -110,8 +109,8 @@ export const PlatformConfigProvider = ({ children }) => {
       if (newSettings.payhereReviewMode !== undefined || newSettings.payhereApprovedLive !== undefined) {
         toast.success(
           isLive
-            ? "PayHere Live Mode Activated! Production checkout & payouts are now live."
-            : "Switched to PayHere Review Mode (Sandbox routing active)."
+            ? "Live Mode Activated! Production checkout & payouts are now live."
+            : "Switched to Review Mode (Sandbox routing active)."
         );
       } else if (newSettings.disablePublicSignupDuringReview !== undefined) {
         toast.info(
@@ -171,7 +170,6 @@ export const PlatformConfigProvider = ({ children }) => {
 
 export const usePlatformConfig = () => {
   const context = useContext(PlatformConfigContext);
-  // Fallback to global state if outside provider
   const [standaloneConfig, setStandaloneConfig] = useState(globalConfigCache);
   const [loading, setLoading] = useState(!globalConfigCache.loaded);
 
@@ -225,8 +223,8 @@ export const usePlatformConfig = () => {
       if (newSettings.payhereReviewMode !== undefined || newSettings.payhereApprovedLive !== undefined) {
         toast.success(
           isLive
-            ? "PayHere Live Mode Activated! Production checkout & payouts are now live."
-            : "Switched to PayHere Review Mode (Sandbox routing active)."
+            ? "Live Mode Activated! Production checkout & payouts are now live."
+            : "Switched to Review Mode (Sandbox routing active)."
         );
       } else if (newSettings.disablePublicSignupDuringReview !== undefined) {
         toast.info(

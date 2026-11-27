@@ -13,7 +13,7 @@ export default function DashboardFooter() {
         {/* Left: Powered by Zeylex & Copyright */}
         <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 text-center md:text-left">
           <span>
-            © {currentYear} <strong className="text-slate-800 dark:text-slate-200 font-bold">Nataka.LK</strong> — Sri Lanka's Official Stage Drama Hub.
+            © {currentYear} <strong className="text-slate-800 dark:text-slate-200 font-bold">Naataka.LK</strong> - Sri Lanka's Official Stage Drama Hub.
           </span>
           <span className="hidden sm:inline text-slate-300 dark:text-slate-600">•</span>
           <span className="inline-flex items-center gap-1.5 font-medium">

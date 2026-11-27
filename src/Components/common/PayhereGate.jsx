@@ -2,13 +2,8 @@
 
 import React from "react";
 import { usePlatformConfig } from "../../hooks/usePlatformConfig";
-import { ShieldCheck, Info } from "lucide-react";
+import { Info } from "lucide-react";
 
-/**
- * Declarative visibility wrapper for PayHere approval compliance.
- * When requireLive=true, children are rendered only when payhereApprovedLive === true.
- * When requireLive=false, children are rendered only when payhereApprovedLive === false (Review Mode).
- */
 export const PayhereGate = ({
   children,
   requireLive = true,
@@ -19,7 +14,7 @@ export const PayhereGate = ({
   const { payhereApprovedLive, loading } = usePlatformConfig();
 
   if (loading) {
-    return null; // Or lightweight placeholder while config loads
+    return null;
   }
 
   const isConditionMet = requireLive ? payhereApprovedLive : !payhereApprovedLive;

@@ -18,7 +18,7 @@ const Chatbot = () => {
   const [messages, setMessages] = useState([
     {
       id: 1,
-      text: "Ayubowan! 🙏 Welcome to Nataka.lk – Sri Lanka's Official Stage Drama & Theatre Platform.\n\nI can recommend top-rated stage plays, check show schedules, find venues in Colombo or across Sri Lanka, and guide you through ticket bookings. How can I assist you?",
+      text: "Ayubowan! 🙏 Welcome to Naataka.lk – Sri Lanka's Official Stage Drama & Theatre Platform.\n\nI can recommend top-rated stage plays, check show schedules, find venues in Colombo or across Sri Lanka, and guide you through ticket bookings. How can I assist you?",
       sender: "bot",
       timestamp: new Date(),
     },
@@ -46,7 +46,7 @@ const Chatbot = () => {
     } catch (error) {
       return {
         reply:
-          "🎭 Welcome to Nataka.lk! You can explore our iconic Sri Lankan stage dramas at /dramas or browse live shows at /shows. Let me know if you'd like recommendations on Kelani Palama, Sinhabahu, or comedy plays!",
+          "🎭 Welcome to Naataka.lk! You can explore our iconic Sri Lankan stage dramas at /dramas or browse live shows at /shows. Let me know if you'd like recommendations on Kelani Palama, Sinhabahu, or comedy plays!",
       };
     }
   };
@@ -116,7 +116,7 @@ const Chatbot = () => {
     { label: "🎭 Suggest Dramas", query: "Suggest top Sri Lankan stage dramas" },
     { label: "📅 Upcoming Shows", query: "What upcoming shows are scheduled?" },
     { label: "📍 Shows in Colombo", query: "Upcoming stage shows in Colombo" },
-    { label: "🎟️ How to Book", query: "How do I book tickets on Nataka.lk?" },
+    { label: "🎟️ How to Book", query: "How do I book tickets on Naataka.lk?" },
   ];
 
   return (
@@ -130,7 +130,7 @@ const Chatbot = () => {
                 <Sparkles className="w-5 h-5 text-amber-300" />
               </div>
               <div>
-                <h3 className="font-bold text-sm tracking-wide">Nataka AI Assistant</h3>
+                <h3 className="font-bold text-sm tracking-wide">Naataka AI Assistant</h3>
                 <p className="text-[11px] text-amber-200/80">Sri Lanka Drama &amp; Ticketing Guide</p>
               </div>
             </div>
@@ -202,7 +202,7 @@ const Chatbot = () => {
                       style={{ animationDelay: "0.3s" }}
                     />
                   </div>
-                  <span className="text-[11px] text-slate-400">Nataka Assistant is typing...</span>
+                  <span className="text-[11px] text-slate-400">Naataka Assistant is typing...</span>
                 </div>
               </div>
             )}
@@ -256,7 +256,7 @@ const Chatbot = () => {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-14 h-14 bg-gradient-to-tr from-[#661F19] to-amber-600 text-white rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all duration-300 flex items-center justify-center border-2 border-amber-400/40 relative group"
-        aria-label="Toggle Nataka Assistant"
+        aria-label="Toggle Naataka Assistant"
       >
         {isOpen ? (
           <X size={22} className="group-hover:rotate-90 transition-transform duration-300" />

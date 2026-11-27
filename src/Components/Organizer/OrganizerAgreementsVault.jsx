@@ -556,7 +556,7 @@ export default function OrganizerAgreementsVault({ onNavigateToKyc }) {
         doc.text("DIGITAL SOLUTIONS", margin, 15);
       }
 
-      // Right: Nataka Logo
+      // Right: Naataka Logo
       try {
         const natakaImg = new Image();
         natakaImg.src = "/images/nataka-logo.png";
@@ -565,7 +565,7 @@ export default function OrganizerAgreementsVault({ onNavigateToKyc }) {
         doc.setTextColor(254, 216, 0);
         doc.setFontSize(8);
         doc.setFont("helvetica", "bold");
-        doc.text("eNataka.lk", pageWidth - margin - 20, 10);
+        doc.text("Naataka.lk", pageWidth - margin - 20, 10);
         doc.setTextColor(241, 245, 249);
         doc.setFontSize(5.5);
         doc.text("TICKETING", pageWidth - margin - 20, 15);
@@ -579,7 +579,7 @@ export default function OrganizerAgreementsVault({ onNavigateToKyc }) {
       doc.setTextColor(241, 245, 249);
       doc.setFontSize(6.6);
       doc.setFont("helvetica", "normal");
-      doc.text("Zeylex Digital Solutions (operating the eNataka.lk Online Ticketing Platform) | BR No: POL/ELH/ESD/02/01/1941/2026", pageWidth / 2, 16, { align: "center" });
+      doc.text("Zeylex Digital Solutions (operating the Naataka.lk Online Ticketing Platform) | BR No: POL/ELH/ESD/02/01/1941/2026", pageWidth / 2, 16, { align: "center" });
 
       let y = 26.5;
       doc.setTextColor(100, 116, 139);
@@ -601,7 +601,7 @@ export default function OrganizerAgreementsVault({ onNavigateToKyc }) {
       doc.setFont("helvetica", "bold");
       doc.text("PARTY A (Platform):", margin + 3.5, boxY + 5.5);
       doc.setFont("helvetica", "normal");
-      doc.text("Zeylex Digital Solutions (operating the eNataka.lk Online Ticketing Platform) | BR No: POL/ELH/ESD/02/01/1941/2026", margin + 33, boxY + 5.5);
+      doc.text("Zeylex Digital Solutions (operating the Naataka.lk Online Ticketing Platform) | BR No: POL/ELH/ESD/02/01/1941/2026", margin + 33, boxY + 5.5);
 
       // Party B & NIC
       doc.setFont("helvetica", "bold");
@@ -612,7 +612,7 @@ export default function OrganizerAgreementsVault({ onNavigateToKyc }) {
       doc.setFont("helvetica", "bold");
       doc.text("National Identity Card (NIC):", margin + 110, boxY + 11);
       doc.setFont("helvetica", "normal");
-      doc.text(agr.nicNumber || "—", margin + 150, boxY + 11);
+      doc.text(agr.nicNumber || "-", margin + 150, boxY + 11);
 
       // Venue
       doc.setFont("helvetica", "bold");
@@ -624,7 +624,7 @@ export default function OrganizerAgreementsVault({ onNavigateToKyc }) {
       doc.setFont("helvetica", "bold");
       doc.text("Registered Contact:", margin + 3.5, boxY + 21.5);
       doc.setFont("helvetica", "normal");
-      doc.text(`${agr.organizerEmail || user?.email || "partner@nataka.lk"} | ${agr.organizerPhone || user?.phoneNumber || "—"}`, margin + 32, boxY + 21.5);
+      doc.text(`${agr.organizerEmail || user?.email || "partner@naataka.lk"} | ${agr.organizerPhone || user?.phoneNumber || "-"}`, margin + 32, boxY + 21.5);
 
       y = boxY + 29.5;
 
@@ -791,7 +791,7 @@ export default function OrganizerAgreementsVault({ onNavigateToKyc }) {
       doc.text("Signed At:", margin + 78, auditY + 8.8);
       doc.setFont("helvetica", "normal");
       doc.setTextColor(15, 23, 42);
-      doc.text(agr.signedAtFormatted || "—", margin + 92, auditY + 8.8);
+      doc.text(agr.signedAtFormatted || "-", margin + 92, auditY + 8.8);
 
       doc.setFont("helvetica", "bold");
       doc.setTextColor(71, 85, 105);
@@ -805,7 +805,7 @@ export default function OrganizerAgreementsVault({ onNavigateToKyc }) {
       doc.text("Party B NIC:", margin + 78, auditY + 13.5);
       doc.setFont("helvetica", "normal");
       doc.setTextColor(15, 23, 42);
-      doc.text(agr.nicNumber || "—", margin + 96, auditY + 13.5);
+      doc.text(agr.nicNumber || "-", margin + 96, auditY + 13.5);
 
       doc.setFont("helvetica", "bold");
       doc.setTextColor(71, 85, 105);
@@ -1506,7 +1506,7 @@ export default function OrganizerAgreementsVault({ onNavigateToKyc }) {
                   ZEYLEX DIGITAL SOLUTIONS
                 </h1>
                 <p className="text-[11px] text-slate-600 font-sans">
-                  operating the eNataka.lk Online Ticketing Platform
+                  operating the Naataka.lk Online Ticketing Platform
                 </p>
                 <p className="text-[10px] text-slate-500 font-mono">
                   Business Registration No: POL/ELH/ESD/02/01/1941/2026
@@ -1521,12 +1521,12 @@ export default function OrganizerAgreementsVault({ onNavigateToKyc }) {
 
               {/* Parties Box */}
               <div className="p-3 bg-slate-50 border rounded-lg space-y-1 font-sans text-[11px]">
-                <p><strong>PARTY A (Platform):</strong> Zeylex Digital Solutions (operating the eNataka.lk Online Ticketing Platform) | BR No: POL/ELH/ESD/02/01/1941/2026</p>
+                <p><strong>PARTY A (Platform):</strong> Zeylex Digital Solutions (operating the Naataka.lk Online Ticketing Platform) | BR No: POL/ELH/ESD/02/01/1941/2026</p>
                 <p className="text-slate-600 font-mono text-[10px]">Address: No. 43, Jamburewela, Aththanakadawala, 51235, Sri Lanka | admin@zeylex.com</p>
                 <p><strong>PARTY B (Organizer / Venue):</strong> {selectedContract.accountName || selectedContract.organizerName}</p>
                 <p><strong>National Identity Card (NIC):</strong> {selectedContract.nicNumber}</p>
                 <p><strong>Associated Venue / Hall:</strong> {selectedContract.venueName}</p>
-                <p><strong>Registered Contact:</strong> {selectedContract.organizerEmail || user?.email} | {selectedContract.organizerPhone || user?.phoneNumber || "—"}</p>
+                <p><strong>Registered Contact:</strong> {selectedContract.organizerEmail || user?.email} | {selectedContract.organizerPhone || user?.phoneNumber || "-"}</p>
               </div>
 
               <h4 className="font-bold text-sm text-slate-900 pt-1 font-sans">1. Scope of Settlement, Agency & Revenue Sharing</h4>

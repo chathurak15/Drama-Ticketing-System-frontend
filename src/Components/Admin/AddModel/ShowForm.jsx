@@ -59,7 +59,7 @@ const ShowForm = forwardRef(({ formData, setFormData }, ref) => {
         <span className="text-sm font-bold text-white">Show Information</span>
       </div>
 
-      {/* Row 1 — Show Title (full width) */}
+      {/* Row 1 - Show Title (full width) */}
       <div>
         <label className={labelClass}>
           Show Title <RequiredStar />
@@ -73,7 +73,7 @@ const ShowForm = forwardRef(({ formData, setFormData }, ref) => {
         />
       </div>
 
-      {/* Row 2 — Description (full width) */}
+      {/* Row 2 - Description (full width) */}
       <div>
         <label className={labelClass}>
           Description <RequiredStar />
@@ -87,7 +87,7 @@ const ShowForm = forwardRef(({ formData, setFormData }, ref) => {
         />
       </div>
 
-      {/* Row 3 — Show Date | Primary Show Time */}
+      {/* Row 3 - Show Date | Primary Show Time */}
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className={labelClass}>
@@ -113,7 +113,7 @@ const ShowForm = forwardRef(({ formData, setFormData }, ref) => {
         </div>
       </div>
 
-      {/* Row 4 — Multi-slot Show Times */}
+      {/* Row 4 - Multi-slot Show Times */}
       <div>
         <label className={labelClass}>Additional Show Times</label>
         <input
@@ -128,7 +128,7 @@ const ShowForm = forwardRef(({ formData, setFormData }, ref) => {
         </p>
       </div>
 
-      {/* Row 5 — Venue | City */}
+      {/* Row 5 - Venue | City */}
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className={labelClass}>
@@ -154,7 +154,7 @@ const ShowForm = forwardRef(({ formData, setFormData }, ref) => {
         </div>
       </div>
 
-      {/* Row 6 — Drama ID | Theatre ID */}
+      {/* Row 6 - Drama ID | Theatre ID */}
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className={labelClass}>
@@ -185,7 +185,7 @@ const ShowForm = forwardRef(({ formData, setFormData }, ref) => {
         </div>
       </div>
 
-      {/* Row 7 — Base Ticket Price | Status */}
+      {/* Row 7 - Base Ticket Price | Status */}
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className={labelClass}>Base Ticket Price (LKR)</label>

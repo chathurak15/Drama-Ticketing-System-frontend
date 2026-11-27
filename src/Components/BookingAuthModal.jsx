@@ -507,7 +507,7 @@ export default function BookingAuthModal({
             <form onSubmit={handleLoginSubmit} className="space-y-4">
               <div>
                 <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-                  Welcome to Nataka.LK
+                  Welcome to Naataka.LK
                 </h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                   Sign in to hold your seats {showTitle ? `for ${showTitle} ` : ""}with a 10-minute priority lock.

@@ -66,19 +66,19 @@ const TheatreManagerSideBar = ({ activeTab, setActiveTab }) => {
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        {/* Brand Header with Main Nataka Logo */}
+        {/* Brand Header with Main Naataka Logo */}
         <div>
           <div className="p-5 border-b border-slate-200 dark:border-white/5 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-3 group">
               <div className="relative shrink-0 flex items-center">
                 <img
                   src="/logo-nataka.png"
-                  alt="Nataka.LK"
+                  alt="Naataka.LK"
                   className="h-8 w-auto object-contain block dark:hidden transition-transform group-hover:scale-105"
                 />
                 <img
                   src="/logo-nataka-white.png"
-                  alt="Nataka.LK"
+                  alt="Naataka.LK"
                   className="h-8 w-auto object-contain hidden dark:block transition-transform group-hover:scale-105"
                 />
               </div>

@@ -369,7 +369,7 @@ const OrganizerKycDocuments = ({ onNavigateToAgreements }) => {
               {isUploading ? (
                 <div className="py-2 flex flex-col items-center">
                   <Loader2 className="w-8 h-8 text-[#FED800] animate-spin mb-2" />
-                  <p className="text-xs font-bold text-amber-300">Uploading securely to Nataka Vault...</p>
+                  <p className="text-xs font-bold text-amber-300">Uploading securely to Naataka Vault...</p>
                   <p className="text-[10px] text-slate-400 mt-1">Please wait a moment</p>
                 </div>
               ) : (
@@ -415,7 +415,7 @@ const OrganizerKycDocuments = ({ onNavigateToAgreements }) => {
       case "Verified":
         return {
           title: "KYC Identity & Bank Verification Complete",
-          desc: "All required identity and banking documents have been verified by Nataka LK Compliance. Your organizer account is fully approved for instant automated payout releases.",
+          desc: "All required identity and banking documents have been verified by Naataka LK Compliance. Your organizer account is fully approved for instant automated payout releases.",
           badge: "Verified",
           icon: ShieldCheck,
           bg: "bg-gradient-to-r from-emerald-950/40 via-emerald-900/20 to-[#12121c] border-emerald-500/40 text-emerald-300",
@@ -542,7 +542,7 @@ const OrganizerKycDocuments = ({ onNavigateToAgreements }) => {
       {/* 2. THE 4 UPLOAD CARDS */}
       <div className="space-y-6">
 
-        {/* CARD 1: National Identity Card (NIC) — Required */}
+        {/* CARD 1: National Identity Card (NIC) - Required */}
         <div className="bg-[#12121c] border border-white/10 rounded-2xl p-6 shadow-xl space-y-5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
             <div className="flex items-center gap-3">
@@ -603,7 +603,7 @@ const OrganizerKycDocuments = ({ onNavigateToAgreements }) => {
           </div>
         </div>
 
-        {/* CARD 2: Business Registration (BR) Certificate — Optional */}
+        {/* CARD 2: Business Registration (BR) Certificate - Optional */}
         <div className="bg-[#12121c] border border-white/10 rounded-2xl p-6 shadow-xl space-y-5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
             <div className="flex items-center gap-3">
@@ -653,7 +653,7 @@ const OrganizerKycDocuments = ({ onNavigateToAgreements }) => {
           </div>
         </div>
 
-        {/* CARD 3: Bank Passbook / Statement Proof — Required */}
+        {/* CARD 3: Bank Passbook / Statement Proof - Required */}
         <div className="bg-[#12121c] border border-white/10 rounded-2xl p-6 shadow-xl space-y-5">
           <div className="flex items-center gap-3 pb-4 border-b border-white/10">
             <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
@@ -683,7 +683,7 @@ const OrganizerKycDocuments = ({ onNavigateToAgreements }) => {
           </div>
         </div>
 
-        {/* CARD 4: Other Supporting KYC Documents — Optional (Multi-file) */}
+        {/* CARD 4: Other Supporting KYC Documents - Optional (Multi-file) */}
         <div className="bg-[#12121c] border border-white/10 rounded-2xl p-6 shadow-xl space-y-5">
           <div className="flex items-center justify-between gap-4 pb-4 border-b border-white/10 flex-wrap">
             <div className="flex items-center gap-3">

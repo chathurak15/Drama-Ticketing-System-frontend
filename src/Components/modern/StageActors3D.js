@@ -1,6 +1,6 @@
 /**
  * StageActors3D.js
- * High-performance, procedurally-rigged 3D Sri Lankan Stage Drama Actors for NatakaLK.
+ * High-performance, procedurally-rigged 3D Sri Lankan Stage Drama Actors for NaatakaLK.
  *
  * Key Highlights:
  * 1. ZERO External Network Downloads: 0 KB payload, loads instantly in 0 ms.

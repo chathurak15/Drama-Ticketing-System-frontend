@@ -34,6 +34,7 @@ import { getCdnUrl } from "../../../utils/cdn";
 import { toast } from "react-toastify";
 import { useAuth } from "../../../utils/AuthContext";
 import ShareModal from "../../../Components/common/ShareModal";
+import { getPreviewShowById, isPreviewMode } from "../../../data/previewCatalog";
 
 export default function ShowDetailsPage() {
   const params = useParams();
@@ -58,6 +59,17 @@ export default function ShowDetailsPage() {
     const fetchShow = async () => {
       try {
         setLoading(true);
+
+        const previewShow = getPreviewShowById(id);
+        if (previewShow) {
+          setShow(previewShow);
+          setSelectedTime(previewShow.showTime || "06:30 PM");
+          setGeneralQuantities({
+            [previewShow.ticketPrices?.[0]?.category || "Standard"]: 2
+          });
+          return;
+        }
+
         const res = await getShowById(id);
         if (res?.data) {
           const statusLower = (res.data.status || "").toLowerCase();
@@ -578,14 +590,13 @@ export default function ShowDetailsPage() {
               </ul>
             </div>
 
-            {/* Payment & Security */}
             <div className="ticket-card bg-white dark:bg-[#14141e] p-6 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
               <h3 className="text-sm font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider mb-4 flex items-center gap-1.5">
                 <ShieldCheck className="w-4 h-4" />
                 <span>Payment &amp; Security</span>
               </h3>
               <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-3">
-                Payments are securely processed via PayHere with 256-bit encryption. Accepted methods include VISA, MasterCard, eZ Cash, and mCash.
+                Payments are securely processed via Central Bank of Sri Lanka (CBSL) approved Internet Payment Gateways with 256-bit encryption. Accepted methods include Visa, Mastercard, and American Express.
               </p>
               <div className="flex items-center gap-2 text-xs font-semibold text-emerald-700 dark:text-emerald-400">
                 <CheckCircle2 className="w-3.5 h-3.5" />
@@ -608,8 +619,8 @@ export default function ShowDetailsPage() {
         isOpen={isShareModalOpen}
         onClose={() => setIsShareModalOpen(false)}
         title={show.title}
-        text={`Book tickets for ${show.title} at ${show.location || "theatre"} on Nataka.lk! 🎭`}
-        url={typeof window !== "undefined" ? window.location.href : `https://nataka.lk/show/${show.slug || show.showId}`}
+        text={`Book tickets for ${show.title} at ${show.location || "theatre"} on Naataka.lk! 🎭`}
+        url={typeof window !== "undefined" ? window.location.href : `https://naataka.lk/show/${show.slug || show.showId}`}
         image={posterUrl}
       />
 
@@ -636,7 +647,7 @@ export default function ShowDetailsPage() {
             },
             "offers": {
               "@type": "Offer",
-              "url": typeof window !== "undefined" ? window.location.href : `https://nataka.lk/show/${show.slug || show.showId}`,
+              "url": typeof window !== "undefined" ? window.location.href : `https://naataka.lk/show/${show.slug || show.showId}`,
               "price": "1000",
               "priceCurrency": "LKR",
               "availability": "https://schema.org/InStock"

@@ -39,7 +39,7 @@ const Logout = () => {
       <ConfirmModal
         isOpen={isModalOpen}
         title="Confirm Logout"
-        message="Are you sure you want to sign out of your Nataka LK account?"
+        message="Are you sure you want to sign out of your Naataka LK account?"
         confirmText="Yes, Log Out"
         cancelText="Stay Signed In"
         confirmVariant="danger"

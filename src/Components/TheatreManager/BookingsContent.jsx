@@ -162,8 +162,8 @@ const BookingsContent = () => {
   const handleQRScan = (result) => {
     if (result) {
       let cleanText = result.trim();
-      // If it contains NATAKA-TICKET-XXX, extract ticket ID
-      if (cleanText.includes("NATAKA-TICKET-")) {
+      // If it contains NAATAKA-TICKET-XXX, extract ticket ID
+      if (cleanText.includes("NAATAKA-TICKET-")) {
         const parts = cleanText.split("-");
         if (parts.length >= 3) {
           cleanText = parts[2];

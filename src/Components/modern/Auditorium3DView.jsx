@@ -428,7 +428,7 @@ export default function Auditorium3DView({
     ctx.fillStyle = "rgba(254, 216, 0, 0.95)";
     ctx.font = "bold 13px 'Plus Jakarta Sans', sans-serif";
     ctx.textAlign = "center";
-    ctx.fillText("✦ eNATAKA SRI LANKA • වේදිකා නාට්‍ය ✦", 256, 42);
+    ctx.fillText("✦ eNAATAKA SRI LANKA • වේදිකා නාට්‍ය ✦", 256, 42);
 
     ctx.fillStyle = "#ffffff";
     ctx.font = "900 24px 'Plus Jakarta Sans', sans-serif";

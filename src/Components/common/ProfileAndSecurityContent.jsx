@@ -584,7 +584,7 @@ export default function ProfileAndSecurityContent({ embedded = false }) {
                 Your personal details, Sri Lankan mobile number, and booking history are strictly protected with encrypted data security.
               </p>
               <div className="pt-2 border-t border-emerald-500/20 flex flex-wrap items-center justify-between gap-1 text-[10px] text-slate-500 dark:text-slate-400">
-                <span>🇱🇰 PayHere & LankaPay Secure</span>
+                <span>🇱🇰 CBSL-Approved IPG & LankaPay Secure</span>
                 <span>Islandwide Verified Venues</span>
               </div>
             </div>

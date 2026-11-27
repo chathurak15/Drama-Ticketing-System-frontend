@@ -84,7 +84,7 @@ const DashboardContent = ({ setAddType, setShowAddModal, setActiveTab }) => {
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-2">
             <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-[#FED800]/20 text-[#FED800] border border-[#FED800]/40 uppercase tracking-wider">
-              Nataka Master Control
+              Naataka Master Control
             </span>
             <span className="text-xs text-slate-400">Platform Administrator</span>
           </div>
@@ -300,7 +300,7 @@ const DashboardContent = ({ setAddType, setShowAddModal, setActiveTab }) => {
                     {show.theatreName || "Proscenium Hall"}
                   </td>
                   <td className="py-3.5 px-3 text-slate-400">
-                    {show.organizer || "Nataka Ensemble"}
+                    {show.organizer || "Naataka Ensemble"}
                   </td>
                   <td className="py-3.5 px-3 text-slate-400">
                     {show.showDate ? new Date(show.showDate).toLocaleDateString() : "Scheduled"}

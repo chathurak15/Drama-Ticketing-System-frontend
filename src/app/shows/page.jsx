@@ -16,6 +16,7 @@ import {
   TicketCheck,
 } from "lucide-react";
 import { getShows, getCity } from "../../services/ShowService";
+import { getPreviewShows, isPreviewMode } from "../../data/previewCatalog";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -65,6 +66,14 @@ function ShowsContent() {
     const fetchShowsData = async () => {
       try {
         setLoading(true);
+
+        if (isPreviewMode()) {
+          const previewList = getPreviewShows();
+          setShows(previewList);
+          setTotalPages(1);
+          return;
+        }
+
         const res = await getShows({
           page: currentPage,
           size: ITEMS_PER_PAGE,

@@ -235,7 +235,7 @@ const PaymentsFinanceContent = () => {
       return;
     }
 
-    let csv = "NATAKA.LK FINANCIAL & BOX OFFICE LEDGER\n";
+    let csv = "NAATAKA.LK FINANCIAL & BOX OFFICE LEDGER\n";
     csv += `Period: ${summaryData.periodStart || ""} to ${summaryData.periodEnd || ""}\n\n`;
 
     csv += "--- PLATFORM TREASURY & FINANCIAL SEPARATION ---\n";
@@ -294,13 +294,13 @@ const PaymentsFinanceContent = () => {
       const doc = new jsPDF();
 
       // Brand Header
-      doc.setFillColor(102, 31, 25); // #661F19 Nataka Crimson
+      doc.setFillColor(102, 31, 25); // #661F19 Naataka Crimson
       doc.rect(0, 0, 210, 32, "F");
 
       doc.setTextColor(254, 216, 0); // #FED800 Gold
       doc.setFontSize(20);
       doc.setFont("helvetica", "bold");
-      doc.text("NATAKA.LK", 14, 18);
+      doc.text("NAATAKA.LK", 14, 18);
 
       doc.setTextColor(255, 255, 255);
       doc.setFontSize(10);
@@ -323,7 +323,7 @@ const PaymentsFinanceContent = () => {
       doc.setTextColor(102, 31, 25);
       doc.text(`Buyer Gross Collected: LKR ${(summaryData.buyerGrossCollected || summaryData.totalGrossRevenue || 0).toLocaleString()}`, 14, y);
       doc.setTextColor(190, 130, 0);
-      doc.text(`eNataka Platform Fee Revenue: LKR ${(summaryData.platformConvenienceFeeRevenue || 0).toLocaleString()}`, 110, y);
+      doc.text(`Naataka Platform Fee Revenue: LKR ${(summaryData.platformConvenienceFeeRevenue || 0).toLocaleString()}`, 110, y);
 
       y += 6;
       doc.setTextColor(30, 30, 45);
@@ -426,7 +426,7 @@ const PaymentsFinanceContent = () => {
         doc.setPage(i);
         doc.setFontSize(8);
         doc.setTextColor(150, 150, 150);
-        doc.text(`Nataka.lk System Generated Financial Audit Statement • Page ${i} of ${pageCount}`, 14, 290);
+        doc.text(`Naataka.lk System Generated Financial Audit Statement • Page ${i} of ${pageCount}`, 14, 290);
       }
 
       doc.save(`nataka_financial_statement_${Date.now()}.pdf`);
@@ -451,7 +451,7 @@ const PaymentsFinanceContent = () => {
           </div>
           <h2 className="text-2xl font-bold text-white mt-1">Payments & Finance Intelligence</h2>
           <p className="text-xs text-slate-400 mt-0.5">
-            Audit customer payments, manage PayHere transactions, inspect seat revenues, and generate exportable financial statements.
+            Audit customer payments, inspect IPG gateway transactions, inspect seat revenues, and generate exportable financial statements.
           </p>
         </div>
 
@@ -521,7 +521,7 @@ const PaymentsFinanceContent = () => {
             </div>
             <div className="text-[10px] text-emerald-400 flex items-center gap-1 mt-1 font-semibold">
               <CheckCircle className="w-3 h-3" />
-              <span>Gross via PayHere Gateway</span>
+              <span>Gross via Payment Gateway</span>
             </div>
           </div>
 
@@ -531,7 +531,7 @@ const PaymentsFinanceContent = () => {
               <DollarSign className="w-5 h-5" />
             </div>
             <div className="text-[10px] font-bold text-[#FED800] uppercase tracking-wider flex items-center gap-1">
-              <span>eNataka Platform Fee</span>
+              <span>Naataka Platform Fee</span>
             </div>
             <div className="text-xl font-black text-[#FED800] mt-1">
               LKR {(summaryData?.platformConvenienceFeeRevenue || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
@@ -744,12 +744,11 @@ const PaymentsFinanceContent = () => {
                               </div>
                             </td>
 
-                            {/* Buyer Grand Total (Collected via PayHere) */}
                             <td className="py-3.5 px-3 text-right whitespace-nowrap">
                               <div className="font-extrabold text-white text-xs">
                                 LKR {Number(buyerTotal).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                               </div>
-                              <div className="text-[9px] text-emerald-400 font-semibold uppercase">PayHere Gross</div>
+                              <div className="text-[9px] text-emerald-400 font-semibold uppercase">Gateway Gross</div>
                             </td>
 
                             {/* Partner Net Share */}
@@ -871,7 +870,7 @@ const PaymentsFinanceContent = () => {
                   <span>Refund Requests & Settlement Audits</span>
                 </h3>
                 <p className="text-xs text-slate-400 mt-1">
-                  100% Face Value refunds for cancelled/postponed productions • LankaPay CEFT/SLIPS & PayHere Reversals
+                  100% Face Value refunds for cancelled/postponed productions • LankaPay CEFT/SLIPS & Gateway Reversals
                 </p>
               </div>
 
@@ -945,7 +944,7 @@ const PaymentsFinanceContent = () => {
                                 </span>
                               </div>
                             ) : (
-                              <span className="text-slate-500 italic">PayHere Card Reversal</span>
+                              <span className="text-slate-500 italic">Gateway Card Reversal</span>
                             )}
                           </td>
 
@@ -1317,28 +1316,28 @@ const PaymentsFinanceContent = () => {
                 </div>
 
                 <div className="flex justify-between text-slate-300">
-                  <span>eNataka Platform Convenience Fee:</span>
+                  <span>Naataka Platform Convenience Fee:</span>
                   <span className="font-bold text-[#FED800]">
                     +LKR {Number(selectedReceipt.platformConvenienceFee != null ? selectedReceipt.platformConvenienceFee : 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </span>
                 </div>
 
                 <div className="flex justify-between text-slate-300 border-t border-white/5 pt-1.5">
-                  <span className="font-semibold text-white">Buyer Grand Total (PayHere):</span>
+                  <span className="font-semibold text-white">Buyer Grand Total (Gateway):</span>
                   <span className="font-extrabold text-white">
                     LKR {Number(selectedReceipt.buyerGrandTotal != null ? selectedReceipt.buyerGrandTotal : selectedReceipt.totalAmount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </span>
                 </div>
 
                 <div className="flex justify-between text-slate-400 text-[11px]">
-                  <span>PayHere Gateway Fee (3.3%):</span>
+                  <span>IPG Gateway Fee (3.3%):</span>
                   <span className="font-mono text-rose-300">
                     -LKR {Number(selectedReceipt.payhereGatewayFee != null ? selectedReceipt.payhereGatewayFee : ((selectedReceipt.buyerGrandTotal || selectedReceipt.totalAmount) * 0.033)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </span>
                 </div>
 
                 <div className="flex justify-between text-slate-400 text-[11px]">
-                  <span>eNataka Net Margin:</span>
+                  <span>Naataka Net Margin:</span>
                   <span className="font-mono font-bold text-amber-300">
                     LKR {Number(selectedReceipt.netPlatformProfit != null ? selectedReceipt.netPlatformProfit : ((selectedReceipt.platformConvenienceFee || 0) - ((selectedReceipt.buyerGrandTotal || selectedReceipt.totalAmount) * 0.033))).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </span>
@@ -1391,7 +1390,7 @@ const PaymentsFinanceContent = () => {
                   <span>Process Refund & Disburse Funds</span>
                 </h3>
                 <p className="text-xs text-slate-400 mt-1">
-                  Reconcile LankaPay CEFT/SLIPS transfer or PayHere reversal
+                  Reconcile LankaPay CEFT/SLIPS transfer or gateway reversal
                 </p>
               </div>
               <button
@@ -1463,7 +1462,7 @@ const PaymentsFinanceContent = () => {
                     className="w-full bg-[#1b1b28] border border-white/10 text-xs text-white p-2.5 rounded-xl focus:border-amber-500 focus:outline-none"
                   >
                     <option value="BANK_TRANSFER">LankaPay CEFT / SLIPS</option>
-                    <option value="PAYHERE_REVERSAL">PayHere Portal Reversal</option>
+                    <option value="PAYHERE_REVERSAL">Gateway Portal Reversal</option>
                   </select>
                 </div>
 
@@ -1571,7 +1570,7 @@ const PaymentsFinanceContent = () => {
                     onChange={(e) => setManualRefundForm({ ...manualRefundForm, refundMethod: e.target.value })}
                     className="w-full bg-[#1b1b28] border border-white/10 text-xs text-white p-2.5 rounded-xl focus:border-amber-500 focus:outline-none"
                   >
-                    <option value="PAYHERE_REVERSAL">PayHere Portal Reversal</option>
+                    <option value="PAYHERE_REVERSAL">Gateway Portal Reversal</option>
                     <option value="BANK_TRANSFER">Direct Bank Transfer</option>
                   </select>
                 </div>
@@ -1582,7 +1581,7 @@ const PaymentsFinanceContent = () => {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. PAYHERE-REV-12345"
+                    placeholder="e.g. REV-12345"
                     value={manualRefundForm.refundReferenceNo}
                     onChange={(e) => setManualRefundForm({ ...manualRefundForm, refundReferenceNo: e.target.value })}
                     className="w-full bg-[#1b1b28] border border-white/10 text-xs text-white p-2.5 rounded-xl focus:border-amber-500 focus:outline-none font-mono"

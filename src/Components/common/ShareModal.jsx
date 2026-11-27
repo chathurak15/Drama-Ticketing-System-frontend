@@ -15,7 +15,7 @@ export default function ShareModal({
   isOpen,
   onClose,
   title = "Sri Lanka Stage Drama",
-  text = "Check out this stage drama on Nataka.lk!",
+  text = "Check out this stage drama on Naataka.lk!",
   url = typeof window !== "undefined" ? window.location.href : "",
   image = "",
 }) {
@@ -24,7 +24,7 @@ export default function ShareModal({
   if (!isOpen) return null;
 
   const currentUrl = url || (typeof window !== "undefined" ? window.location.href : "");
-  const shareText = `${title} - Official Sri Lanka Stage Drama Tickets on Nataka.lk 🎭`;
+  const shareText = `${title} - Official Sri Lanka Stage Drama Tickets on Naataka.lk 🎭`;
   const encodedUrl = encodeURIComponent(currentUrl);
   const encodedText = encodeURIComponent(`${shareText}\n${currentUrl}`);
 
@@ -162,7 +162,7 @@ export default function ShareModal({
               {title}
             </h4>
             <p className="text-[11px] text-amber-700 dark:text-amber-400 font-medium">
-              Nataka.lk • Sri Lanka Stage Drama
+              Naataka.lk • Sri Lanka Stage Drama
             </p>
             <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
               {currentUrl}

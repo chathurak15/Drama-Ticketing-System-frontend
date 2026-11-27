@@ -200,7 +200,7 @@ const DashboardContent = ({ setActiveTab, setAddType, setShowAddModal }) => {
               Confirmed Gate & Pre-sale Receipts
             </div>
           </div>
-          <div className="text-[10px] text-slate-500">Processed via Nataka Payments</div>
+          <div className="text-[10px] text-slate-500">Processed via Naataka Payments</div>
         </div>
       </div>
 

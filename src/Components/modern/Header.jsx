@@ -168,12 +168,12 @@ export default function ModernHeader() {
           <Link href="/" className="flex items-center gap-2.5 group shrink-0 py-1">
             <img
               src="/logo-nataka.png"
-              alt="Nataka.LK"
+              alt="Naataka.LK"
               className="h-7 sm:h-8 w-auto object-contain transition-transform group-hover:scale-105 block dark:hidden"
             />
             <img
               src="/logo-nataka-white.png"
-              alt="Nataka.LK"
+              alt="Naataka.LK"
               className="h-7 sm:h-8 w-auto object-contain transition-transform group-hover:scale-105 hidden dark:block"
             />
           </Link>

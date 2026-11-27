@@ -1,7 +1,7 @@
 export default function manifest() {
   return {
-    name: "eNataka.lk — Sri Lanka's Stage Drama Ticketing Platform",
-    short_name: "eNataka",
+    name: "Naataka.lk - Sri Lanka's Stage Drama Ticketing Platform",
+    short_name: "Naataka",
     description: "Book tickets online for Sri Lanka's top stage dramas, theatre shows, and live cultural performances.",
     start_url: "/",
     display: "standalone",

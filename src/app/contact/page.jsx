@@ -73,7 +73,7 @@ export default function ContactPage() {
                 <div className="flex items-start gap-3 text-xs text-slate-600 dark:text-slate-300">
                   <MapPin className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold text-slate-900 dark:text-white">Nataka.lk Support Office</p>
+                    <p className="font-semibold text-slate-900 dark:text-white">Naataka.lk Support Office</p>
                     <p className="text-slate-500 dark:text-slate-400">Guilford Crescent, Colombo 07, Western Province, Sri Lanka</p>
                   </div>
                 </div>
@@ -93,7 +93,7 @@ export default function ContactPage() {
                   <div>
                     <p className="font-semibold text-slate-900 dark:text-white">Email Address</p>
                     <p className="text-slate-500 dark:text-slate-400">
-                      <a href="mailto:support@nataka.lk" className="hover:underline">support@nataka.lk</a> / <a href="mailto:tickets@nataka.lk" className="hover:underline">tickets@nataka.lk</a>
+                      <a href="mailto:support@naataka.lk" className="hover:underline">support@naataka.lk</a> / <a href="mailto:tickets@naataka.lk" className="hover:underline">tickets@naataka.lk</a>
                     </p>
                   </div>
                 </div>
@@ -122,7 +122,7 @@ export default function ContactPage() {
                   Drama Organizers & Theatres
                 </h4>
                 <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                  Interested in selling tickets for your upcoming play or auditorium? Contact our partnerships desk directly at <span className="text-slate-900 dark:text-white font-semibold">organizers@nataka.lk</span>.
+                  Interested in selling tickets for your upcoming play or auditorium? Contact our partnerships desk directly at <span className="text-slate-900 dark:text-white font-semibold">organizers@naataka.lk</span>.
                 </p>
               </div>
             </div>

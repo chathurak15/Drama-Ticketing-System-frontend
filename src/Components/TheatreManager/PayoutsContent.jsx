@@ -632,7 +632,7 @@ export default function PayoutsContent({ setActiveTab }) {
     if (cleaned && cleaned.toLowerCase() !== "verified on file") {
       return cleaned;
     }
-    return "—";
+    return "-";
   };
 
   const getPartyBBankAccount = () => {
@@ -645,7 +645,7 @@ export default function PayoutsContent({ setActiveTab }) {
       summary?.payoutHistory?.[0]?.accountNumber ||
       "";
     const cleaned = String(val).trim();
-    return cleaned || "—";
+    return cleaned || "-";
   };
 
   const getContractId = () => {
@@ -718,7 +718,7 @@ export default function PayoutsContent({ setActiveTab }) {
         doc.text("DIGITAL SOLUTIONS", margin, 15);
       }
 
-      // Right: Nataka Logo
+      // Right: Naataka Logo
       try {
         const natakaImg = new Image();
         natakaImg.src = "/images/nataka-logo.png";
@@ -727,7 +727,7 @@ export default function PayoutsContent({ setActiveTab }) {
         doc.setTextColor(254, 216, 0);
         doc.setFontSize(8);
         doc.setFont("helvetica", "bold");
-        doc.text("eNataka.lk", pageWidth - margin - 20, 10);
+        doc.text("Naataka.lk", pageWidth - margin - 20, 10);
         doc.setTextColor(241, 245, 249);
         doc.setFontSize(5.5);
         doc.text("TICKETING", pageWidth - margin - 20, 15);
@@ -741,7 +741,7 @@ export default function PayoutsContent({ setActiveTab }) {
       doc.setTextColor(241, 245, 249);
       doc.setFontSize(6.6);
       doc.setFont("helvetica", "normal");
-      doc.text("Zeylex Digital Solutions (operating the eNataka.lk Online Ticketing Platform) | BR No: POL/ELH/ESD/02/01/1941/2026", pageWidth / 2, 16, { align: "center" });
+      doc.text("Zeylex Digital Solutions (operating the Naataka.lk Online Ticketing Platform) | BR No: POL/ELH/ESD/02/01/1941/2026", pageWidth / 2, 16, { align: "center" });
 
       let y = 26.5;
       doc.setTextColor(100, 116, 139);
@@ -770,7 +770,7 @@ export default function PayoutsContent({ setActiveTab }) {
       doc.setFont("helvetica", "bold");
       doc.text("PARTY A (Platform):", margin + 3.5, boxY + 5.5);
       doc.setFont("helvetica", "normal");
-      doc.text("Zeylex Digital Solutions (operating the eNataka.lk Online Ticketing Platform) | BR No: POL/ELH/ESD/02/01/1941/2026", margin + 33, boxY + 5.5);
+      doc.text("Zeylex Digital Solutions (operating the Naataka.lk Online Ticketing Platform) | BR No: POL/ELH/ESD/02/01/1941/2026", margin + 33, boxY + 5.5);
 
       // Row 2: Party B & NIC
       doc.setFont("helvetica", "bold");
@@ -793,7 +793,7 @@ export default function PayoutsContent({ setActiveTab }) {
       doc.setFont("helvetica", "bold");
       doc.text("Registered Contact:", margin + 3.5, boxY + 21.5);
       doc.setFont("helvetica", "normal");
-      doc.text(`${user?.email || summary?.userEmail || "partner@nataka.lk"} | ${user?.phoneNumber || summary?.userPhone || "0771234567"}`, margin + 32, boxY + 21.5);
+      doc.text(`${user?.email || summary?.userEmail || "partner@naataka.lk"} | ${user?.phoneNumber || summary?.userPhone || "0771234567"}`, margin + 32, boxY + 21.5);
 
       y = boxY + 29.5;
 
@@ -1092,7 +1092,7 @@ export default function PayoutsContent({ setActiveTab }) {
         doc.text("DIGITAL SOLUTIONS", margin, 15);
       }
 
-      // Right: Nataka Logo
+      // Right: Naataka Logo
       try {
         const natakaImg = new Image();
         natakaImg.src = "/images/nataka-logo.png";
@@ -1101,7 +1101,7 @@ export default function PayoutsContent({ setActiveTab }) {
         doc.setTextColor(254, 216, 0);
         doc.setFontSize(8);
         doc.setFont("helvetica", "bold");
-        doc.text("eNataka.lk", pageWidth - margin - 20, 10);
+        doc.text("Naataka.lk", pageWidth - margin - 20, 10);
         doc.setTextColor(241, 245, 249);
         doc.setFontSize(5.5);
         doc.text("TICKETING", pageWidth - margin - 20, 15);
@@ -1115,7 +1115,7 @@ export default function PayoutsContent({ setActiveTab }) {
       doc.setTextColor(241, 245, 249);
       doc.setFontSize(6.6);
       doc.setFont("helvetica", "normal");
-      doc.text("Zeylex Digital Solutions (operating the eNataka.lk Online Ticketing Platform) | BR No: POL/ELH/ESD/02/01/1941/2026", pageWidth / 2, 16, { align: "center" });
+      doc.text("Zeylex Digital Solutions (operating the Naataka.lk Online Ticketing Platform) | BR No: POL/ELH/ESD/02/01/1941/2026", pageWidth / 2, 16, { align: "center" });
 
       let y = 26.5;
       doc.setTextColor(100, 116, 139);
@@ -1269,7 +1269,7 @@ export default function PayoutsContent({ setActiveTab }) {
       doc.setFontSize(7);
       doc.setFont("helvetica", "normal");
       doc.setTextColor(71, 85, 105);
-      const footnote = `Gross ticket face values remitted hereunder represent pass-through proceeds collected strictly on behalf of the Organizer (Party B) under the linked Ticketing & Settlement Agreement (${agrRef}). Zeylex Digital Solutions (eNataka.lk) acts solely as an authorized digital ticketing facilitator and collection agent. All platform commissions and payment gateway fees have been fully settled per booking under the Agreement. Municipal entertainment taxes and event permits remain the exclusive responsibility of Party B.`;
+      const footnote = `Gross ticket face values remitted hereunder represent pass-through proceeds collected strictly on behalf of the Organizer (Party B) under the linked Ticketing & Settlement Agreement (${agrRef}). Zeylex Digital Solutions (Naataka.lk) acts solely as an authorized digital ticketing facilitator and collection agent. All platform commissions and payment gateway fees have been fully settled per booking under the Agreement. Municipal entertainment taxes and event permits remain the exclusive responsibility of Party B.`;
       const splitFootnote = doc.splitTextToSize(footnote, contentWidth);
       doc.text(splitFootnote, margin, y);
       y += splitFootnote.length * 3.2 + 4;
@@ -1636,7 +1636,7 @@ export default function PayoutsContent({ setActiveTab }) {
                       #PAY-{String(item.id).padStart(4, "0")}
                     </td>
                     <td className="py-3.5 px-4 text-slate-400 whitespace-nowrap">
-                      {item.createdAt ? new Date(item.createdAt).toLocaleDateString() : "—"}
+                      {item.createdAt ? new Date(item.createdAt).toLocaleDateString() : "-"}
                     </td>
                     <td className="py-3.5 px-4 font-bold text-white">
                       ₨ {Number(item.requestedAmount).toLocaleString(undefined, { minimumFractionDigits: 2 })}
@@ -2120,7 +2120,7 @@ export default function PayoutsContent({ setActiveTab }) {
                   <div className="p-4 rounded-xl bg-[#0e0e16] border border-white/10 space-y-3 max-h-56 overflow-y-auto">
                     <div className="flex items-center justify-between border-b border-white/10 pb-2">
                       <span className="font-extrabold text-amber-400 uppercase tracking-widest text-[10px]">
-                        Nataka.LK Merchant Revenue Agreement Terms
+                        Naataka.LK Merchant Revenue Agreement Terms
                       </span>
                       <button
                         type="button"
@@ -2134,7 +2134,7 @@ export default function PayoutsContent({ setActiveTab }) {
                     <div className="text-[11px] text-slate-300 space-y-2 leading-relaxed">
                       <p>
                         This Revenue Settlement and Payout Agreement is executed electronically between{" "}
-                        <strong className="text-white">Zeylex Digital Solutions (operating the eNataka.lk Online Ticketing Platform)</strong> and the Authorized Partner:
+                        <strong className="text-white">Zeylex Digital Solutions (operating the Naataka.lk Online Ticketing Platform)</strong> and the Authorized Partner:
                       </p>
                       <div className="p-2.5 rounded bg-white/5 border border-white/5 space-y-1">
                         <p><strong>Partner Signatory:</strong> {getPartyBRepresentativeName()}</p>
@@ -2395,7 +2395,7 @@ export default function PayoutsContent({ setActiveTab }) {
                     className="h-16 max-w-xs object-contain border border-white/10 rounded p-1 bg-black/40"
                   />
                   <p className="text-[10px] text-slate-500 mt-1">
-                    Timestamp: {inspectPayout.signedAt ? new Date(inspectPayout.signedAt).toLocaleString() : "—"}
+                    Timestamp: {inspectPayout.signedAt ? new Date(inspectPayout.signedAt).toLocaleString() : "-"}
                   </p>
                 </div>
               )}
@@ -2490,7 +2490,7 @@ export default function PayoutsContent({ setActiveTab }) {
                   ZEYLEX DIGITAL SOLUTIONS
                 </h1>
                 <p className="text-[11px] text-slate-600 font-sans font-medium">
-                  operating the eNataka.lk Online Ticketing Platform
+                  operating the Naataka.lk Online Ticketing Platform
                 </p>
                 <p className="text-[10px] text-slate-500 font-mono mt-0.5">
                   Business Registration No: POL/ELH/ESD/02/01/1941/2026
@@ -2509,7 +2509,7 @@ export default function PayoutsContent({ setActiveTab }) {
 
               <div className="p-3 bg-slate-50 border rounded-lg space-y-1.5 font-sans">
                 <p>
-                  <strong>PARTY A (Platform):</strong> Zeylex Digital Solutions (operating the eNataka.lk Online Ticketing Platform) | BR No: POL/ELH/ESD/02/01/1941/2026
+                  <strong>PARTY A (Platform):</strong> Zeylex Digital Solutions (operating the Naataka.lk Online Ticketing Platform) | BR No: POL/ELH/ESD/02/01/1941/2026
                 </p>
                 <p>
                   <strong>PARTY B (Organizer / Venue Representative):</strong>{" "}
@@ -2519,7 +2519,7 @@ export default function PayoutsContent({ setActiveTab }) {
                   <strong>National Identity Card (NIC):</strong> {getPartyBNicNumber()}
                 </p>
                 <p>
-                  <strong>Registered Email & Phone:</strong> {user?.email || summary?.userEmail || "partner@nataka.lk"} | {user?.phoneNumber || summary?.userPhone || "—"}
+                  <strong>Registered Email & Phone:</strong> {user?.email || summary?.userEmail || "partner@naataka.lk"} | {user?.phoneNumber || summary?.userPhone || "-"}
                 </p>
                 <p>
                   <strong>Associated Venue / Hall:</strong> {summary?.theatreName || "Designated Venue / Hall"}

@@ -265,22 +265,22 @@ export default function DramaDetailsPage() {
   const currentDramaSlug = drama.slug || drama.id;
   const canonicalUrl = typeof window !== "undefined"
     ? `${window.location.origin}/drama/${currentDramaSlug}`
-    : `https://nataka.lk/drama/${currentDramaSlug}`;
+    : `https://naataka.lk/drama/${currentDramaSlug}`;
 
   // Structured Data (JSON-LD) for Search Engine Indexing (Google, Bing)
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "TheaterEvent",
     "name": `${drama.title} - Sri Lanka Stage Drama`,
-    "description": drama.description || `Official stage drama tickets and information for ${drama.title} on Nataka.lk`,
+    "description": drama.description || `Official stage drama tickets and information for ${drama.title} on Naataka.lk`,
     "image": dramaPoster,
     "url": canonicalUrl,
     "inLanguage": "si-LK",
     "eventStatus": "https://schema.org/EventScheduled",
     "organizer": {
       "@type": "Organization",
-      "name": "Nataka.lk",
-      "url": "https://nataka.lk"
+      "name": "Naataka.lk",
+      "url": "https://naataka.lk"
     },
     ...(drama.actors && drama.actors.length > 0 && {
       "performer": drama.actors.map((actor) => ({
@@ -295,7 +295,7 @@ export default function DramaDetailsPage() {
         "name": show.title,
         "url": typeof window !== "undefined"
           ? `${window.location.origin}/show/${show.slug || show.showId}`
-          : `https://nataka.lk/show/${show.slug || show.showId}`,
+          : `https://naataka.lk/show/${show.slug || show.showId}`,
         "availability": "https://schema.org/InStock",
         "price": "1000",
         "priceCurrency": "LKR",
@@ -595,7 +595,7 @@ export default function DramaDetailsPage() {
         isOpen={isShareModalOpen}
         onClose={() => setIsShareModalOpen(false)}
         title={drama.title}
-        text={`Watch ${drama.title} - Sri Lanka's official stage drama tickets on Nataka.lk! 🎭`}
+        text={`Watch ${drama.title} - Sri Lanka's official stage drama tickets on Naataka.lk! 🎭`}
         url={canonicalUrl}
         image={dramaPoster}
       />

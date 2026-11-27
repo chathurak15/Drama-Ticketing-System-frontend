@@ -469,7 +469,7 @@ export default function PayoutsManagementContent({ setActiveTab }) {
         doc.text("DIGITAL SOLUTIONS", margin, 15);
       }
 
-      // Right: Nataka Logo
+      // Right: Naataka Logo
       try {
         const natakaImg = new Image();
         natakaImg.src = "/images/nataka-logo.png";
@@ -478,7 +478,7 @@ export default function PayoutsManagementContent({ setActiveTab }) {
         doc.setTextColor(254, 216, 0);
         doc.setFontSize(8);
         doc.setFont("helvetica", "bold");
-        doc.text("eNataka.lk", pageWidth - margin - 20, 10);
+        doc.text("Naataka.lk", pageWidth - margin - 20, 10);
         doc.setTextColor(241, 245, 249);
         doc.setFontSize(5.5);
         doc.text("TICKETING", pageWidth - margin - 20, 15);
@@ -492,7 +492,7 @@ export default function PayoutsManagementContent({ setActiveTab }) {
       doc.setTextColor(241, 245, 249);
       doc.setFontSize(6.6);
       doc.setFont("helvetica", "normal");
-      doc.text("Zeylex Digital Solutions (operating the eNataka.lk Online Ticketing Platform) | BR No: POL/ELH/ESD/02/01/1941/2026", pageWidth / 2, 16, { align: "center" });
+      doc.text("Zeylex Digital Solutions (operating the Naataka.lk Online Ticketing Platform) | BR No: POL/ELH/ESD/02/01/1941/2026", pageWidth / 2, 16, { align: "center" });
 
       let y = 26.5;
       doc.setTextColor(100, 116, 139);
@@ -646,7 +646,7 @@ export default function PayoutsManagementContent({ setActiveTab }) {
       doc.setFontSize(7);
       doc.setFont("helvetica", "normal");
       doc.setTextColor(71, 85, 105);
-      const footnote = `Gross ticket face values remitted hereunder represent pass-through proceeds collected strictly on behalf of the Organizer (Party B) under the linked Ticketing & Settlement Agreement (${agrRef}). Zeylex Digital Solutions (eNataka.lk) acts solely as an authorized digital ticketing facilitator and collection agent. All platform commissions and payment gateway fees have been fully settled per booking under the Agreement. Municipal entertainment taxes and event permits remain the exclusive responsibility of Party B.`;
+      const footnote = `Gross ticket face values remitted hereunder represent pass-through proceeds collected strictly on behalf of the Organizer (Party B) under the linked Ticketing & Settlement Agreement (${agrRef}). Zeylex Digital Solutions (Naataka.lk) acts solely as an authorized digital ticketing facilitator and collection agent. All platform commissions and payment gateway fees have been fully settled per booking under the Agreement. Municipal entertainment taxes and event permits remain the exclusive responsibility of Party B.`;
       const splitFootnote = doc.splitTextToSize(footnote, contentWidth);
       doc.text(splitFootnote, margin, y);
       y += splitFootnote.length * 3.2 + 4;
@@ -1012,13 +1012,12 @@ export default function PayoutsManagementContent({ setActiveTab }) {
         </div>
       </div>
 
-      {/* PayHere Review Mode Notice */}
       {!payhereApprovedLive && (
         <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs flex items-center justify-between gap-4 shadow-sm">
           <div className="flex items-center gap-3">
             <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0" />
             <div>
-              <span className="font-bold">PayHere Review Mode Active:</span> Public ticket payments run in sandbox. Administrator KYC audit, pre-show proof validation, and LankaPay CEFT milestone disbursements remain fully operational.
+              <span className="font-bold">IPG Review Mode Active:</span> Public ticket payments run in sandbox. Administrator KYC audit, pre-show proof validation, and LankaPay CEFT milestone disbursements remain fully operational.
             </div>
           </div>
           <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-bold uppercase tracking-wider shrink-0">
@@ -1791,11 +1790,11 @@ export default function PayoutsManagementContent({ setActiveTab }) {
                         <td className="py-3.5 px-4">
                           <p className="text-white font-bold">{item.userName || "Partner"}</p>
                           <p className="text-[10px] text-slate-400">
-                            {item.theatreName || "Theatre"} • {item.userPhone || "—"}
+                            {item.theatreName || "Theatre"} • {item.userPhone || "-"}
                           </p>
                         </td>
                         <td className="py-3.5 px-4 font-mono text-[11px] text-slate-300">
-                          {item.nicNumber || "—"}
+                          {item.nicNumber || "-"}
                         </td>
                         <td className="py-3.5 px-4 font-extrabold text-emerald-400">
                           ₨ {Number(item.netPayableAmount).toLocaleString(undefined, { minimumFractionDigits: 2 })}
@@ -2767,7 +2766,7 @@ export default function PayoutsManagementContent({ setActiveTab }) {
                     className="h-16 max-w-xs object-contain border border-white/10 rounded p-1 bg-black/40"
                   />
                   <p className="text-[10px] text-slate-500 mt-1">
-                    Signed at: {selectedPayout.signedAt ? new Date(selectedPayout.signedAt).toLocaleString() : "—"}
+                    Signed at: {selectedPayout.signedAt ? new Date(selectedPayout.signedAt).toLocaleString() : "-"}
                   </p>
                 </div>
               )}

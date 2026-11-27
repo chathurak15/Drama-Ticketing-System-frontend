@@ -33,6 +33,7 @@ import {
   getPendingBooking,
   clearPendingBooking,
 } from "../../../../utils/pendingBooking";
+import { getPreviewShowById, getPreviewSeatLayout } from "../../../../data/previewCatalog";
 
 // Skeleton loader displayed while Three.js and Auditorium3DView dynamically load
 function Auditorium3DSkeleton() {
@@ -141,6 +142,11 @@ export default function DedicatedSeatSelectionPage() {
     const fetchShowDetails = async () => {
       try {
         setLoading(true);
+        const previewShow = getPreviewShowById(showId);
+        if (previewShow) {
+          setShow(previewShow);
+          return;
+        }
         const res = await getShowById(showId);
         if (res?.data) {
           setShow(res.data);
@@ -160,6 +166,11 @@ export default function DedicatedSeatSelectionPage() {
     if (!idToUse) return;
     try {
       setLoadingSeats(true);
+      const previewLayout = getPreviewSeatLayout(idToUse);
+      if (previewLayout && String(idToUse).startsWith("preview-")) {
+        setShowData(previewLayout);
+        return;
+      }
       const response = await getSeatsByShowId(idToUse);
       if (response?.data && response.data.ticketPrices && response.data.ticketPrices.length > 0) {
         setShowData(response.data);
@@ -170,9 +181,9 @@ export default function DedicatedSeatSelectionPage() {
           showTime: response?.data?.showTime || show?.showTime || "06:30 PM",
           location: response?.data?.location || show?.location || "Main Stage",
           ticketPrices: [
-            { category: "VIP", price: 1000, totalSeats: 75, seatsPerRow: 15 },
-            { category: "Normal", price: 750, totalSeats: 116, seatsPerRow: 15 },
-            { category: "Balcony", price: 500, totalSeats: 45, seatsPerRow: 15 },
+            { category: "VIP", price: 1500, totalSeats: 75, seatsPerRow: 15 },
+            { category: "Normal", price: 1000, totalSeats: 116, seatsPerRow: 15 },
+            { category: "Balcony", price: 750, totalSeats: 45, seatsPerRow: 15 },
           ],
         });
       }
@@ -181,9 +192,9 @@ export default function DedicatedSeatSelectionPage() {
       setShowData({
         title: show?.title || "Auditorium Performance",
         ticketPrices: [
-          { category: "VIP", price: 1000, totalSeats: 75, seatsPerRow: 15 },
-          { category: "Normal", price: 750, totalSeats: 116, seatsPerRow: 15 },
-          { category: "Balcony", price: 500, totalSeats: 45, seatsPerRow: 15 },
+          { category: "VIP", price: 1500, totalSeats: 75, seatsPerRow: 15 },
+          { category: "Normal", price: 1000, totalSeats: 116, seatsPerRow: 15 },
+          { category: "Balcony", price: 750, totalSeats: 45, seatsPerRow: 15 },
         ],
       });
     } finally {
@@ -438,6 +449,45 @@ export default function DedicatedSeatSelectionPage() {
         : selectedSeats.map((s) => s.seatIdentifier);
 
     const effectiveUser = authedUser || user;
+
+    if (String(showId).startsWith("preview-") || getPreviewShowById(showId)) {
+      const checkoutSeats =
+        pending?.seats && pending.seats.length > 0
+          ? pending.seats
+          : selectedSeats.map((s) => ({
+              id: s.id,
+              seatIdentifier: s.seatIdentifier,
+              price: Number(s.price),
+              category: s.category,
+              row: s.row,
+              number: s.number,
+            }));
+      const bookingData = {
+        showId: show?.showId || showId,
+        seats: checkoutSeats,
+        totalAmount: pending?.totalAmount || totalAmount,
+        userId: effectiveUser?.id || 1,
+        selectedTime: activeSlot,
+        showTimeSlot: activeSlot,
+        lockId: "PREVIEW-LOCK-" + Date.now(),
+        lockExpiresAt: new Date(Date.now() + 10 * 60 * 1000).toISOString(),
+        isPreview: true,
+        showTitle: show?.title || "Sri Lankan Stage Drama",
+        venue: show?.location || "Lionel Wendt Memorial Theatre",
+        city: show?.city?.cityName || "Colombo",
+        showDate: show?.showDate || "2026-12-15",
+        showTime: activeSlot || show?.showTime || "06:30 PM",
+      };
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem("nataka_booking", JSON.stringify(bookingData));
+      }
+      clearPendingBooking();
+      toast.success("Seats selected! Proceeding to checkout...");
+      router.push("/checkout");
+      setIsSecuringSeats(false);
+      setIsProcessing(false);
+      return;
+    }
 
     const lockPayload = {
       showId: targetNumericShowId,

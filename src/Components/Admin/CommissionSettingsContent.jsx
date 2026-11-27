@@ -192,10 +192,9 @@ export default function CommissionSettingsContent() {
   const organizerCommAmount = (grossTicketFaceValue * (activeFees.organizerCommissionPercent || 0)) / 100;
   const organizerReceives = grossTicketFaceValue - organizerCommAmount;
 
-  // PayHere takes ~3.30% of total charged from buyer (standard Sri Lankan domestic gateway card processing)
-  const estimatedPayHereFee = (buyerTotalPaid * 3.3) / 100;
+  const estimatedGatewayFee = (buyerTotalPaid * 3.3) / 100;
   const totalPlatformGrossFee = buyerFeeAmount + organizerCommAmount;
-  const estimatedNetPlatformProfit = totalPlatformGrossFee - estimatedPayHereFee;
+  const estimatedNetPlatformProfit = totalPlatformGrossFee - estimatedGatewayFee;
 
   return (
     <div className="space-y-8 animate-in fade-in duration-200">
@@ -215,7 +214,7 @@ export default function CommissionSettingsContent() {
               </span>
             </div>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              Select and adjust dynamic revenue sharing models between ticket buyers, theatre partners, and Nataka LK.
+              Select and adjust dynamic revenue sharing models between ticket buyers, theatre partners, and Naataka LK.
             </p>
           </div>
         </div>
@@ -478,11 +477,10 @@ export default function CommissionSettingsContent() {
             </div>
           </div>
 
-          {/* 3. Estimated PayHere Fee */}
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 space-y-1">
-            <div className="text-xs text-slate-500 dark:text-slate-400 font-medium">Estimated PayHere Gateway Fee</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400 font-medium">Estimated IPG Processing Fee</div>
             <div className="text-xl font-extrabold text-rose-600 dark:text-rose-400">
-              - LKR {estimatedPayHereFee.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              - LKR {estimatedGatewayFee.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </div>
             <div className="text-[11px] text-slate-500 dark:text-slate-400">
               Est. 3.30% of total charged from buyer (LKR {buyerTotalPaid.toLocaleString()})

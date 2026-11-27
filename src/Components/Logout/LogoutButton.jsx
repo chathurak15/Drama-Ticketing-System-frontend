@@ -15,7 +15,7 @@ const LogoutButton = ({
   iconSize = "w-4 h-4",
   confirm = true,
   confirmTitle = "Confirm Sign Out",
-  confirmMessage = "Are you sure you want to sign out of your Nataka LK account?",
+  confirmMessage = "Are you sure you want to sign out of your Naataka LK account?",
   redirectTo = "/login",
   children,
 }) => {

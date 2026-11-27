@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 
 /**
- * Modern user-friendly popup notification helper for Nataka LK
+ * Modern user-friendly popup notification helper for Naataka LK
  */
 export const notify = {
   success: (message, options = {}) => {

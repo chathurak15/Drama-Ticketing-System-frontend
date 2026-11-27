@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import ModernHeader from "../../Components/modern/Header";
 import ModernFooter from "../../Components/modern/Footer";
+import PaymentSchemeBadges from "../../Components/common/PaymentSchemeBadges";
 import {
   Calendar,
   Clock,
@@ -18,15 +19,21 @@ import {
   Loader2,
   Lock,
   Ticket,
+  Info,
+  CheckCircle2,
+  X,
+  Receipt,
+  Sparkles,
 } from "lucide-react";
 import { useAuth } from "../../utils/AuthContext";
 import { getShowById } from "../../services/ShowService";
-import { addBooking, initiatePayHerePayment } from "../../services/BookingService";
+import { addBooking, initiatePayment } from "../../services/BookingService";
 import axios from "../../api/axiosInstance";
 import { getActiveCommission } from "../../services/CommissionService";
 import { usePlatformConfig } from "../../hooks/usePlatformConfig";
 import { toast } from "react-toastify";
 import { getMyLock, releaseLock } from "../../services/SeatService";
+import { isPreviewMode } from "../../data/previewCatalog";
 
 export default function BookingCheckoutPage() {
   const router = useRouter();
@@ -36,12 +43,12 @@ export default function BookingCheckoutPage() {
   const [bookingData, setBookingData] = useState(null);
   const [showData, setShowData] = useState(null);
   const [activeCommission, setActiveCommission] = useState(null);
-  const [timeLeft, setTimeLeft] = useState(590); // 10 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState(590);
   const [isProcessing, setIsProcessing] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
   const [consentAgreed, setConsentAgreed] = useState(false);
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
 
-  // Load active commission model
   useEffect(() => {
     getActiveCommission()
       .then((res) => {
@@ -50,7 +57,6 @@ export default function BookingCheckoutPage() {
       .catch((err) => console.warn("Could not load commission model", err));
   }, []);
 
-  // Load booking data and enforce server lock guard
   useEffect(() => {
     if (authLoading) return;
 
@@ -75,9 +81,23 @@ export default function BookingCheckoutPage() {
           return;
         }
 
+        if (parsed.isPreview || String(parsed.showId).startsWith("preview-")) {
+          setBookingData(parsed);
+          setShowData({
+            showId: parsed.showId,
+            title: parsed.showTitle || "Sri Lankan Stage Drama",
+            drama: { title: parsed.dramaTitle || parsed.showTitle || "Stage Drama" },
+            showDate: parsed.showDate || "2026-12-15",
+            showTime: parsed.showTime || parsed.selectedTime || "06:30 PM",
+            location: parsed.venue || "Lionel Wendt Memorial Theatre",
+            city: { cityName: parsed.city || "Colombo" }
+          });
+          setPageLoading(false);
+          return;
+        }
+
         const slot = parsed.selectedTime || parsed.showTimeSlot || null;
 
-        // Server Lock Guard: check if current user has an active, unexpired lock
         getMyLock(parsed.showId, slot)
           .then((res) => {
             const lockData = res?.data;
@@ -127,7 +147,6 @@ export default function BookingCheckoutPage() {
     }
   }, [user, authLoading, router]);
 
-  // Server-driven Hold Countdown Timer
   useEffect(() => {
     if (!bookingData?.lockExpiresAt) return;
 
@@ -143,7 +162,7 @@ export default function BookingCheckoutPage() {
         if (typeof window !== "undefined") {
           sessionStorage.removeItem("nataka_booking");
         }
-        if (bookingData.showId) {
+        if (bookingData.showId && !String(bookingData.showId).startsWith("preview-")) {
           releaseLock(bookingData.showId, bookingData.selectedTime || bookingData.showTimeSlot || null).catch(() => {});
         }
         router.push(bookingData.showId ? `/show/${bookingData.showId}/seats` : "/shows");
@@ -157,13 +176,15 @@ export default function BookingCheckoutPage() {
 
   const handleBackToSeatMap = async () => {
     if (bookingData?.showId) {
-      try {
-        await releaseLock(
-          bookingData.showId,
-          bookingData.selectedTime || bookingData.showTimeSlot || null
-        );
-      } catch (e) {
-        console.warn("Could not release locks on exit:", e);
+      if (!String(bookingData.showId).startsWith("preview-")) {
+        try {
+          await releaseLock(
+            bookingData.showId,
+            bookingData.selectedTime || bookingData.showTimeSlot || null
+          );
+        } catch (e) {
+          console.warn("Could not release locks on exit:", e);
+        }
       }
       if (typeof window !== "undefined") {
         sessionStorage.removeItem("nataka_booking");
@@ -180,16 +201,25 @@ export default function BookingCheckoutPage() {
     return `${mins.toString().padStart(2, "0")}:${remainder.toString().padStart(2, "0")}`;
   };
 
-  const handlePayHereCheckout = async () => {
+  const handleSecureCheckout = async () => {
     if (isProcessing) return;
     if (!consentAgreed) {
       toast.warn("Please agree to the Terms & Conditions and Refund Policy to proceed with checkout.");
       return;
     }
+
+    const isPreview = bookingData?.isPreview ||
+      String(bookingData?.showId).startsWith("preview-") ||
+      (typeof process !== "undefined" && process.env?.NEXT_PUBLIC_PREVIEW_MODE === "true");
+
+    if (isPreview) {
+      setShowPreviewModal(true);
+      return;
+    }
+
     setIsProcessing(true);
 
     try {
-      // 1. Calculate final financial breakdown with commission
       const baseTicketTotal =
         (bookingData.seats || []).reduce((sum, s) => sum + (Number(s.price) || 0), 0) ||
         Number(bookingData.totalAmount) ||
@@ -200,7 +230,6 @@ export default function BookingCheckoutPage() {
       const buyerFeeAmount = buyerFeePercent > 0 ? (baseTicketTotal * buyerFeePercent) / 100 : 0;
       const totalPayable = baseTicketTotal + buyerFeeAmount;
 
-      // 2. Format seat objects matching backend SeatBookingInfo
       const formattedSeats = (bookingData.seats || []).map((s) => {
         if (typeof s === "string") {
           return {
@@ -217,7 +246,6 @@ export default function BookingCheckoutPage() {
         };
       });
 
-      // 3. Initiate booking and verified PayHere session on Spring Boot backend
       const bookingPayload = {
         showId: Number(bookingData.showId),
         userId: user.id,
@@ -229,10 +257,9 @@ export default function BookingCheckoutPage() {
 
       let initData = null;
       try {
-        const initRes = await initiatePayHerePayment(bookingPayload);
+        const initRes = await initiatePayment(bookingPayload);
         initData = initRes?.data;
       } catch (initErr) {
-        // Only fallback to legacy addBooking endpoint if /payment/payhere/initiate route is not found (404 route)
         if (
           initErr?.response?.status === 404 &&
           (initErr?.response?.data?.error === "Not Found" || typeof initErr?.response?.data === "string")
@@ -244,7 +271,13 @@ export default function BookingCheckoutPage() {
         }
       }
 
-      const bookingId = initData?.bookingId || initData?.order_id || initData?.id || `NATAKA-${Date.now()}`;
+      const bookingId = initData?.bookingId || initData?.order_id || initData?.id || `NAATAKA-${Date.now()}`;
+
+      if (initData?.checkoutMode === "REDIRECT" && initData?.actionUrl) {
+        sessionStorage.removeItem("nataka_booking");
+        window.location.href = initData.actionUrl;
+        return;
+      }
 
       const appBaseUrl =
         (typeof process !== "undefined" && process.env?.NEXT_PUBLIC_APP_URL) || "https://nataka.chathurakavindu.me";
@@ -252,8 +285,8 @@ export default function BookingCheckoutPage() {
         (typeof process !== "undefined" && process.env?.NEXT_PUBLIC_API_BASE_URL) ||
         "https://server-nataka.chathurakavindu.me/api/v1/";
 
-      let hash = initData?.hash;
-      let merchantId = initData?.merchant_id || initData?.merchantId || "1233942";
+      let hash = initData?.hash || initData?.payload?.hash;
+      let merchantId = initData?.merchant_id || initData?.merchantId || initData?.payload?.merchant_id || "1233942";
 
       if (!hash) {
         try {
@@ -267,7 +300,6 @@ export default function BookingCheckoutPage() {
 
       const isSandbox = initData?.sandbox !== undefined ? initData.sandbox : !payhereApprovedLive;
 
-      // Populated with verified customer details from PostgreSQL via backend
       const payment = {
         sandbox: isSandbox,
         merchant_id: merchantId,
@@ -275,13 +307,13 @@ export default function BookingCheckoutPage() {
         cancel_url: initData?.cancel_url || `${appBaseUrl}/booking`,
         notify_url: initData?.notify_url || `${apiBaseUrl}payment/notify`,
         order_id: String(bookingId),
-        items: initData?.items || `Nataka.lk Tickets for ${showData?.title || "Drama Show"}`,
+        items: initData?.items || `Naataka.lk Tickets for ${showData?.title || "Drama Show"}`,
         amount: totalPayable.toFixed(2),
         currency: "LKR",
         hash: hash,
         first_name: initData?.first_name || user?.fname || "Customer",
         last_name: initData?.last_name || user?.lname || "",
-        email: initData?.email || user?.email || "customer@nataka.lk",
+        email: initData?.email || user?.email || "customer@naataka.lk",
         phone: initData?.phone || user?.phoneNumber || "0771234567",
         address: initData?.address || "Colombo",
         city: initData?.city || "Colombo",
@@ -303,13 +335,15 @@ export default function BookingCheckoutPage() {
 
         window.payhere.onError = function onError(error) {
           setIsProcessing(false);
-          console.error("PayHere Error", error);
+          console.error("Payment Error", error);
           toast.error("Payment error occurred. Please try again.");
         };
 
         window.payhere.startPayment(payment);
+      } else if (initData?.actionUrl) {
+        window.location.href = initData.actionUrl;
       } else {
-        toast.warn("PayHere gateway is loading. Please try again in a moment.");
+        toast.warn("Payment gateway is initializing. Please try again in a moment.");
         setIsProcessing(false);
       }
     } catch (err) {
@@ -368,7 +402,6 @@ export default function BookingCheckoutPage() {
 
       <main className="flex-1 bg-slate-50 dark:bg-[#0d0d12] text-slate-900 dark:text-slate-100 py-8 lg:py-12 transition-colors duration-200">
         <div className="container mx-auto px-4 max-w-5xl">
-          {/* Top Bar with Countdown Timer */}
           <div className="ticket-card bg-white dark:bg-[#14141e] p-5 rounded-2xl border border-amber-500/30 mb-8 shadow-sm dark:shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
             <button
               onClick={handleBackToSeatMap}
@@ -388,9 +421,7 @@ export default function BookingCheckoutPage() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            {/* Left Column: Show & Payment Details */}
             <div className="lg:col-span-7 space-y-6">
-              {/* Show Info Card */}
               <div className="ticket-card bg-white dark:bg-[#14141e] p-6 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
                 <h2 className="text-sm font-bold text-amber-700 dark:text-amber-400 uppercase tracking-widest mb-4 flex items-center gap-1.5">
                   <Ticket className="w-4 h-4" />
@@ -439,38 +470,38 @@ export default function BookingCheckoutPage() {
                 </div>
               </div>
 
-              {/* Payment Methods Card */}
-              <div className="ticket-card bg-white dark:bg-[#14141e] p-6 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
-                <h3 className="text-sm font-bold text-amber-700 dark:text-amber-400 uppercase tracking-widest mb-4 flex items-center gap-1.5">
+              <div className="ticket-card bg-white dark:bg-[#14141e] p-6 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm space-y-4">
+                <h3 className="text-sm font-bold text-amber-700 dark:text-amber-400 uppercase tracking-widest flex items-center gap-1.5">
                   <CreditCard className="w-4 h-4" />
-                  <span>Secure Payment Gateway</span>
+                  <span>Payment Method</span>
                 </h3>
 
-                <div className="p-4 rounded-xl bg-emerald-50 dark:bg-gradient-to-r dark:from-[#172019] dark:to-[#121c17] border border-emerald-300 dark:border-emerald-500/30 flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 flex items-center justify-center">
-                      <ShieldCheck className="w-6 h-6" />
+                <div className="p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                      <h4 className="text-xs font-bold text-slate-900 dark:text-white">
+                        Pay Securely by Card (Visa / Mastercard / American Express)
+                      </h4>
                     </div>
-                    <div>
-                      <h4 className="text-xs font-bold text-slate-900 dark:text-white">PayHere Online Gateway</h4>
-                      <p className="text-[11px] text-emerald-700 dark:text-emerald-400">256-Bit SSL Encrypted Transaction</p>
-                    </div>
+                    <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                      Processed securely in Sri Lankan Rupees (LKR) via Central Bank of Sri Lanka (CBSL) approved Internet Payment Gateways.
+                    </p>
                   </div>
-                  <span className="text-[10px] font-bold px-2 py-1 rounded bg-white dark:bg-black/40 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-500/20 shadow-sm">
-                    Official
-                  </span>
+                  <div className="shrink-0">
+                    <PaymentSchemeBadges size="md" />
+                  </div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs space-y-2">
-                  <p className="font-semibold text-slate-900 dark:text-white">Accepted Sri Lankan Payment Methods:</p>
-                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-[11px]">
-                    VISA, MasterCard, American Express, eZ Cash, mCash, FriMi, Genie, Vishwa, and Online Banking across all Sri Lankan banks.
-                  </p>
+                <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30 flex items-center gap-2 text-xs text-amber-900 dark:text-amber-300">
+                  <Lock className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
+                  <span className="text-[11px]">
+                    256-bit SSL/TLS Encrypted &amp; 3D Secure Authenticated Transaction.
+                  </span>
                 </div>
               </div>
             </div>
 
-            {/* Right Column: Order Summary & Checkout Button */}
             <div className="lg:col-span-5">
               <div className="ticket-card bg-white dark:bg-[#14141e] p-6 rounded-2xl border border-slate-200 dark:border-white/15 sticky top-24 shadow-xl">
                 <h3 className="text-base font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
@@ -478,7 +509,6 @@ export default function BookingCheckoutPage() {
                   <span>Booking Summary</span>
                 </h3>
 
-                {/* Seat List */}
                 <div className="space-y-2.5 max-h-56 overflow-y-auto mb-6 pr-1">
                   {bookingData.seats?.map((seat, index) => (
                     <div
@@ -500,7 +530,6 @@ export default function BookingCheckoutPage() {
                   ))}
                 </div>
 
-                {/* Total Calculations */}
                 {(() => {
                   const baseTicketTotal = (bookingData.seats || []).reduce(
                     (sum, s) => sum + (Number(s.price) || 0),
@@ -513,7 +542,7 @@ export default function BookingCheckoutPage() {
 
                   return (
                     <>
-                      <div className="border-t border-slate-100 dark:border-white/10 pt-4 space-y-2 text-xs mb-6">
+                      <div className="border-t border-slate-100 dark:border-white/10 pt-4 space-y-2 text-xs mb-4">
                         <div className="flex justify-between text-slate-600 dark:text-slate-400">
                           <span>Seats Quantity</span>
                           <span className="font-semibold text-slate-900 dark:text-white">
@@ -529,7 +558,7 @@ export default function BookingCheckoutPage() {
 
                         {buyerFeePercent > 0 && (
                           <div className="flex justify-between text-slate-600 dark:text-slate-400">
-                            <span>Convenience Fee ({buyerFeePercent}%)</span>
+                            <span>Online Booking Service Fee ({buyerFeePercent}%)</span>
                             <span className="text-emerald-700 dark:text-emerald-400 font-semibold">
                               + LKR {buyerFeeAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </span>
@@ -544,8 +573,19 @@ export default function BookingCheckoutPage() {
                         </div>
                       </div>
 
-                      {/* Refund & Terms Consent Checkbox */}
-                      <label className="flex items-start gap-2.5 p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs text-slate-700 dark:text-slate-300 cursor-pointer select-none">
+                      <div className="p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-[11px] text-slate-600 dark:text-slate-400 space-y-1 mb-4">
+                        <p>
+                          <strong className="text-slate-900 dark:text-white">Merchant:</strong> Zeylex Digital Solutions (Naataka.lk) | Country of Domicile: Sri Lanka
+                        </p>
+                        <p>
+                          <strong className="text-slate-900 dark:text-white">Billing Currency:</strong> Sri Lankan Rupees (LKR) | Security: 256-bit SSL/TLS &amp; 3D Secure Protected
+                        </p>
+                        <p>
+                          <strong className="text-slate-900 dark:text-white">Delivery Method:</strong> Instant digital QR e-ticket delivered on-screen and via email upon payment authorization.
+                        </p>
+                      </div>
+
+                      <label className="flex items-start gap-2.5 p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs text-slate-700 dark:text-slate-300 cursor-pointer select-none mb-4">
                         <input
                           type="checkbox"
                           checked={consentAgreed}
@@ -553,30 +593,58 @@ export default function BookingCheckoutPage() {
                           className="mt-0.5 rounded border-slate-300 text-amber-600 focus:ring-amber-500 w-4 h-4 shrink-0"
                         />
                         <span className="leading-snug text-[11px]">
-                          I agree to eNataka.lk's Terms & Conditions and Refund Policy. I understand that all ticket sales are final and non-refundable unless the show is cancelled or postponed by the organizer, and that the online convenience fee is non-refundable.
+                          I agree to Naataka.lk&apos;s{" "}
+                          <Link href="/terms" className="text-amber-600 dark:text-amber-400 underline font-semibold" target="_blank">
+                            Terms &amp; Conditions
+                          </Link>
+                          ,{" "}
+                          <Link href="/refund-policy" className="text-amber-600 dark:text-amber-400 underline font-semibold" target="_blank">
+                            Refund &amp; Cancellation Policy
+                          </Link>
+                          , and{" "}
+                          <Link href="/privacy-policy" className="text-amber-600 dark:text-amber-400 underline font-semibold" target="_blank">
+                            Privacy Policy
+                          </Link>
+                          . I understand that all ticket sales are final and non-refundable unless the show is cancelled or postponed by the organizer, and that the Online Booking Service Fee is non-refundable.
                         </span>
                       </label>
 
-                      {/* Pay Button */}
                       <button
-                        onClick={handlePayHereCheckout}
+                        onClick={handleSecureCheckout}
                         disabled={isProcessing || !consentAgreed}
                         className="btn-theatre-gold w-full py-3.5 rounded-xl font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-xl shadow-amber-500/25 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                       >
                         {isProcessing ? (
                           <>
                             <Loader2 className="w-4 h-4 animate-spin" />
-                            <span>Opening Secure PayHere...</span>
+                            <span>Connecting to Secure Payment...</span>
                           </>
                         ) : (
                           <>
                             <Lock className="w-4 h-4" />
                             <span>
-                              Pay LKR {totalPayable.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                              Proceed to Secure Payment — LKR {totalPayable.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </span>
                           </>
                         )}
                       </button>
+
+                      {(isPreviewMode() || !payhereApprovedLive || (typeof process !== "undefined" && process.env?.NEXT_PUBLIC_PREVIEW_MODE === "true")) && (
+                        <button
+                          onClick={() => {
+                            if (typeof window !== "undefined") {
+                              sessionStorage.removeItem("nataka_booking");
+                            }
+                            toast.success("Preview authorization successful (Auth Code: PREVIEW-AUTH-001). Loading receipt...");
+                            router.push("/booking/ticket/preview?view=receipt");
+                          }}
+                          type="button"
+                          className="mt-3 w-full py-2.5 rounded-xl border border-amber-500/40 bg-amber-500/10 hover:bg-amber-500/20 text-amber-900 dark:text-amber-300 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                        >
+                          <Receipt className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                          <span>Preview Card-Absent Receipt (Compliance Inspection)</span>
+                        </button>
+                      )}
                     </>
                   );
                 })()}
@@ -588,6 +656,42 @@ export default function BookingCheckoutPage() {
             </div>
           </div>
         </div>
+
+        {showPreviewModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+            <div className="bg-white dark:bg-[#14141e] border border-slate-200 dark:border-white/10 rounded-2xl max-w-md w-full p-6 text-center space-y-4 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
+              <div className="w-12 h-12 rounded-full bg-amber-50 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto">
+                <Info className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                Pre-Launch Verification Mode
+              </h3>
+              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                Online card checkout is currently in pre-launch verification and will be enabled immediately upon final gateway activation.
+              </p>
+              <div className="p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-[11px] text-slate-500 dark:text-slate-400 text-left space-y-1">
+                <p><strong>Merchant:</strong> Zeylex Digital Solutions</p>
+                <p><strong>BR No:</strong> POL/ELH/ESD/02/01/1941/2026</p>
+                <p><strong>Country of Domicile:</strong> Sri Lanka</p>
+              </div>
+              <div className="flex gap-3 pt-2">
+                <button
+                  onClick={() => setShowPreviewModal(false)}
+                  className="flex-1 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-xs font-semibold hover:bg-slate-50 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                >
+                  Close
+                </button>
+                <Link
+                  href="/booking/ticket/preview?view=receipt"
+                  className="flex-1 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-colors cursor-pointer flex items-center justify-center gap-1.5"
+                >
+                  <Receipt className="w-4 h-4" />
+                  <span>Preview Compliance Receipt</span>
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
 
       <ModernFooter />

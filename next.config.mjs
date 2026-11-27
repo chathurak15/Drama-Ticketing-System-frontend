@@ -1,4 +1,3 @@
-/** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   images: {
@@ -18,10 +17,6 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'www.payhere.lk',
-      },
-      {
-        protocol: 'https',
         hostname: 'images.unsplash.com',
       },
       {
@@ -31,6 +26,7 @@ const nextConfig = {
     ],
   },
   webpack(config, { webpack }) {
+    config.cache = false;
     config.plugins.push(
       new webpack.DefinePlugin({
         'import.meta.env.VITE_API_BASE_URL': JSON.stringify(process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080/api/v1/'),
@@ -38,7 +34,6 @@ const nextConfig = {
         'import.meta.env.VITE_APP_BACKEND_URL': JSON.stringify('/uploads/'),
         'import.meta.env.VITE_APP_URL': JSON.stringify('http://localhost:3000'),
         'import.meta.env.VITE_GOOGLE_AUTH_URL': JSON.stringify('https://server-nataka.chathurakavindu.me/oauth2/authorization/google'),
-        'import.meta.env.VITE_PAYHERE_SANDBOX': JSON.stringify('true'),
       })
     );
     return config;

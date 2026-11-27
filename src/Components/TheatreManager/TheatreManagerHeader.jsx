@@ -31,13 +31,13 @@ const TheatreManagerHeader = ({ activeTab, onReload, onLaunchStudio = () => {} }
     <header className="bg-white/95 dark:bg-[#101018]/90 backdrop-blur-md border-b border-slate-200 dark:border-white/10 px-4 sm:px-6 py-3.5 sticky top-0 z-30 flex items-center justify-between gap-4 transition-colors duration-200">
       {/* Left Title / Brand Logo */}
       <div className="flex items-center gap-3">
-        <Link href="/" className="md:hidden flex items-center shrink-0 pr-1" title="Back to Nataka Home">
-          <img src="/logo-nataka.png" alt="Nataka" className="h-6 w-auto block dark:hidden" />
-          <img src="/logo-nataka-white.png" alt="Nataka" className="h-6 w-auto hidden dark:block" />
+        <Link href="/" className="md:hidden flex items-center shrink-0 pr-1" title="Back to Naataka Home">
+          <img src="/logo-nataka.png" alt="Naataka" className="h-6 w-auto block dark:hidden" />
+          <img src="/logo-nataka-white.png" alt="Naataka" className="h-6 w-auto hidden dark:block" />
         </Link>
         <div>
           <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium tracking-wider flex items-center gap-2">
-            <span>NATAKA VENUE OPERATING SYSTEM</span>
+            <span>NAATAKA VENUE OPERATING SYSTEM</span>
             <span className="hidden sm:inline-block text-[10px] text-amber-600 dark:text-amber-400 font-bold bg-amber-500/10 px-1.5 py-0.2 rounded border border-amber-500/20">
               v2.4.2
             </span>

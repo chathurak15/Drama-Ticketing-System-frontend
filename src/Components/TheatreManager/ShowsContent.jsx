@@ -120,7 +120,7 @@ const ShowsContent = ({ setAddType, setShowAddModal, setEditData }) => {
   const handleCopyShowUrl = (show, e) => {
     e.stopPropagation();
     const slugOrId = show.slug || show.showId;
-    const origin = typeof window !== "undefined" ? window.location.origin : "https://nataka.lk";
+    const origin = typeof window !== "undefined" ? window.location.origin : "https://naataka.lk";
     const fullUrl = `${origin}/show/${slugOrId}`;
     if (navigator?.clipboard) {
       navigator.clipboard.writeText(fullUrl);

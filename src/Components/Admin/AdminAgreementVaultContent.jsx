@@ -238,7 +238,7 @@ export default function AdminAgreementVaultContent() {
                         dateStyle: "medium",
                         timeStyle: "short",
                       })
-                    : "—";
+                    : "-";
 
                   return (
                     <tr
@@ -431,7 +431,7 @@ export default function AdminAgreementVaultContent() {
                       Party A (Platform Facilitator & Agent):
                     </h4>
                     <p className="font-bold text-slate-900">Zeylex Digital Solutions</p>
-                    <p className="text-slate-600">Operating the eNataka.lk Online Ticketing Platform</p>
+                    <p className="text-slate-600">Operating the Naataka.lk Online Ticketing Platform</p>
                     <p className="text-slate-600 font-mono text-[10px]">
                       BR No: POL/ELH/ESD/02/01/1941/2026
                     </p>
@@ -537,7 +537,7 @@ export default function AdminAgreementVaultContent() {
                   {/* Party A */}
                   <div>
                     <p className="text-[10px] font-bold text-slate-500 uppercase mb-1">
-                      Party A (eNataka.lk / Zeylex Digital Solutions):
+                      Party A (Naataka.lk / Zeylex Digital Solutions):
                     </p>
                     <div className="h-16 flex items-center">
                       <img
@@ -551,7 +551,7 @@ export default function AdminAgreementVaultContent() {
                     </div>
                     <div className="border-t border-slate-400 pt-1 mt-1">
                       <p className="font-bold text-slate-900 text-[10px]">Authorized Signatory / Rubber Seal</p>
-                      <p className="text-[9px] text-slate-500">Zeylex Digital Solutions | eNataka.lk</p>
+                      <p className="text-[9px] text-slate-500">Zeylex Digital Solutions | Naataka.lk</p>
                     </div>
                   </div>
 

@@ -11,7 +11,7 @@ import { Theater, Sparkles } from "lucide-react";
  * - Dancing golden comedy & tragedy drama mask (🎭)
  * - Ambient stage footlights shimmer
  * - Dynamic stage spotlight beam
- * - Rich velvet maroon (#661F19) & Nataka Gold (#FED800) gradients
+ * - Rich velvet maroon (#661F19) & Naataka Gold (#FED800) gradients
  *
  * Perfect for:
  * - Customers: Booking seats, checkout, reservation confirmation

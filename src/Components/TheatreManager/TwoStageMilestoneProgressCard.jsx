@@ -427,7 +427,7 @@ export default function TwoStageMilestoneProgressCard({ userId: propUserId, onNa
             {/* TWO-TRANCHE SIDE-BY-SIDE CARDS */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2">
               {/* ========================================================= */}
-              {/* CARD 1 — STAGE 1: PRE-SHOW ADVANCE (UP TO 50%)            */}
+              {/* CARD 1 - STAGE 1: PRE-SHOW ADVANCE (UP TO 50%)            */}
               {/* ========================================================= */}
               <div className="bg-[#181824] rounded-2xl border border-white/10 p-5 flex flex-col justify-between space-y-4 shadow-lg hover:border-white/20 transition-all">
                 <div className="space-y-4">
@@ -760,7 +760,7 @@ export default function TwoStageMilestoneProgressCard({ userId: propUserId, onNa
                   ) : eligibility.tranche1Status === "REQUESTED" ? (
                     <div className="px-4 py-2.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-bold flex items-center gap-2">
                       <Clock className="w-3.5 h-3.5 animate-spin" />
-                      <span>Advance Requested — Under Audit</span>
+                      <span>Advance Requested - Under Audit</span>
                     </div>
                   ) : eligibility.tranche1Status === "APPROVED" ? (
                     <div className="px-4 py-2.5 rounded-xl bg-blue-500/15 border border-blue-500/30 text-blue-300 text-xs font-bold flex items-center gap-2">
@@ -784,12 +784,12 @@ export default function TwoStageMilestoneProgressCard({ userId: propUserId, onNa
                     hallDoc?.verificationStatus === "VERIFIED" ? (
                       <div className="px-4 py-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-bold flex items-center gap-2">
                         <CheckCircle2 className="w-3.5 h-3.5" />
-                        <span>Hall Receipt Verified — Awaiting Admin Milestone Activation</span>
+                        <span>Hall Receipt Verified - Awaiting Admin Milestone Activation</span>
                       </div>
                     ) : hallDoc?.verificationStatus === "PENDING" ? (
                       <div className="px-4 py-2.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-bold flex items-center gap-2">
                         <Clock className="w-3.5 h-3.5 animate-spin" />
-                        <span>Hall Receipt Uploaded — Under Admin Audit</span>
+                        <span>Hall Receipt Uploaded - Under Admin Audit</span>
                       </div>
                     ) : (
                       <label
@@ -813,7 +813,7 @@ export default function TwoStageMilestoneProgressCard({ userId: propUserId, onNa
               </div>
 
               {/* ========================================================= */}
-              {/* CARD 2 — STAGE 2: FINAL POST-SHOW SETTLEMENT              */}
+              {/* CARD 2 - STAGE 2: FINAL POST-SHOW SETTLEMENT              */}
               {/* ========================================================= */}
               <div className="bg-[#181824] rounded-2xl border border-white/10 p-5 flex flex-col justify-between space-y-4 shadow-lg hover:border-white/20 transition-all">
                 <div className="space-y-4">
@@ -938,7 +938,7 @@ export default function TwoStageMilestoneProgressCard({ userId: propUserId, onNa
                   ) : eligibility.tranche2Status === "REQUESTED" ? (
                     <div className="px-4 py-2.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-bold flex items-center gap-2">
                       <Clock className="w-3.5 h-3.5 animate-spin" />
-                      <span>Settlement Requested — Under Audit</span>
+                      <span>Settlement Requested - Under Audit</span>
                     </div>
                   ) : eligibility.tranche2Status === "APPROVED" ? (
                     <div className="px-4 py-2.5 rounded-xl bg-blue-500/15 border border-blue-500/30 text-blue-300 text-xs font-bold flex items-center gap-2">

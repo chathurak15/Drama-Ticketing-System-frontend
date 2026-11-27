@@ -1,29 +1,28 @@
 import "./globals.css";
 import Providers from "./providers";
-import Script from "next/script";
 
 export const metadata = {
   title: {
-    default: "Nataka.lk | Sri Lanka's Premier Stage Drama Ticketing Platform",
-    template: "%s | Nataka.lk",
+    default: "Naataka.lk | Sri Lanka's Premier Stage Drama Ticketing Platform",
+    template: "%s | Naataka.lk",
   },
   description:
-    "Book tickets online for Sri Lanka's top stage dramas, theatre shows, and live cultural performances. Secure PayHere payment, instant QR e-tickets, and verified seat selection at Lionel Wendt, Nelum Pokuna, Elphinstone and more.",
+    "Book tickets online for Sri Lanka's top stage dramas, theatre shows, and live cultural performances. Secure online card payment, instant QR e-tickets, and verified seat selection at Lionel Wendt, Nelum Pokuna, Elphinstone and more.",
   keywords: [
     "Sri Lanka drama tickets",
-    "Nataka lk",
+    "Naataka lk",
     "Sinhala drama booking",
     "Lionel Wendt tickets",
     "Nelum Pokuna stage drama",
     "stage drama Sri Lanka",
     "theatre tickets Colombo",
     "eventure lk alternative",
-    "PayHere drama booking",
+    "online drama booking",
     "වේදිකා නාට්‍ය",
   ],
-  authors: [{ name: "Zeylex", url: "https://zeylex.com" }, { name: "Nataka.lk Team" }],
+  authors: [{ name: "Zeylex", url: "https://zeylex.com" }, { name: "Naataka.lk Team" }],
   creator: "Zeylex",
-  publisher: "Nataka.lk",
+  publisher: "Naataka.lk",
   formatDetection: {
     email: false,
     address: false,
@@ -31,11 +30,11 @@ export const metadata = {
   },
   metadataBase: new URL("https://nataka.chathurakavindu.me"),
   openGraph: {
-    title: "Nataka.lk — Sri Lanka's Official Stage Drama Hub",
+    title: "Naataka.lk - Sri Lanka's Official Stage Drama Hub",
     description:
       "Explore, pick your seats, and book tickets for Sri Lanka's best stage dramas and theatrical events.",
     url: "https://nataka.chathurakavindu.me",
-    siteName: "Nataka.lk",
+    siteName: "Naataka.lk",
     locale: "en_LK",
     type: "website",
   },
@@ -70,7 +69,7 @@ export default function RootLayout({ children }) {
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="eNataka" />
+        <meta name="apple-mobile-web-app-title" content="Naataka" />
         <link rel="apple-touch-icon" href="/icon-192x192.png" />
         <script
           dangerouslySetInnerHTML={{
@@ -124,12 +123,6 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className="min-h-screen bg-slate-50 text-slate-900 dark:bg-[#0d0d12] dark:text-slate-100 antialiased selection:bg-amber-500 selection:text-black transition-colors duration-200" suppressHydrationWarning>
-        {/* PayHere Payment Gateway SDK */}
-        <Script
-          src="https://www.payhere.lk/lib/payhere.js"
-          strategy="lazyOnload"
-        />
-        
         <Providers>
           <div className="flex min-h-screen flex-col" suppressHydrationWarning>
             {children}

@@ -78,13 +78,13 @@ const AdminHeader = ({ activeTab, onReload }) => {
     <header className="bg-white/95 dark:bg-[#101018]/90 backdrop-blur-md border-b border-slate-200 dark:border-white/10 px-4 sm:px-6 py-3 sticky top-0 z-30 flex flex-wrap items-center justify-between gap-3 transition-colors duration-200">
       {/* Title & Brand Logo */}
       <div className="flex items-center gap-3">
-        <Link href="/" className="md:hidden flex items-center shrink-0 pr-1" title="Back to Nataka Home">
-          <img src="/logo-nataka.png" alt="Nataka" className="h-6 w-auto block dark:hidden" />
-          <img src="/logo-nataka-white.png" alt="Nataka" className="h-6 w-auto hidden dark:block" />
+        <Link href="/" className="md:hidden flex items-center shrink-0 pr-1" title="Back to Naataka Home">
+          <img src="/logo-nataka.png" alt="Naataka" className="h-6 w-auto block dark:hidden" />
+          <img src="/logo-nataka-white.png" alt="Naataka" className="h-6 w-auto hidden dark:block" />
         </Link>
         <div>
           <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium tracking-wider flex items-center gap-2">
-            <span>NATAKA MASTER CONSOLE</span>
+            <span>NAATAKA MASTER CONSOLE</span>
             <span className="hidden sm:inline-block text-[10px] text-amber-600 dark:text-amber-400 font-bold bg-amber-500/10 px-1.5 py-0.2 rounded border border-amber-500/20">
               v2.4.2
             </span>
@@ -114,7 +114,6 @@ const AdminHeader = ({ activeTab, onReload }) => {
           <span className="hidden sm:inline">Reload</span>
         </button>
 
-        {/* CONTROL 1: PayHere Review Mode / Live Switch */}
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl border transition-all duration-200 text-xs font-semibold shadow-sm bg-slate-100 dark:bg-black/40 border-slate-200 dark:border-white/10">
           <div className="flex items-center gap-1.5">
             {payhereApprovedLive ? (
@@ -122,7 +121,7 @@ const AdminHeader = ({ activeTab, onReload }) => {
             ) : (
               <AlertTriangle className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0 animate-pulse" />
             )}
-            <span className="hidden sm:inline text-slate-700 dark:text-slate-300">PayHere:</span>
+            <span className="hidden sm:inline text-slate-700 dark:text-slate-300">Gateway:</span>
             <span
               className={`font-bold ${
                 payhereApprovedLive ? "text-emerald-600 dark:text-emerald-400" : "text-amber-600 dark:text-amber-400"
@@ -140,8 +139,8 @@ const AdminHeader = ({ activeTab, onReload }) => {
             disabled={updatingReviewMode || configLoading}
             title={
               payhereApprovedLive
-                ? "Click to switch to PayHere Review Mode (Sandbox Routing & Restricted Partner Onboarding)"
-                : "Click to activate Live PayHere Production Gateway"
+                ? "Click to switch to IPG Review Mode (Sandbox Routing & Restricted Partner Onboarding)"
+                : "Click to activate Live Production Gateway"
             }
             className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
               payhereApprovedLive ? "bg-emerald-500" : "bg-slate-700"
@@ -189,7 +188,7 @@ const AdminHeader = ({ activeTab, onReload }) => {
               disabled={updatingSignupMode || configLoading}
               title={
                 disablePublicSignupDuringReview
-                  ? "Click to re-open Buyer registration for PayHere reviewers"
+                  ? "Click to re-open Buyer registration during review"
                   : "Click to lock the entire Create Account form completely"
               }
               className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${

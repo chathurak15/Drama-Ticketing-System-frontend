@@ -108,12 +108,12 @@ function ResetPasswordContent() {
         <Link href="/" className="inline-block mb-3">
           <img
             src="/logo-nataka.png"
-            alt="Nataka.LK"
+            alt="Naataka.LK"
             className="h-9 w-auto object-contain mx-auto block dark:hidden"
           />
           <img
             src="/logo-nataka-white.png"
-            alt="Nataka.LK"
+            alt="Naataka.LK"
             className="h-9 w-auto object-contain mx-auto hidden dark:block"
           />
         </Link>
@@ -121,7 +121,7 @@ function ResetPasswordContent() {
           Choose New Password
         </h1>
         <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-          Create a secure password to keep your Nataka.LK account and tickets safe
+          Create a secure password to keep your Naataka.LK account and tickets safe
         </p>
       </div>
 

@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export async function GET() {
   const themeConfig = {
     status: "success",
-    brand: "Nataka.LK",
+    brand: "Naataka.LK",
     developedBy: "Zeylex",
     developerUrl: "https://zeylex.com",
     theme: {

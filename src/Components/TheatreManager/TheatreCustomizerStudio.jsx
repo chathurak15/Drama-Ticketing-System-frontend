@@ -1029,7 +1029,7 @@ export default function TheatreCustomizerStudio({ theatreToEdit = null, onSucces
               <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#FED800]/20 text-[#FED800] border border-[#FED800]/40 uppercase tracking-wider">
                 3D Layout Studio
               </span>
-              <span className="text-xs text-slate-400">Nataka Venue Architect</span>
+              <span className="text-xs text-slate-400">Naataka Venue Architect</span>
             </div>
             <input
               type="text"

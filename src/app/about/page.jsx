@@ -5,8 +5,8 @@ import { Landmark, Heart, ShieldCheck, Users, Ticket, Award } from "lucide-react
 import Link from "next/link";
 
 export const metadata = {
-  title: "About Us — Nataka.lk | Sri Lanka's Stage Drama Hub",
-  description: "Learn about Nataka.lk mission to celebrate and digitize Sri Lankan stage drama and theatre ticketing.",
+  title: "About Us - Naataka.lk | Sri Lanka's Stage Drama Hub",
+  description: "Learn about Naataka.lk mission to celebrate and digitize Sri Lankan stage drama and theatre ticketing.",
 };
 
 export default function AboutPage() {
@@ -23,7 +23,7 @@ export default function AboutPage() {
               <span>වේදිකා නාට්‍ය උරුමය • Sri Lankan Theatre Heritage</span>
             </div>
             <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white font-['Plus_Jakarta_Sans'] mb-4 leading-tight">
-              About Nataka<span className="text-amber-600 dark:text-amber-400">.lk</span>
+              About Naataka<span className="text-amber-600 dark:text-amber-400">.lk</span>
             </h1>
             <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
               Connecting thousands of drama enthusiasts across Sri Lanka with the island's richest theatrical productions, master actors, and legendary auditoriums.
@@ -40,7 +40,7 @@ export default function AboutPage() {
                 Our Story
               </h2>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
-                Stage drama has always been the heart and soul of Sri Lankan cultural storytelling — from timeless classics like Suba Saha Yasa, Maname, and Sinhabahu to contemporary masterpieces. Nataka.lk was born out of a desire to eliminate long queues and make ticketing effortless, transparent, and completely secure for every Sri Lankan theatre fan.
+                Stage drama has always been the heart and soul of Sri Lankan cultural storytelling - from timeless classics like Suba Saha Yasa, Maname, and Sinhabahu to contemporary masterpieces. Naataka.lk was born out of a desire to eliminate long queues and make ticketing effortless, transparent, and completely secure for every Sri Lankan theatre fan.
               </p>
             </div>
 
@@ -52,12 +52,11 @@ export default function AboutPage() {
                 Our Mission
               </h2>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
-                To empower Sri Lankan dramatists, directors, and historic theatre halls with cutting-edge ticketing technology, real-time seat inventory, and reliable PayHere payment solutions — ensuring that every show reaches its full audience potential.
+                To empower Sri Lankan dramatists, directors, and historic theatre halls with cutting-edge ticketing technology, real-time seat inventory, and reliable payment solutions via Central Bank of Sri Lanka (CBSL) approved Internet Payment Gateways - ensuring that every show reaches its full audience potential.
               </p>
             </div>
           </div>
 
-          {/* Key Pillars */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-16">
             <div className="ticket-card bg-white dark:bg-[#14141e] p-6 rounded-2xl border border-slate-200 dark:border-white/10 text-center shadow-sm">
               <div className="w-10 h-10 rounded-xl bg-amber-50 dark:bg-white/5 border border-amber-200 dark:border-white/10 flex items-center justify-center text-amber-600 dark:text-amber-400 mx-auto mb-3">
@@ -73,9 +72,9 @@ export default function AboutPage() {
               <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-white/5 border border-emerald-200 dark:border-white/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mx-auto mb-3">
                 <ShieldCheck className="w-5 h-5" />
               </div>
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-1">PayHere Certified</h3>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-1">CBSL-Approved IPG</h3>
               <p className="text-xs text-slate-600 dark:text-slate-400">
-                Pay securely with VISA, MasterCard, eZ Cash, mCash, FriMi, or Sri Lankan bank portals.
+                Pay securely in LKR with Visa, Mastercard, or American Express protected by 256-bit encryption and 3D Secure.
               </p>
             </div>
 

@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://nataka.lk";
+  const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://naataka.lk";
   const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080/api/v1/";
 
   let xml = `<?xml version="1.0" encoding="UTF-8"?>

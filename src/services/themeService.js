@@ -5,7 +5,7 @@ export const getThemeConfig = async () => {
     return await res.json();
   } catch (err) {
     return {
-      brand: "Nataka.LK",
+      brand: "Naataka.LK",
       developedBy: "Zeylex",
       theme: {
         primary: "#661F19",

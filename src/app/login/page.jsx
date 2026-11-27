@@ -424,12 +424,12 @@ function LoginContent() {
             <Link href="/" className="inline-block mb-3">
               <img
                 src="/logo-nataka.png"
-                alt="Nataka.LK"
+                alt="Naataka.LK"
                 className="h-9 w-auto object-contain mx-auto block dark:hidden"
               />
               <img
                 src="/logo-nataka-white.png"
-                alt="Nataka.LK"
+                alt="Naataka.LK"
                 className="h-9 w-auto object-contain mx-auto hidden dark:block"
               />
             </Link>

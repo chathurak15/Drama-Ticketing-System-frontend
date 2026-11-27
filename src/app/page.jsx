@@ -27,6 +27,7 @@ import { getShows } from "../services/ShowService";
 import { getDramas } from "../services/dramaService";
 import { getCdnUrl } from "../utils/cdn";
 import usePlatformConfig from "../hooks/usePlatformConfig";
+import { getPreviewShows, isPreviewMode } from "../data/previewCatalog";
 
 const SRI_LANKAN_VENUES = [
   {
@@ -156,6 +157,13 @@ export default function HomePage() {
     let isMounted = true;
     const fetchHomeData = async () => {
       try {
+        if (isPreviewMode()) {
+          const previewList = getPreviewShows();
+          setShows(previewList);
+          setDramas(previewList.map(s => s.drama));
+          return;
+        }
+
         const [showsRes, dramasRes] = await Promise.all([
           getShows({ page: 0, size: 8 }),
           getDramas({ page: 0, size: 6 }),
@@ -224,7 +232,7 @@ export default function HomePage() {
 
       <main className="flex-1 bg-slate-50 dark:bg-[#0b0b10] text-slate-900 dark:text-slate-100 transition-colors duration-200">
         {/* ============================================================ */}
-        {/* HERO SECTION — Theatrical Proscenium Spotlight Banner       */}
+        {/* HERO SECTION - Theatrical Proscenium Spotlight Banner       */}
         {/* ============================================================ */}
         <section className="relative overflow-hidden pt-8 pb-16 lg:pt-14 lg:pb-24 border-b border-slate-200 dark:border-white/[0.06] bg-gradient-to-b from-[#fff5f2] via-[#faf5f0] to-slate-50 dark:from-[#240b0b] dark:via-[#100910] dark:to-[#0b0b10]">
           {/* Subtle Stage Lighting Accents */}
@@ -249,9 +257,8 @@ export default function HomePage() {
                   </span>
                 </h1>
 
-                {/* Editorial Subtitle */}
                 <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-xl mb-8 leading-relaxed font-normal">
-                  Reserve verified seating directly for acclaimed productions at Lionel Wendt, Nelum Pokuna, Elphinstone and provincial theatres. Instant PayHere checkout and digital admission.
+                  Reserve verified seating directly for acclaimed productions at Lionel Wendt, Nelum Pokuna, Elphinstone and provincial theatres. Instant secure card checkout and digital admission.
                 </p>
 
                 {/* Eventure.lk Search Console */}
@@ -315,7 +322,7 @@ export default function HomePage() {
                 <div className="flex flex-wrap items-center gap-5 text-xs text-slate-600 dark:text-slate-400">
                   <span className="flex items-center gap-1.5 font-medium">
                     <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                    <span>PayHere Secured Payment</span>
+                    <span>CBSL-Approved IPG Protected</span>
                   </span>
                   <span className="text-slate-300 dark:text-white/20">•</span>
                   <span className="flex items-center gap-1.5 font-medium">
@@ -440,7 +447,7 @@ export default function HomePage() {
         </section>
 
         {/* ============================================================ */}
-        {/* UPCOMING SHOWS — Eventure.lk Physical Ticket Grid            */}
+        {/* UPCOMING SHOWS - Eventure.lk Physical Ticket Grid            */}
         {/* ============================================================ */}
         <section id="upcoming-shows" className="pt-6 pb-12 sm:pt-8 sm:pb-16 bg-slate-50 dark:bg-[#0b0b10]">
           <div className="desktop-container">
@@ -505,7 +512,7 @@ export default function HomePage() {
         </section>
 
         {/* ============================================================ */}
-        {/* ACCLAIMED DRAMAS — Sri Lankan Theatrical Productions Catalog */}
+        {/* ACCLAIMED DRAMAS - Sri Lankan Theatrical Productions Catalog */}
         {/* ============================================================ */}
         <section className="py-14 bg-white dark:bg-gradient-to-b dark:from-[#111119] dark:to-[#0b0b10] border-y border-slate-200 dark:border-white/[0.06]">
           <div className="desktop-container">
@@ -644,7 +651,7 @@ export default function HomePage() {
         </section>
 
         {/* ============================================================ */}
-        {/* HOW TO BOOK — Box Office Steps                               */}
+        {/* HOW TO BOOK - Box Office Steps                               */}
         {/* ============================================================ */}
         <section className="pt-12 pb-10 sm:pt-14 sm:pb-12 bg-white dark:bg-[#0f0f17] border-t border-slate-200 dark:border-white/[0.06]">
           <div className="desktop-container">
@@ -673,8 +680,8 @@ export default function HomePage() {
                 },
                 {
                   step: "03",
-                  title: "PayHere Secure Checkout",
-                  desc: "Complete transaction via VISA, MasterCard, eZ Cash, mCash, FriMi or Internet Banking.",
+                  title: "Pay Securely by Card",
+                  desc: "Complete transaction in LKR via Visa, Mastercard, or American Express with 3D Secure protection.",
                   icon: ShieldCheck,
                 },
                 {
@@ -709,13 +716,9 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ============================================================ */}
-        {/* BUYER TRUST BANNER (PayHere Review Mode) / ORGANIZER CTA     */}
-        {/* ============================================================ */}
         <section className="pt-2 pb-14 sm:pb-16">
           <div className="desktop-container">
             {payhereReviewMode ? (
-              /* Buyer-focused Trust Banner during PayHere Review Mode */
               <div className="rounded-2xl p-8 sm:p-12 bg-gradient-to-r from-[#661F19] via-[#4A1410] to-[#2B0B08] border border-amber-500/40 shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8 text-left text-white">
                 <div className="max-w-xl z-10">
                   <span className="px-3 py-1 rounded-md text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 mb-3 inline-block">
@@ -748,14 +751,13 @@ export default function HomePage() {
                 </div>
               </div>
             ) : (
-              /* Producer & Theatre Organizer Banner (Post PayHere Approval) */
               <div className="rounded-2xl p-8 sm:p-12 bg-gradient-to-r from-[#661F19] via-[#4A1410] to-[#2B0B08] border border-amber-500/40 shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8 text-left text-white">
                 <div className="max-w-xl z-10">
                   <span className="px-3 py-1 rounded-md text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 mb-3 inline-block">
                     For Sri Lankan Drama Producers & Theatres
                   </span>
                   <h3 className="text-2xl sm:text-3xl font-extrabold text-white font-['Plus_Jakarta_Sans'] mb-3">
-                    Sell Out Your Next Production on Nataka.lk
+                    Sell Out Your Next Production on Naataka.lk
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-normal">
                     Join Sri Lanka's dedicated stage drama network. Manage reserved seating, direct bank settlements, QR scanning apps for gate staff, and audience promotion across all 9 provinces.

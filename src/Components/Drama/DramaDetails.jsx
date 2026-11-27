@@ -100,7 +100,7 @@ const DramaDetails = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/90 backdrop-blur-sm">
           <div className="text-center">
             <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-amber-600 mx-auto mb-4"></div>
-            <h2 className="text-xl font-bold text-gray-800">Nataka.lk</h2>
+            <h2 className="text-xl font-bold text-gray-800">Naataka.lk</h2>
             <p className="text-gray-600 text-sm font-medium animate-pulse">
               Setting the stage...
             </p>

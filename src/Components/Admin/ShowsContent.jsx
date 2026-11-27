@@ -576,7 +576,7 @@ const ShowsContent = ({ setAddType, setShowAddModal, setEditData }) => {
                       No shows match the selected moderation status or search criteria.
                     </p>
                     <p className="text-xs text-[#FED800]/60 mt-2 font-medium">
-                      Pending shows awaiting your review will appear here — check the approval queue.
+                      Pending shows awaiting your review will appear here - check the approval queue.
                     </p>
                   </td>
                 </tr>
