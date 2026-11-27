@@ -1,16 +1,16 @@
 "use client";
 import React from "react";
 import "../../assets/css/DramaCard.css";
-import { useNavigate } from "../../utils/useNavigateCompat";
+import { useRouter } from "next/navigation";
 import { getCdnUrl } from "../../utils/cdn";
 import Link from "next/link";
 
 const DramaCard = ({ drama }) => {
-  const navigate = useNavigate();
-  const BACKEND_IMAGE_URL = `${import.meta.env.VITE_CDN_URL}/dramas/`;
+  const router = useRouter();
+  const BACKEND_IMAGE_URL = `${process.env.NEXT_PUBLIC_CDN_URL || "/uploads"}/dramas/`;
 
   const handleViewDetails = () => {
-    navigate(`/drama/${drama.id}`);
+    router.push(`/drama/${drama.id}`);
   };
 
   return (

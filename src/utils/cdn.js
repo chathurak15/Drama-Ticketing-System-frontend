@@ -51,11 +51,6 @@ export const getCdnUrl = (path = '', folder = '') => {
     if (!envCdn.includes('cloudfront.net')) {
       baseUrl = envCdn;
     }
-  } else if (typeof import.meta !== 'undefined' && import.meta.env?.VITE_CDN_URL) {
-    const viteCdn = import.meta.env.VITE_CDN_URL;
-    if (!viteCdn.includes('cloudfront.net')) {
-      baseUrl = viteCdn;
-    }
   }
 
   return `${baseUrl.replace(/\/+$/, '')}/${clean}`;
@@ -65,11 +60,6 @@ export const getApiBaseUrl = () => {
   if (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_API_BASE_URL) {
     return process.env.NEXT_PUBLIC_API_BASE_URL;
   }
-  try {
-    if (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_BASE_URL) {
-      return import.meta.env.VITE_API_BASE_URL;
-    }
-  } catch (e) {}
   return 'http://localhost:8080/api/v1/';
 };
 

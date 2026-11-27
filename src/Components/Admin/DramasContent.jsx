@@ -23,7 +23,7 @@ const DramasContent = ({ setAddType, setShowAddModal, setEditData }) => {
   });
   const pageSize = 15;
 
-  const BACKEND_IMAGE_URL = `${import.meta.env.VITE_CDN_URL}/dramas/`;
+  const BACKEND_IMAGE_URL = `${process.env.NEXT_PUBLIC_CDN_URL || "/uploads"}/dramas/`;
 
   useEffect(() => {
     fetchDramas();

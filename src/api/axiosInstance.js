@@ -4,13 +4,6 @@ const getBaseUrl = () => {
   if (typeof process !== "undefined" && process.env?.NEXT_PUBLIC_API_BASE_URL) {
     return process.env.NEXT_PUBLIC_API_BASE_URL;
   }
-  try {
-    if (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_BASE_URL) {
-      return import.meta.env.VITE_API_BASE_URL;
-    }
-  } catch (e) {
-    // import.meta may not be available in non-module environments
-  }
   return "https://server-nataka.chathurakavindu.me/api/v1/";
 };
 

@@ -19,14 +19,14 @@ import ProfileAndSecurityContent from "../common/ProfileAndSecurityContent";
 import OrganizerKycDocuments from "../Organizer/OrganizerKycDocuments";
 import Logout from "../Logout/Logout";
 import DashboardFooter from "../common/DashboardFooter";
-import { useNavigate } from "../../utils/useNavigateCompat";
+import { useRouter } from "next/navigation";
 import notify from "../../utils/notify";
 
 const TheaterManagerDashboard = () => {
   const [activeTab, setActiveTabState] = useState("dashboard");
   const [showAddModal, setShowAddModal] = useState(false);
   const [addType, setAddType] = useState("");
-  const navigate = useNavigate();
+  const router = useRouter();
   const auth = useAuth();
   const userStatus = auth.user?.status;
   const [editData, setEditData] = useState(null);
@@ -76,9 +76,9 @@ const TheaterManagerDashboard = () => {
   useEffect(() => {
     if (userStatus && userStatus !== "approved") {
       notify.warn("Your account is pending administrator approval. Please contact administration.");
-      navigate("/");
+      router.push("/");
     }
-  }, [userStatus, navigate]);
+  }, [userStatus, router]);
 
   const renderContent = () => {
     switch (activeTab) {

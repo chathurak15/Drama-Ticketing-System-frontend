@@ -19,12 +19,10 @@ import AuditLogsContent from "../Admin/AuditLogsContent";
 import ProfileAndSecurityContent from "../common/ProfileAndSecurityContent";
 import AdminAgreementVaultContent from "../Admin/AdminAgreementVaultContent";
 import Logout from "../Logout/Logout";
-import { useNavigate } from "../../utils/useNavigateCompat";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTabState] = useState("dashboard");
   const [showAddModal, setShowAddModal] = useState(false);
-  const navigate = useNavigate();
   const [addType, setAddType] = useState("");
   const [editData, setEditData] = useState(null);
   const [contentKey, setContentKey] = useState(0);

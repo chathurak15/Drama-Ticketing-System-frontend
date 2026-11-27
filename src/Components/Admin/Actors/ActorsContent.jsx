@@ -23,7 +23,7 @@ const ActorsContent = ({ setAddType, setShowAddModal, setEditData }) => {
     loading: false,
   });
   const pageSize = 15;
-  const BACKEND_IMAGE_URL = `${import.meta.env.VITE_CDN_URL}/actors/`;
+  const BACKEND_IMAGE_URL = `${process.env.NEXT_PUBLIC_CDN_URL || "/uploads"}/actors/`;
 
   useEffect(() => {
     fetchActors();

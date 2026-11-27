@@ -22,7 +22,6 @@ import {
   FileCheck,
 } from "lucide-react";
 import { useAuth } from "../../utils/AuthContext";
-import { useNavigate } from "../../utils/useNavigateCompat";
 import LogoutButton from "../Logout/LogoutButton";
 
 const sidebarItems = [
@@ -44,7 +43,6 @@ const sidebarItems = [
 const AdminSidebar = ({ activeTab, setActiveTab }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user } = useAuth();
-  const navigate = useNavigate();
 
   return (
     <>

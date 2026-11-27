@@ -1,14 +1,14 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "../../utils/useNavigateCompat";
+import { useRouter } from "next/navigation";
 import { getCdnUrl } from "../../utils/cdn";
 import useTranslation from "../../hooks/useTranslation"; 
 
 const UpcomingShowsSlider = ({ upcomingShows }) => {
   const sliderRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
-  const navigate = useNavigate();
-  const BACKEND_IMAGE_URL = `${import.meta.env.VITE_CDN_URL}/shows/`;
+  const router = useRouter();
+  const BACKEND_IMAGE_URL = `${process.env.NEXT_PUBLIC_CDN_URL || "/uploads"}/shows/`;
 
   const { translatedTexts } = useTranslation(); 
   useEffect(() => {
@@ -32,7 +32,7 @@ const UpcomingShowsSlider = ({ upcomingShows }) => {
   };
 
   const handleBooking = (showId) => {
-    navigate(`/show/${showId}`);
+    router.push(`/show/${showId}`);
   };
 
   return (

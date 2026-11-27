@@ -42,7 +42,7 @@ const ShowsContent = ({ setAddType, setShowAddModal, setEditData }) => {
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const userId = useAuth().user?.id;
   const pageSize = 10;
-  const BACKEND_IMAGE_URL = `${import.meta.env.VITE_CDN_URL}/shows/`;
+  const BACKEND_IMAGE_URL = `${process.env.NEXT_PUBLIC_CDN_URL || "/uploads"}/shows/`;
 
   useEffect(() => {
     fetchShows();

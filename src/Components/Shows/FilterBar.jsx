@@ -2,13 +2,13 @@
 import React, { useState, useEffect } from "react";
 import "../../assets/css/FilterBar.css";
 import { getCity, getLocationByCity } from "../../services/ShowService";
-import { useNavigate } from "../../utils/useNavigateCompat";
+import { useRouter } from "next/navigation";
 
 const FilterBar = ({ filters, onFilterChange }) => {
   const [localFilters, setLocalFilters] = useState(filters);
   const [cities, setCities] = useState([]);
   const [venues, setVenues] = useState([]);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchCities = async () => {
@@ -43,7 +43,7 @@ const FilterBar = ({ filters, onFilterChange }) => {
       city: "",
       venue: "",
     });
-    navigate("/shows");
+    router.push("/shows");
   };
 
   

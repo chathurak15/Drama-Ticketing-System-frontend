@@ -4,14 +4,14 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Bell, Sparkles, Box, ShieldCheck, Search, RotateCw } from "lucide-react";
 import { useAuth } from "../../utils/AuthContext";
-import { useNavigate } from "../../utils/useNavigateCompat";
+import { useRouter } from "next/navigation";
 import ThemeToggle from "../common/ThemeToggle";
 import LogoutButton from "../Logout/LogoutButton";
 import { toast } from "react-toastify";
 
 const TheatreManagerHeader = ({ activeTab, onReload, onLaunchStudio = () => {} }) => {
   const { user } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [isReloading, setIsReloading] = useState(false);
 
   const handleReload = () => {
@@ -88,7 +88,7 @@ const TheatreManagerHeader = ({ activeTab, onReload, onLaunchStudio = () => {} }
         {/* User Pill - Links to Profile & Security */}
         <button
           type="button"
-          onClick={() => navigate("/profile")}
+          onClick={() => router.push("/profile")}
           className="flex items-center gap-2 pl-2 border-l border-slate-200 dark:border-white/10 hover:opacity-90 transition-opacity text-left cursor-pointer"
           title="Open Profile & Security Settings"
         >

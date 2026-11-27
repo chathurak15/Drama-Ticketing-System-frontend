@@ -6,7 +6,7 @@ import {
 } from "../../services/BookingService";
 import { requestBuyerRefund } from "../../services/RefundService";
 import { useAuth } from "../../utils/AuthContext";
-import { useNavigate } from "../../utils/useNavigateCompat";
+import { useRouter } from "next/navigation";
 import { getShowById } from "../../services/ShowService";
 import { addReview } from "../../services/ReviewService"; 
 import notify from "../../utils/notify";
@@ -29,12 +29,12 @@ const Bookings = () => {
     reason: "",
   });
   const { user } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [showDetails, setShowDetails] = useState({});
 
   useEffect(() => {
     if (!user) {
-      navigate("/login");
+      router.push("/login");
       return;
     }
 
@@ -308,7 +308,7 @@ const Bookings = () => {
 
                 <button
                   onClick={() =>
-                    navigate("/booking/ticket/" + booking.ticketId)
+                    router.push("/booking/ticket/" + booking.ticketId)
                   }
                   className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 cursor-pointer"
                 >

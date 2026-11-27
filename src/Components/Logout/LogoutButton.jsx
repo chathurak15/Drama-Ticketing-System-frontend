@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { LogOut, Loader2 } from "lucide-react";
-import { useNavigate } from "../../utils/useNavigateCompat";
+import { useRouter } from "next/navigation";
 import { useAuth } from "../../utils/AuthContext";
 import ConfirmModal from "../common/ConfirmModal";
 import notify from "../../utils/notify";
@@ -19,7 +19,7 @@ const LogoutButton = ({
   redirectTo = "/login",
   children,
 }) => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { logout } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -31,7 +31,7 @@ const LogoutButton = ({
     try {
       await logout();
       notify.success("Logged out successfully. See you soon!");
-      navigate(redirectTo);
+      router.push(redirectTo);
     } catch (err) {
       console.error("Logout failed:", err);
       notify.error("Logout failed. Please try again.");

@@ -7,7 +7,7 @@ import { getCdnUrl } from "../../utils/cdn.js";
 
 
 const ShowCard = ({ show }) => {
-  const BACKEND_IMAGE_URL = `${import.meta.env.VITE_CDN_URL}/shows/`;
+  const BACKEND_IMAGE_URL = `${process.env.NEXT_PUBLIC_CDN_URL || "/uploads"}/shows/`;
 
 return (
   <div className="show-card">

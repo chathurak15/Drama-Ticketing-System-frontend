@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import { useNavigate } from "../../utils/useNavigateCompat";
+import { useRouter } from "next/navigation";
 import { useAuth } from "../../utils/AuthContext";
 import ConfirmModal from "../common/ConfirmModal";
 import notify from "../../utils/notify";
 
 const Logout = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { logout } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -17,7 +17,7 @@ const Logout = () => {
     try {
       await logout();
       notify.success("Logged out successfully. See you soon!");
-      navigate("/login");
+      router.push("/login");
     } catch (err) {
       console.error("Logout failed", err);
       notify.error("Logout failed. Please try again.");
@@ -28,9 +28,9 @@ const Logout = () => {
   const handleCancelLogout = () => {
     setIsModalOpen(false);
     if (typeof window !== "undefined" && window.history.length > 1) {
-      navigate(-1);
+      router.back();
     } else {
-      navigate("/");
+      router.push("/");
     }
   };
 

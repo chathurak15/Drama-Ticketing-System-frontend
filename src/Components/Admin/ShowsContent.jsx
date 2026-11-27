@@ -41,7 +41,7 @@ const ShowsContent = ({ setAddType, setShowAddModal, setEditData }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 15;
-  const BACKEND_IMAGE_URL = `${import.meta.env.VITE_CDN_URL}/shows/`;
+  const BACKEND_IMAGE_URL = `${process.env.NEXT_PUBLIC_CDN_URL || "/uploads"}/shows/`;
 
   // Cancel / Postpone Modal State
   const [statusModalShow, setStatusModalShow] = useState(null);

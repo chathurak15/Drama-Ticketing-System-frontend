@@ -14,7 +14,7 @@ import {
   RotateCw,
 } from "lucide-react";
 import { useAuth } from "../../utils/AuthContext";
-import { useNavigate } from "../../utils/useNavigateCompat";
+import { useRouter } from "next/navigation";
 import { usePlatformConfig } from "../../hooks/usePlatformConfig";
 import ThemeToggle from "../common/ThemeToggle";
 import LogoutButton from "../Logout/LogoutButton";
@@ -22,7 +22,7 @@ import { toast } from "react-toastify";
 
 const AdminHeader = ({ activeTab, onReload }) => {
   const { user } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
   const {
     payhereApprovedLive,
     payhereReviewMode,
@@ -229,7 +229,7 @@ const AdminHeader = ({ activeTab, onReload }) => {
         {/* User Pill - Links to Unified Profile & Security */}
         <button
           type="button"
-          onClick={() => navigate("/profile")}
+          onClick={() => router.push("/profile")}
           className="flex items-center gap-2 pl-2 border-l border-slate-200 dark:border-white/10 hover:opacity-90 transition-opacity text-left cursor-pointer"
           title="Open Profile & Security Settings"
         >

@@ -1,10 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "../../utils/useNavigateCompat";
+import { useRouter } from "next/navigation";
 import { getCity } from "../../services/ShowService";
 
 const SearchShows = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [city, setCity] = useState("");
   const [cities, setCities] = useState([]);
   const [date, setDate] = useState("");
@@ -27,7 +27,7 @@ const SearchShows = () => {
     if (city)  params.set("city",  city);
     if (date)  params.set("date",  date);
     if (title) params.set("title", title);
-    navigate(`/shows?${params.toString()}`);
+    router.push(`/shows?${params.toString()}`);
   };
 
   return (

@@ -1,17 +1,16 @@
 "use client";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { useState, useRef, useEffect } from "react";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import "../../assets/css/DramaDetails.css";
 import { getDramaById, getRatings } from "../../services/dramaService";
-import { useNavigate } from "../../utils/useNavigateCompat";
 import UpcomingShowsSlider from "../Home/UpcomingShowsSlider";
 import { getShowsByDramaId } from "../../services/ShowService";
 import { getCdnUrl } from "../../utils/cdn";
 
 const DramaDetails = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { id } = useParams();
   
   const [drama, setDrama] = useState(null);
@@ -19,8 +18,8 @@ const DramaDetails = () => {
   const [loading, setLoading] = useState(true);
   const [upcomingShows, setUpcomingShows] = useState([]);
 
-  const BACKEND_IMAGE_URL = `${import.meta.env.VITE_CDN_URL}/dramas/`;
-  const BACKEND_Actor_IMAGE_URL = `${import.meta.env.VITE_CDN_URL}/actors/`;
+  const BACKEND_IMAGE_URL = `${process.env.NEXT_PUBLIC_CDN_URL || "/uploads"}/dramas/`;
+  const BACKEND_Actor_IMAGE_URL = `${process.env.NEXT_PUBLIC_CDN_URL || "/uploads"}/actors/`;
 
   // Fetch all data
   useEffect(() => {
@@ -136,7 +135,7 @@ const DramaDetails = () => {
                 </div>
                 <div className="flex justify-center mt-3">
                   <button
-                    onClick={() => navigate(`/shows/${id}`)}
+                    onClick={() => router.push(`/shows/${id}`)}
                     className="booking-btn bg-amber-600 hover:bg-amber-700 text-white px-8 py-3 rounded-full font-semibold shadow-md transition duration-300 mt-4"
                   >
                     Book a Show

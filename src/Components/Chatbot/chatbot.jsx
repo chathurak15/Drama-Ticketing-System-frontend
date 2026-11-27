@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import { MessageCircle, Send, X, User, Sparkles, Compass, Ticket, LogIn } from "lucide-react";
 import { useAuth } from "../../utils/AuthContext";
 import { getChatBot } from "../../services/ChatBotService";
-import { useNavigate } from "../../utils/useNavigateCompat";
 
 const Chatbot = () => {
   const pathname = usePathname();
@@ -27,7 +26,6 @@ const Chatbot = () => {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
   const { user } = useAuth();
-  const navigate = useNavigate();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });

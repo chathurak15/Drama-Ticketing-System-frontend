@@ -25,17 +25,8 @@ const nextConfig = {
       },
     ],
   },
-  webpack(config, { webpack }) {
+  webpack(config) {
     config.cache = false;
-    config.plugins.push(
-      new webpack.DefinePlugin({
-        'import.meta.env.VITE_API_BASE_URL': JSON.stringify(process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080/api/v1/'),
-        'import.meta.env.VITE_CDN_URL': JSON.stringify('/uploads'),
-        'import.meta.env.VITE_APP_BACKEND_URL': JSON.stringify('/uploads/'),
-        'import.meta.env.VITE_APP_URL': JSON.stringify('http://localhost:3000'),
-        'import.meta.env.VITE_GOOGLE_AUTH_URL': JSON.stringify('https://server-nataka.chathurakavindu.me/oauth2/authorization/google'),
-      })
-    );
     return config;
   },
   async rewrites() {

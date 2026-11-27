@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import { Theater } from 'lucide-react';
 import { getCdnUrl } from '../../../utils/cdn';
 
-const CDN_URL = import.meta.env.VITE_CDN_URL || '';
+const CDN_URL = process.env.NEXT_PUBLIC_CDN_URL || '';
 
 const inputClass =
   'w-full bg-[#1b1b28] border border-white/10 text-white text-sm px-3 py-2.5 rounded-xl placeholder-slate-500 focus:outline-none focus:border-[#FED800] transition-colors';
